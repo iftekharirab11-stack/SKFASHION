@@ -185,8 +185,8 @@
     .ft-story:hover { transform: translateY(-2px); }
 
     /* WHATSAPP FLOAT */
-    .wa-float { position: fixed; bottom: 28px; right: 28px; z-index: 995; display: flex; flex-direction: column; align-items: flex-end; gap: 9px; }
-    .wa-tip { background: var(--dark2); color: white; padding: 7px 14px; border-radius: 50px; font-size: 0.78rem; white-space: nowrap; opacity: 0; transform: translateX(16px); transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.08); pointer-events: none; }
+    .wa-float { position: fixed; bottom: 28px; left: 28px; z-index: 995; display: flex; flex-direction: column; align-items: flex-start; gap: 9px; }
+    .wa-tip { background: var(--dark2); color: white; padding: 7px 14px; border-radius: 50px; font-size: 0.78rem; white-space: nowrap; opacity: 0; transform: translateX(-16px); transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.08); pointer-events: none; }
     .wa-float:hover .wa-tip { opacity: 1; transform: translateX(0); }
     .wa-btn { width: 58px; height: 58px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.55rem; text-decoration: none; box-shadow: 0 6px 22px rgba(37,211,102,0.38); transition: transform 0.3s ease; animation: waPulse 3s ease-in-out infinite; }
     .wa-btn:hover { transform: scale(1.1); }
@@ -452,8 +452,40 @@
 
   <div class="ft-bottom">
     <p>© 2024 SK Fashion Bangladesh. All rights reserved.</p>
-    <!-- 🔗 FOOTER: Link to about page -->
-    <a href="about.html" class="ft-story plink">Our Full Story &nbsp;<i class="fas fa-arrow-right"></i></a>
+
+    <div style="display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;">
+      <!-- 🔗 FOOTER: Link to about page -->
+      <a href="about.html" class="ft-story plink">Our Full Story &nbsp;<i class="fas fa-arrow-right"></i></a>
+
+      <!-- ============================================================ -->
+      <!-- 🔗 ADMIN LOGIN LINK                                          -->
+      <!-- Subtle — customers won't notice it                           -->
+      <!-- Only admin knows to look here                                -->
+      <!-- ============================================================ -->
+      <a href="admin.html"
+         title="Admin Panel"
+         style="
+           display: inline-flex;
+           align-items: center;
+           gap: 6px;
+           font-size: 0.72rem;
+           color: rgba(255,255,255,0.18);
+           text-decoration: none;
+           letter-spacing: 1px;
+           text-transform: uppercase;
+           padding: 6px 12px;
+           border: 1px solid rgba(255,255,255,0.06);
+           border-radius: 50px;
+           transition: all 0.3s ease;
+           cursor: pointer;
+           position: relative;
+           z-index: 10;
+         "
+         onmouseover="this.style.color='rgba(212,68,154,0.7)';this.style.borderColor='rgba(212,68,154,0.25)';"
+         onmouseout="this.style.color='rgba(255,255,255,0.18)';this.style.borderColor='rgba(255,255,255,0.06)';">
+        <i class="fas fa-lock" style="font-size:0.65rem;"></i> Admin
+      </a>
+    </div>
   </div>
 </footer>
 
