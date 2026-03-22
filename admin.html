@@ -337,18 +337,59 @@ tr:hover td{background:rgba(255,255,255,0.02);}
     <div class="login-card">
       <h2>Welcome back 👋</h2>
       <p>Sign in to manage SK Fashion</p>
+
+      <!-- ============================================================ -->
+      <!-- ⚠️ PASSWORD NOTE:                                            -->
+      <!-- Use the password you set when creating your                  -->
+      <!-- Firebase Authentication account.                             -->
+      <!-- Go to Firebase Console → Authentication → Users              -->
+      <!-- to reset your password if needed.                            -->
+      <!-- ============================================================ -->
+
       <div class="login-field">
         <label>Email Address</label>
-        <input type="email" id="login-email" placeholder="kasturyshahid@gmail.com" value="kasturyshahid@gmail.com">
+        <input type="email" id="login-email"
+          placeholder="kasturyshahid@gmail.com"
+          value="kasturyshahid@gmail.com"
+          autocomplete="email">
       </div>
       <div class="login-field">
         <label>Password</label>
-        <input type="password" id="login-pass" placeholder="Enter your password" value="admin123">
+        <div style="position:relative;">
+          <input type="password" id="login-pass"
+            placeholder="Enter your Firebase password"
+            autocomplete="current-password"
+            style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:12px 44px 12px 16px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.95rem;outline:none;transition:border-color 0.3s ease;">
+          <button onclick="toggleAdminPass()"
+            style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.9rem;"
+            id="pass-eye"><i class="fas fa-eye"></i></button>
+        </div>
       </div>
-      <button class="login-btn" onclick="doLogin()">Sign In to Admin Panel</button>
-      <div class="login-error" id="login-error">
-        <i class="fas fa-exclamation-circle"></i> Invalid email or password. Please try again.
+
+      <!-- Forgot password hint -->
+      <div style="text-align:right;margin-top:-0.3rem;margin-bottom:1rem;">
+        <span style="font-size:0.78rem;color:var(--muted);">
+          Forgot password?
+          <a href="https://console.firebase.google.com" target="_blank"
+            style="color:var(--pink);text-decoration:none;">
+            Reset in Firebase Console
+          </a>
+        </span>
       </div>
+
+      <button class="login-btn" id="login-submit-btn" onclick="doLogin()">
+        <i class="fas fa-sign-in-alt"></i> &nbsp;Sign In to Admin Panel
+      </button>
+
+      <div class="login-error" id="login-error" style="display:none;">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="login-error-text">Invalid email or password. Please try again.</span>
+      </div>
+
+      <!-- Edge/browser autofill warning -->
+      <p style="font-size:0.72rem;color:rgba(255,255,255,0.2);text-align:center;margin-top:1rem;">
+        🔒 Secured by Firebase Authentication
+      </p>
     </div>
   </div>
 </div>
@@ -1062,30 +1103,37 @@ tr:hover td{background:rgba(255,255,255,0.02);}
   window.fb_doLogin = async function() {
     const email = document.getElementById('login-email').value.trim();
     const pass  = document.getElementById('login-pass').value;
-    const btn   = document.querySelector('.login-btn');
+    const btn   = document.getElementById('login-submit-btn');
     const err   = document.getElementById('login-error');
 
     if (!email || !pass) {
-      showLoginError('Please enter email and password.');
+      showLoginError('Please enter your email and password.');
       return;
     }
 
+    // Hide any previous error
+    err.style.display = 'none';
+
     // Show loading state
-    btn.textContent = 'Signing in...';
-    btn.disabled    = true;
-    err.classList.remove('show');
+    if (btn) {
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> &nbsp;Signing in...';
+      btn.disabled = true;
+    }
 
     try {
       await signInWithEmailAndPassword(auth, email, pass);
       // onAuthStateChanged above handles the rest
     } catch (e) {
-      btn.textContent = 'Sign In to Admin Panel';
-      btn.disabled    = false;
-      // Show friendly error messages
+      if (btn) {
+        btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> &nbsp;Sign In to Admin Panel';
+        btn.disabled = false;
+      }
       if (e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') {
         showLoginError('Wrong email or password. Please try again.');
       } else if (e.code === 'auth/too-many-requests') {
-        showLoginError('Too many attempts. Please wait and try again.');
+        showLoginError('Too many failed attempts. Please wait a few minutes.');
+      } else if (e.code === 'auth/network-request-failed') {
+        showLoginError('Network error. Check your internet connection.');
       } else {
         showLoginError('Login failed: ' + e.message);
       }
@@ -1094,10 +1142,17 @@ tr:hover td{background:rgba(255,255,255,0.02);}
 
   function showLoginError(msg) {
     const err = document.getElementById('login-error');
-    err.querySelector('span') 
-      ? err.querySelector('span').textContent = msg 
-      : err.textContent = msg;
-    err.classList.add('show');
+    const txt = document.getElementById('login-error-text');
+    if (txt) txt.textContent = msg;
+    err.style.display = 'flex';
+    err.style.alignItems = 'center';
+    err.style.gap = '8px';
+    // Reset button
+    const btn = document.getElementById('login-submit-btn');
+    if (btn) {
+      btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> &nbsp;Sign In to Admin Panel';
+      btn.disabled = false;
+    }
   }
 
   // ============================================================
@@ -1585,6 +1640,20 @@ tr:hover td{background:rgba(255,255,255,0.02);}
   function toggleBlockCustomer(id, b)    { window.fb_toggleBlockCustomer?.(id, b); }
   function editProduct(id)               { window.showToast('Edit coming soon! Use Firebase console for now.'); }
   function saveSettings(section)         { window.fb_saveSettings?.(section); }
+
+  // ── Show/hide password on login screen ──
+  function toggleAdminPass() {
+    const inp = document.getElementById('login-pass');
+    const ico = document.getElementById('pass-eye');
+    if (!inp || !ico) return;
+    if (inp.type === 'password') {
+      inp.type = 'text';
+      ico.innerHTML = '<i class="fas fa-eye-slash"></i>';
+    } else {
+      inp.type = 'password';
+      ico.innerHTML = '<i class="fas fa-eye"></i>';
+    }
+  }
 
   document.getElementById('login-pass')?.addEventListener('keydown', e => {
     if (e.key === 'Enter') doLogin();
