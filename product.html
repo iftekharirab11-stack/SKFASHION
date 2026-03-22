@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product – SK Fashion Bangladesh</title>
+  <meta name="description" content="View product details at SK Fashion Bangladesh. Authentic sarees, Jamdani, Panjabi and handcrafted bags.">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- ============================================================ -->
+  <!-- 🔥 FIREBASE: PASTE YOUR FIREBASE SCRIPTS HERE                -->
+  <!-- ============================================================ -->
+  <!-- PASTE FIREBASE SCRIPTS HERE -->
+  <style>
+    :root {
+      --pink:#D4449A;--pink-soft:#F0A8D8;--blue:#2B5CE6;--blue-soft:#93AEFF;
+      --cream:#FAF6F0;--cream2:#F0E8DC;--dark:#12101E;--dark2:#1E1B32;
+      --body:#4A4460;--green:#16A34A;--red:#EF4444;--yellow:#F59E0B;
+      --radius:20px;--ease:cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--dark);opacity:0;transition:opacity 0.4s ease;overflow-x:hidden;}
+    body.loaded{opacity:1;}
+    body.exiting{opacity:0!important;transition:opacity 0.35s ease;}
+
+    /* NAV */
+    #nav{position:fixed;top:0;left:0;right:0;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(250,246,240,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(212,68,154,0.08);z-index:1000;transition:height 0.3s,box-shadow 0.3s;}
+    #nav.scrolled{height:60px;box-shadow:0 4px 24px rgba(0,0,0,0.07);}
+    .logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+    .logo-sk{font-family:'Dancing Script',cursive;font-size:2rem;line-height:1;}
+    .logo-sk .s{color:var(--pink);}.logo-sk .k{color:var(--blue);}
+    .logo-words{display:flex;flex-direction:column;line-height:1.15;}
+    .logo-words .w1{font-family:'Cinzel',serif;font-size:0.75rem;font-weight:700;letter-spacing:2px;color:var(--pink);}
+    .logo-words .w2{font-family:'Cinzel',serif;font-size:0.75rem;font-weight:600;letter-spacing:4px;color:var(--blue);}
+    .nav-ul{list-style:none;display:flex;align-items:center;gap:1.4rem;}
+    .nav-ul a{font-size:0.8rem;font-weight:500;text-transform:uppercase;letter-spacing:1px;color:var(--dark);text-decoration:none;position:relative;transition:color 0.3s;}
+    .nav-ul a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--pink),var(--blue));transition:width 0.3s;}
+    .nav-ul a:hover{color:var(--pink);}
+    .nav-ul a:hover::after{width:100%;}
+    .nav-wa{background:linear-gradient(135deg,var(--pink),var(--blue))!important;color:white!important;padding:8px 18px!important;border-radius:50px!important;display:inline-flex!important;align-items:center!important;gap:6px!important;font-weight:600!important;}
+    .nav-wa::after{display:none!important;}
+    .nav-wa:hover{transform:translateY(-2px)!important;color:white!important;}
+    .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+    .burger span{width:24px;height:2px;background:var(--dark);transition:all 0.3s;display:block;}
+    .burger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+    .burger.open span:nth-child(2){opacity:0;}
+    .burger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
+    .mob-menu{display:none;position:fixed;top:70px;left:0;right:0;background:rgba(250,246,240,0.97);backdrop-filter:blur(20px);flex-direction:column;padding:1rem 5%;border-bottom:1px solid var(--cream2);z-index:999;}
+    .mob-menu.show{display:flex;}
+    .mob-menu a{text-decoration:none;font-size:0.9rem;font-weight:500;color:var(--dark);text-transform:uppercase;letter-spacing:1px;padding:0.85rem 0;border-bottom:1px solid var(--cream2);transition:color 0.3s;}
+    .mob-menu a:last-child{border-bottom:none;}
+    .mob-menu a:hover{color:var(--pink);}
+
+    /* BREADCRUMB */
+    #breadcrumb{padding:calc(70px + 1.5rem) 5% 0;max-width:1200px;margin:0 auto;}
+    .bc{display:flex;align-items:center;gap:8px;font-size:0.78rem;color:var(--body);flex-wrap:wrap;}
+    .bc a{color:var(--body);text-decoration:none;transition:color 0.2s;}
+    .bc a:hover{color:var(--pink);}
+    .bc-sep{color:var(--cream2);}
+
+    /* PRODUCT SECTION */
+    #product-main{padding:1.5rem 5% 5rem;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
+
+    /* ── IMAGE GALLERY ── */
+    .prod-gallery{position:sticky;top:84px;}
+    .main-img-wrap{border-radius:22px;overflow:hidden;background:white;border:1px solid var(--cream2);position:relative;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 40px rgba(0,0,0,0.08);}
+    .main-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease;}
+    .main-img-wrap:hover img{transform:scale(1.04);}
+    .main-img-placeholder{font-size:6rem;display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-height:380px;}
+    .img-zoom-btn{position:absolute;bottom:14px;right:14px;background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.9rem;color:var(--dark);box-shadow:0 2px 10px rgba(0,0,0,0.12);transition:all 0.2s;}
+    .img-zoom-btn:hover{background:white;transform:scale(1.1);}
+    .img-share-btn{position:absolute;bottom:14px;left:14px;background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.9rem;color:var(--dark);box-shadow:0 2px 10px rgba(0,0,0,0.12);transition:all 0.2s;}
+    .img-share-btn:hover{background:white;transform:scale(1.1);}
+
+    /* Thumbnails */
+    .thumb-row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;}
+    .thumb{width:70px;height:70px;border-radius:12px;overflow:hidden;border:2px solid transparent;cursor:pointer;transition:all 0.25s;background:white;display:flex;align-items:center;justify-content:center;}
+    .thumb img{width:100%;height:100%;object-fit:cover;}
+    .thumb.active{border-color:var(--pink);box-shadow:0 0 0 3px rgba(212,68,154,0.15);}
+    .thumb:hover:not(.active){border-color:var(--cream2);}
+
+    /* Badges on image */
+    .img-badges{position:absolute;top:14px;left:14px;display:flex;flex-direction:column;gap:6px;}
+    .img-badge{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:50px;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;}
+    .badge-new{background:linear-gradient(135deg,var(--pink),#9B2070);color:white;}
+    .badge-sale{background:linear-gradient(135deg,var(--yellow),#D97706);color:white;}
+    .badge-hot{background:linear-gradient(135deg,#EF4444,#B91C1C);color:white;}
+
+    /* ── PRODUCT INFO ── */
+    .prod-info{}
+    .pi-cat{font-size:0.72rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--pink);margin-bottom:0.6rem;}
+    .pi-name{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;line-height:1.2;margin-bottom:0.3rem;}
+    .pi-name-bn{font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;color:var(--body);margin-bottom:1.2rem;}
+
+    /* Rating row */
+    .pi-rating{display:flex;align-items:center;gap:12px;margin-bottom:1.4rem;flex-wrap:wrap;}
+    .pi-stars{color:#F59E0B;font-size:0.9rem;letter-spacing:2px;}
+    .pi-rating-count{font-size:0.82rem;color:var(--body);}
+    .pi-sold{font-size:0.82rem;color:var(--body);padding-left:12px;border-left:1px solid var(--cream2);}
+
+    /* Price */
+    .pi-price-block{background:linear-gradient(135deg,rgba(212,68,154,0.05),rgba(43,92,230,0.05));border:1px solid rgba(212,68,154,0.12);border-radius:16px;padding:1.2rem 1.4rem;margin-bottom:1.5rem;}
+    .pi-price-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+    .pi-price{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--green);}
+    .pi-orig{font-size:1.1rem;color:var(--body);text-decoration:line-through;}
+    .pi-disc-badge{background:linear-gradient(135deg,var(--pink),#9B2070);color:white;font-size:0.75rem;font-weight:700;padding:4px 12px;border-radius:50px;}
+    .pi-save{font-size:0.8rem;color:var(--green);font-weight:600;margin-top:4px;}
+
+    /* Stock */
+    .pi-stock{display:flex;align-items:center;gap:8px;margin-bottom:1.4rem;font-size:0.88rem;font-weight:500;}
+    .stock-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+    .stock-in{background:var(--green);box-shadow:0 0 0 3px rgba(22,163,74,0.2);}
+    .stock-low{background:var(--yellow);box-shadow:0 0 0 3px rgba(245,158,11,0.2);}
+    .stock-out{background:var(--red);box-shadow:0 0 0 3px rgba(239,68,68,0.2);}
+
+    /* Divider */
+    .pi-divider{height:1px;background:var(--cream2);margin:1.4rem 0;}
+
+    /* Description */
+    .pi-desc-head{font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--body);margin-bottom:0.8rem;}
+    .pi-desc{font-size:0.94rem;color:var(--body);line-height:1.85;}
+
+    /* Details table */
+    .pi-details{margin-top:1.2rem;}
+    .pi-detail-row{display:flex;gap:1rem;padding:8px 0;border-bottom:1px solid var(--cream2);font-size:0.86rem;}
+    .pi-detail-row:last-child{border-bottom:none;}
+    .pd-label{color:var(--body);font-weight:500;min-width:110px;flex-shrink:0;}
+    .pd-value{color:var(--dark);font-weight:600;}
+
+    /* ── ORDER SECTION ── */
+    .pi-order-section{margin-top:1.5rem;}
+    .pi-order-head{font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--body);margin-bottom:1rem;}
+
+    /* Order form */
+    .order-form{background:white;border:1px solid var(--cream2);border-radius:20px;padding:1.5rem;box-shadow:0 4px 20px rgba(0,0,0,0.05);}
+    .of-field{margin-bottom:1rem;}
+    .of-field label{display:block;font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--body);margin-bottom:0.4rem;}
+    .of-field input,.of-field select,.of-field textarea{width:100%;background:var(--cream);border:1.5px solid var(--cream2);border-radius:12px;padding:11px 14px;color:var(--dark);font-family:'Jost',sans-serif;font-size:0.9rem;outline:none;transition:border-color 0.25s,background 0.25s;}
+    .of-field input:focus,.of-field select:focus,.of-field textarea:focus{border-color:rgba(212,68,154,0.4);background:white;}
+    .of-field textarea{resize:vertical;min-height:70px;}
+    .of-qty{display:flex;align-items:center;gap:10px;}
+    .qty-btn{width:36px;height:36px;background:var(--cream2);border:none;border-radius:10px;cursor:pointer;font-size:1rem;font-weight:700;transition:all 0.2s;display:flex;align-items:center;justify-content:center;color:var(--dark);}
+    .qty-btn:hover{background:var(--pink);color:white;}
+    .qty-num{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;min-width:32px;text-align:center;}
+
+    /* Order buttons */
+    .order-btns{display:flex;flex-direction:column;gap:10px;margin-top:1.2rem;}
+    .btn-wa{display:flex;align-items:center;justify-content:center;gap:10px;padding:15px;border-radius:14px;background:#25D366;color:white;border:none;font-family:'Jost',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;transition:all 0.3s;box-shadow:0 6px 20px rgba(37,211,102,0.35);text-decoration:none;}
+    .btn-wa:hover{background:#1EB85A;transform:translateY(-2px);box-shadow:0 10px 28px rgba(37,211,102,0.5);}
+    .btn-fb{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;border-radius:14px;background:#1877F2;color:white;border:none;font-family:'Jost',sans-serif;font-size:0.92rem;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none;}
+    .btn-fb:hover{background:#1464D8;transform:translateY(-2px);}
+
+    /* Trust badges */
+    .trust-badges{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.2rem;}
+    .trust-b{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--body);background:white;border:1px solid var(--cream2);border-radius:50px;padding:6px 12px;}
+    .trust-b i{font-size:0.88rem;}
+    .trust-b.green i{color:var(--green);}
+    .trust-b.pink i{color:var(--pink);}
+    .trust-b.blue i{color:var(--blue);}
+
+    /* ── RELATED PRODUCTS ── */
+    #related{padding:4rem 5%;max-width:1200px;margin:0 auto;}
+    .sec-head{text-align:center;margin-bottom:2.5rem;}
+    .sec-tag{font-size:0.72rem;font-weight:600;letter-spacing:5px;text-transform:uppercase;color:var(--pink);display:block;margin-bottom:0.7rem;}
+    .sec-title{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;}
+    .sec-line{width:50px;height:3px;background:linear-gradient(90deg,var(--pink),var(--blue));border-radius:3px;margin:1rem auto 0;}
+    .related-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;}
+    .rel-card{background:white;border-radius:16px;overflow:hidden;border:1px solid var(--cream2);cursor:pointer;transition:transform 0.3s,box-shadow 0.3s;}
+    .rel-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,0.09);}
+    .rel-card:hover .rel-img-inner{transform:scale(1.05);}
+    .rel-img{height:160px;overflow:hidden;}
+    .rel-img-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;transition:transform 0.4s;}
+    .rel-img-inner img{width:100%;height:100%;object-fit:cover;}
+    .rel-body{padding:1rem;}
+    .rel-cat{font-size:0.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--pink);margin-bottom:3px;}
+    .rel-name{font-family:'Playfair Display',serif;font-size:0.88rem;font-weight:700;margin-bottom:0.4rem;line-height:1.3;}
+    .rel-price{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;color:var(--green);}
+
+    /* FOOTER */
+    footer{background:#0A0818;padding:4rem 5% 2rem;}
+    .ft-top{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(255,255,255,0.05);}
+    .ft-brand-tagline{font-size:0.85rem;line-height:1.75;color:rgba(255,255,255,0.35);margin-top:0.8rem;max-width:240px;}
+    .ft-socials{display:flex;gap:10px;margin-top:1.2rem;}
+    .ft-soc{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.4);text-decoration:none;font-size:0.84rem;transition:all 0.3s;}
+    .ft-soc:hover{background:linear-gradient(135deg,var(--pink),var(--blue));border-color:transparent;color:white;transform:translateY(-3px);}
+    .ft-col h5{font-family:'Cinzel',serif;font-size:0.68rem;letter-spacing:4px;text-transform:uppercase;color:white;margin-bottom:1.2rem;}
+    .ft-col ul{list-style:none;display:flex;flex-direction:column;gap:0.65rem;}
+    .ft-col ul a{text-decoration:none;color:rgba(255,255,255,0.38);font-size:0.85rem;transition:color 0.3s;}
+    .ft-col ul a:hover{color:var(--pink);}
+    .ft-cinfo{display:flex;align-items:flex-start;gap:9px;margin-bottom:0.7rem;}
+    .ft-cinfo i{color:var(--pink);font-size:0.82rem;margin-top:3px;flex-shrink:0;}
+    .ft-cinfo a{text-decoration:none;color:rgba(255,255,255,0.38);font-size:0.85rem;transition:color 0.3s;word-break:break-all;}
+    .ft-cinfo a:hover{color:var(--pink);}
+    .ft-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:1.8rem;flex-wrap:wrap;gap:1rem;}
+    .ft-bottom p{font-size:0.75rem;color:rgba(255,255,255,0.18);}
+
+    /* WHATSAPP FLOAT */
+    .wa-float{position:fixed;bottom:28px;left:28px;z-index:995;display:flex;flex-direction:column;align-items:flex-start;gap:9px;}
+    .wa-tip{background:var(--dark2);color:white;padding:7px 14px;border-radius:50px;font-size:0.75rem;white-space:nowrap;opacity:0;transform:translateX(-16px);transition:all 0.3s;border:1px solid rgba(255,255,255,0.08);pointer-events:none;}
+    .wa-float:hover .wa-tip{opacity:1;transform:translateX(0);}
+    .wa-btn{width:56px;height:56px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:1.45rem;text-decoration:none;box-shadow:0 6px 22px rgba(37,211,102,0.38);transition:transform 0.3s;animation:waPulse 3s ease-in-out infinite;}
+    .wa-btn:hover{transform:scale(1.1);}
+    @keyframes waPulse{0%,100%{box-shadow:0 6px 22px rgba(37,211,102,0.38)}50%{box-shadow:0 6px 22px rgba(37,211,102,0.38),0 0 0 12px rgba(37,211,102,0.1)}}
+
+    /* LIGHTBOX */
+    #lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:2000;display:none;align-items:center;justify-content:center;}
+    #lightbox.open{display:flex;}
+    #lightbox img{max-width:90vw;max-height:90vh;border-radius:12px;object-fit:contain;}
+    #lightbox-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.1);border:none;color:white;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+    #lightbox-close:hover{background:rgba(255,255,255,0.2);}
+
+    /* LOADING */
+    .page-loader{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:1rem;}
+    .loader-spinner{width:44px;height:44px;border:3px solid var(--cream2);border-top-color:var(--pink);border-radius:50%;animation:spin 0.9s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loader-text{font-size:0.88rem;color:var(--body);}
+
+    /* ERROR */
+    .page-error{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:1rem;text-align:center;padding:2rem;}
+    .page-error i{font-size:3rem;color:var(--cream2);}
+    .page-error h2{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--body);}
+    .page-error p{font-size:0.88rem;color:var(--body);max-width:380px;}
+    .page-error a{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--pink),var(--blue));color:white;text-decoration:none;padding:12px 26px;border-radius:50px;font-size:0.88rem;font-weight:600;margin-top:0.5rem;transition:transform 0.3s;}
+    .page-error a:hover{transform:translateY(-2px);}
+
+    /* ANIMATIONS */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+    .prod-gallery{animation:fadeUp 0.6s ease 0.1s both;}
+    .prod-info{animation:fadeUp 0.6s ease 0.25s both;}
+
+    /* RESPONSIVE */
+    @media(max-width:900px){#product-main{grid-template-columns:1fr;gap:2rem}.prod-gallery{position:static}.related-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:768px){.nav-ul{display:none}.burger{display:flex}#nav{padding:0 5%}.ft-top{grid-template-columns:1fr;gap:1.8rem}.ft-bottom{flex-direction:column;text-align:center}}
+    @media(max-width:480px){.related-grid{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="logo plink">
+    <div class="logo-sk"><span class="s">S</span><span class="k">K</span></div>
+    <div class="logo-words"><span class="w1">SK</span><span class="w2">Fashion</span></div>
+  </a>
+  <ul class="nav-ul">
+    <li><a href="index.html" class="plink">Home</a></li>
+    <li><a href="shop.html" class="plink">Shop</a></li>
+    <li><a href="about.html" class="plink">Our Story</a></li>
+    <li><a href="customer.html" class="plink" style="border:1.5px solid rgba(212,68,154,0.4);color:var(--pink);padding:7px 16px;border-radius:50px;font-weight:600;">Login</a></li>
+    <li><a href="https://wa.me/8801676456965" target="_blank" class="nav-wa"><i class="fab fa-whatsapp"></i> Order</a></li>
+    <!-- 👤 User Profile — shown by Firebase when logged in -->
+    <li><a href="customer.html" class="plink" id="nav-user-btn" style="display:none;align-items:center;gap:8px;background:rgba(212,68,154,0.08);border:1px solid rgba(212,68,154,0.2);padding:6px 14px 6px 6px;border-radius:50px;"><div id="nav-user-initial" style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--blue));display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;color:white;">?</div><span id="nav-user-name" style="font-size:0.8rem;font-weight:600;">My Account</span></a></li>
+  </ul>
+  <div class="burger" id="burger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- MOBILE MENU -->
+<nav class="mob-menu" id="mob">
+  <a href="index.html" class="plink" onclick="closeMob()">Home</a>
+  <a href="shop.html" class="plink" onclick="closeMob()">Shop</a>
+  <a href="about.html" class="plink" onclick="closeMob()">Our Story</a>
+  <a href="customer.html" class="plink" onclick="closeMob()" style="color:var(--pink)!important;font-weight:700!important;">Login / My Account</a>
+  <a href="https://www.facebook.com/skfashionnn/" target="_blank"><i class="fab fa-facebook"></i> &nbsp;Facebook Shop</a>
+  <a href="https://wa.me/8801676456965" target="_blank"><i class="fab fa-whatsapp"></i> &nbsp;WhatsApp Order</a>
+</nav>
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb">
+  <div class="bc">
+    <a href="index.html" class="plink">Home</a>
+    <span class="bc-sep">/</span>
+    <a href="shop.html" class="plink">Shop</a>
+    <span class="bc-sep">/</span>
+    <span id="bc-name" style="color:var(--dark);font-weight:500;">Loading...</span>
+  </div>
+</div>
+
+<!-- MAIN CONTENT — dynamically filled by JS -->
+<div id="product-main">
+  <!-- Loading state -->
+  <div style="grid-column:1/-1;">
+    <div class="page-loader" id="page-loader">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading product...</p>
+    </div>
+  </div>
+</div>
+
+<!-- RELATED PRODUCTS -->
+<section id="related" style="display:none;">
+  <div class="sec-head">
+    <span class="sec-tag">You May Also Like</span>
+    <h2 class="sec-title">Related Products</h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="related-grid" id="related-grid"></div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-top">
+    <div>
+      <a href="index.html" class="logo plink" style="display:inline-flex;margin-bottom:0.5rem;">
+        <div class="logo-sk" style="font-size:2.1rem;"><span class="s">S</span><span class="k">K</span></div>
+        <div class="logo-words"><span class="w1" style="font-size:0.76rem;">SK</span><span class="w2" style="font-size:0.76rem;">Fashion</span></div>
+      </a>
+      <p class="ft-brand-tagline">Authentic sarees, Jamdani, Panjabi &amp; handcrafted bags. Premium fashion with a personal touch.</p>
+      <div class="ft-socials">
+        <a href="https://www.facebook.com/skfashionnn/" target="_blank" class="ft-soc"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/aftabun_nahar/?hl=en" target="_blank" class="ft-soc"><i class="fab fa-instagram"></i></a>
+        <a href="https://wa.me/8801676456965" target="_blank" class="ft-soc"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div class="ft-col">
+      <h5>Collections</h5>
+      <ul>
+        <li><a href="shop.html" class="plink">All Products</a></li>
+        <li><a href="shop.html?category=silk" class="plink">Silk Sarees</a></li>
+        <li><a href="shop.html?category=jamdani" class="plink">Jamdani Sarees</a></li>
+        <li><a href="shop.html?category=panjabi" class="plink">Men's Panjabi</a></li>
+        <li><a href="shop.html?category=handbag" class="plink">Ladies Handbags</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <h5>Contact Us</h5>
+      <div class="ft-cinfo"><i class="fas fa-phone"></i><a href="tel:+8801676456965">01676-456965</a></div>
+      <div class="ft-cinfo"><i class="fab fa-whatsapp"></i><a href="https://wa.me/8801676456965" target="_blank">WhatsApp Order</a></div>
+      <div class="ft-cinfo"><i class="fas fa-envelope"></i><a href="mailto:kasturyshahid@gmail.com">kasturyshahid@gmail.com</a></div>
+      <div class="ft-cinfo"><i class="fab fa-facebook"></i><a href="https://www.facebook.com/skfashionnn/" target="_blank">SK Fashion</a></div>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <p>© 2024 SK Fashion Bangladesh. All rights reserved.</p>
+    <a href="admin.html" title="Admin" style="display:inline-flex;align-items:center;gap:6px;font-size:0.7rem;color:rgba(255,255,255,0.15);text-decoration:none;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border:1px solid rgba(255,255,255,0.06);border-radius:50px;transition:all 0.3s;position:relative;z-index:10;" onmouseover="this.style.color='rgba(212,68,154,0.7)';this.style.borderColor='rgba(212,68,154,0.25)';" onmouseout="this.style.color='rgba(255,255,255,0.15)';this.style.borderColor='rgba(255,255,255,0.06)';"><i class="fas fa-lock" style="font-size:0.62rem;"></i> Admin</a>
+  </div>
+</footer>
+
+<!-- FLOATING WHATSAPP -->
+<div class="wa-float">
+  <div class="wa-tip">Order on WhatsApp 🛍️</div>
+  <a href="https://wa.me/8801676456965" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i></a>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <button id="lightbox-close" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
+  <img id="lightbox-img" src="" alt="Product zoom">
+</div>
+
+<!-- ============================================================ -->
+<!-- 🔥 FIREBASE: LOAD PRODUCT FROM FIRESTORE                     -->
+<!-- Reads ?id=PRODUCT_ID from URL → fetches from PRODUCTS        -->
+<!-- ============================================================ -->
+<script type="module">
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, doc, getDoc, collection, getDocs, query, where, limit }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getAuth, onAuthStateChanged }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey:            "AIzaSyARyH6aE1ovNsVPketz4Q-FiG6Tt14n43s",
+    authDomain:        "skfashion-1.firebaseapp.com",
+    projectId:         "skfashion-1",
+    storageBucket:     "skfashion-1.firebasestorage.app",
+    messagingSenderId: "524555632799",
+    appId:             "1:524555632799:web:93f2cfbf606cae8da462aa"
+  };
+
+  const app  = initializeApp(firebaseConfig);
+  const db   = getFirestore(app);
+  const auth = getAuth(app);
+
+  // Auth state for navbar
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const btn = document.getElementById('nav-user-btn');
+      if (btn) {
+        btn.style.display = 'flex';
+        const nameEl = document.getElementById('nav-user-name');
+        const initEl = document.getElementById('nav-user-initial');
+        if (user.displayName && nameEl) {
+          nameEl.textContent = user.displayName.split(' ')[0];
+          initEl.textContent = user.displayName.charAt(0).toUpperCase();
+        }
+      }
+    }
+  });
+
+  // Get product ID from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const productId = urlParams.get('id');
+
+  if (!productId) {
+    showError('No product specified', 'Please go back and select a product.');
+  } else {
+    try {
+      // Fetch product from Firebase
+      const snap = await getDoc(doc(db, 'PRODUCTS', productId));
+
+      if (!snap.exists()) {
+        // Try demo products
+        const demo = window._demoProducts?.find(p => p.id === productId);
+        if (demo) {
+          window.renderProduct(demo);
+          loadRelated(demo.category, productId, null);
+        } else {
+          showError('Product not found', 'This product may have been removed or is no longer available.');
+        }
+      } else {
+        const product = { id: snap.id, ...snap.data() };
+        window.renderProduct(product);
+        loadRelated(product.category, productId, db);
+      }
+    } catch(e) {
+      console.warn('Firebase error, trying demo:', e.message);
+      // Fallback to demo products
+      const demo = window._demoProducts?.find(p => p.id === productId);
+      if (demo) {
+        window.renderProduct(demo);
+        loadRelated(demo.category, productId, null);
+      } else {
+        showError('Connection error', 'Could not load product. Please check your connection.');
+      }
+    }
+  }
+
+  // Load related products
+  async function loadRelated(category, currentId, db) {
+    try {
+      let related = [];
+      if (db) {
+        const q = query(collection(db, 'PRODUCTS'), where('category', '==', category), limit(5));
+        const snap = await getDocs(q);
+        related = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.id !== currentId).slice(0, 4);
+      } else {
+        // Demo fallback
+        related = (window._demoProducts || []).filter(p => p.category === category && p.id !== currentId).slice(0, 4);
+      }
+      if (related.length > 0) window.renderRelated(related);
+    } catch(e) {
+      console.warn('Related load error:', e.message);
+    }
+  }
+
+  function showError(title, msg) {
+    document.getElementById('page-loader').remove();
+    document.getElementById('product-main').innerHTML = `
+      <div style="grid-column:1/-1;">
+        <div class="page-error">
+          <i class="fas fa-box-open"></i>
+          <h2>${title}</h2>
+          <p>${msg}</p>
+          <a href="shop.html"><i class="fas fa-arrow-left"></i> Back to Shop</a>
+        </div>
+      </div>`;
+  }
+
+</script>
+
+<script>
+  // PAGE TRANSITIONS
+  function goTo(href) { document.body.classList.add('exiting'); setTimeout(() => { window.location.href = href; }, 380); }
+  document.querySelectorAll('.plink').forEach(a => {
+    a.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (href && !href.startsWith('http') && !href.startsWith('mailto') && !href.startsWith('tel') && !href.startsWith('#')) { e.preventDefault(); goTo(href); }
+    });
+  });
+  window.addEventListener('load', () => document.body.classList.add('loaded'));
+  window.addEventListener('scroll', () => document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50));
+  const burger = document.getElementById('burger');
+  const mob    = document.getElementById('mob');
+  burger.addEventListener('click', () => { burger.classList.toggle('open'); mob.classList.toggle('show'); });
+  function closeMob() { burger.classList.remove('open'); mob.classList.remove('show'); }
+
+  // DEMO PRODUCTS
+  window._demoProducts = [
+    { id:'demo1', name:'Royal Banarasi Silk Saree', nameBangla:'রয়্যাল বেনারসি সিল্ক শাড়ি', category:'silk', price:4500, originalPrice:5000, discount:10, stock:15, isNewArrival:true, isFeatured:true, photos:[], description:'Exquisite hand-woven Banarasi silk saree perfect for weddings and special occasions. Made from the finest silk with intricate gold zari work. Each saree is a masterpiece of craftsmanship passed down through generations of weavers in Varanasi.' },
+    { id:'demo2', name:'Traditional Jamdani Saree', nameBangla:'ঐতিহ্যবাহী জামদানি শাড়ি', category:'jamdani', price:8500, originalPrice:9000, discount:5, stock:8, isNewArrival:true, isFeatured:false, photos:[], description:'Heritage handloom Jamdani — a timeless piece of Bangladeshi artistry. Recognised by UNESCO as an Intangible Cultural Heritage. Each saree takes weeks to weave by hand.' },
+    { id:'demo3', name:'Premium Eid Panjabi', nameBangla:'প্রিমিয়াম ঈদ পাঞ্জাবি', category:'panjabi', price:2200, originalPrice:2500, discount:12, stock:20, isNewArrival:false, isFeatured:true, photos:[], description:'Elegant premium Panjabi for Eid and special celebrations. Lightweight fabric, comfortable for all-day wear.' },
+    { id:'demo4', name:'Handcrafted Suti Bag', nameBangla:'হাতে বোনা সুতি ব্যাগ', category:'handbag', price:850, originalPrice:1000, discount:15, stock:30, isNewArrival:true, isFeatured:false, photos:[], description:'Beautiful handcrafted ladies handbag made from authentic Suti Kapor fabric. Spacious, durable, and uniquely designed.' },
+    { id:'demo5', name:'Kanjivaram Silk Saree', nameBangla:'কাঞ্জিভরম সিল্ক শাড়ি', category:'silk', price:6500, originalPrice:7000, discount:7, stock:5, isNewArrival:false, isFeatured:true, photos:[], description:'South Indian Kanjivaram silk with rich gold zari work. Perfect for weddings and grand celebrations.' },
+    { id:'demo6', name:'Muslin Jamdani Saree', nameBangla:'মসলিন জামদানি শাড়ি', category:'jamdani', price:5500, originalPrice:6000, discount:8, stock:12, isNewArrival:true, isFeatured:false, photos:[], description:'Lightweight muslin Jamdani perfect for casual and formal occasions. Breathable fabric ideal for Bangladesh\'s climate.' },
+  ];
+
+  const CAT_BG    = { silk:'linear-gradient(155deg,#5A0A0A,#C9A84C)', jamdani:'linear-gradient(155deg,#0A2E22,#4ABAAA)', panjabi:'linear-gradient(155deg,#0A0A2E,#4A80EE)', handbag:'linear-gradient(155deg,#2E1A0A,#C48040)' };
+  const CAT_EMOJI = { silk:'🥻', jamdani:'🌿', panjabi:'👔', handbag:'👜' };
+  const CAT_LABEL = { silk:'Silk Saree', jamdani:'Jamdani', panjabi:'Men\'s Panjabi', handbag:'Ladies Handbag' };
+
+  let qty = 1;
+  let currentProduct = null;
+
+  // ============================================================
+  // RENDER PRODUCT — fills the page with product data
+  // ============================================================
+  window.renderProduct = function(p) {
+    currentProduct = p;
+
+    // Update page title & breadcrumb
+    document.title = `${p.name} – SK Fashion`;
+    const bcEl = document.getElementById('bc-name');
+    if (bcEl) bcEl.textContent = p.name;
+
+    // Remove loader
+    const loader = document.getElementById('page-loader');
+    if (loader) loader.parentElement.remove();
+
+    const hasPhoto   = p.photos && p.photos.length > 0;
+    const mainPhoto  = hasPhoto ? p.photos[0] : null;
+    const stockClass = p.stock > 5 ? 'stock-in' : p.stock > 0 ? 'stock-low' : 'stock-out';
+    const stockText  = p.stock > 5 ? 'In Stock' : p.stock > 0 ? `Only ${p.stock} left — order soon!` : 'Out of Stock';
+    const savings    = p.originalPrice && p.originalPrice > p.price ? p.originalPrice - p.price : 0;
+
+    document.getElementById('product-main').innerHTML = `
+      <!-- GALLERY -->
+      <div class="prod-gallery">
+        <div class="main-img-wrap" id="main-img-wrap">
+          ${mainPhoto
+            ? `<img src="${mainPhoto}" alt="${p.name}" id="main-product-img" onerror="this.parentElement.innerHTML='<div class=main-img-placeholder style=background:${CAT_BG[p.category]}>${CAT_EMOJI[p.category]||'🛍️'}</div>'">`
+            : `<div class="main-img-placeholder" style="background:${CAT_BG[p.category]||'#eee'}">${CAT_EMOJI[p.category]||'🛍️'}</div>`}
+
+          <!-- Badges -->
+          <div class="img-badges">
+            ${p.isNewArrival ? '<span class="img-badge badge-new">🆕 New</span>' : ''}
+            ${p.discount >= 10 ? `<span class="img-badge badge-sale">${p.discount}% Off</span>` : ''}
+            ${p.isFeatured ? '<span class="img-badge badge-hot">⭐ Featured</span>' : ''}
+          </div>
+
+          <!-- Action buttons -->
+          ${mainPhoto ? `<button class="img-zoom-btn" onclick="openLightbox('${mainPhoto}')" title="Zoom"><i class="fas fa-expand-alt"></i></button>` : ''}
+          <button class="img-share-btn" onclick="shareProduct()" title="Share"><i class="fas fa-share-alt"></i></button>
+        </div>
+
+        <!-- Thumbnails (if multiple photos) -->
+        ${hasPhoto && p.photos.length > 1 ? `
+          <div class="thumb-row">
+            ${p.photos.map((ph, i) => `
+              <div class="thumb ${i === 0 ? 'active' : ''}" onclick="switchPhoto('${ph}', this)">
+                <img src="${ph}" alt="Photo ${i+1}">
+              </div>`).join('')}
+          </div>` : ''}
+      </div>
+
+      <!-- PRODUCT INFO -->
+      <div class="prod-info">
+        <div class="pi-cat">${CAT_LABEL[p.category] || p.category}</div>
+        <h1 class="pi-name">${p.name}</h1>
+        ${p.nameBangla ? `<p class="pi-name-bn">${p.nameBangla}</p>` : ''}
+
+        <!-- Rating -->
+        <div class="pi-rating">
+          <div class="pi-stars">★★★★★</div>
+          <span class="pi-rating-count">5.0 (Verified Reviews)</span>
+          <span class="pi-sold">✅ Authentic Product</span>
+        </div>
+
+        <!-- Price -->
+        <div class="pi-price-block">
+          <div class="pi-price-row">
+            <span class="pi-price">৳${p.price.toLocaleString()}</span>
+            ${p.originalPrice && p.originalPrice > p.price ? `<span class="pi-orig">৳${p.originalPrice.toLocaleString()}</span>` : ''}
+            ${p.discount ? `<span class="pi-disc-badge">${p.discount}% OFF</span>` : ''}
+          </div>
+          ${savings > 0 ? `<p class="pi-save">You save ৳${savings.toLocaleString()} on this order!</p>` : ''}
+        </div>
+
+        <!-- Stock -->
+        <div class="pi-stock">
+          <span class="stock-dot ${stockClass}"></span>
+          <span style="color:${p.stock > 5 ? 'var(--green)' : p.stock > 0 ? 'var(--yellow)' : 'var(--red)'};">${stockText}</span>
+        </div>
+
+        <div class="pi-divider"></div>
+
+        <!-- Description -->
+        <div class="pi-desc-head">About This Product</div>
+        <p class="pi-desc">${p.description || 'Premium quality product handpicked by SK Fashion.'}</p>
+
+        <!-- Details -->
+        <div class="pi-details">
+          <div class="pi-detail-row"><span class="pd-label">Category</span><span class="pd-value">${CAT_LABEL[p.category] || p.category}</span></div>
+          <div class="pi-detail-row"><span class="pd-label">Payment</span><span class="pd-value">Cash on Delivery (COD)</span></div>
+          <div class="pi-detail-row"><span class="pd-label">Delivery</span><span class="pd-value">৳80 Dhaka · ৳150 Outside Dhaka</span></div>
+          <div class="pi-detail-row"><span class="pd-label">Authenticity</span><span class="pd-value">100% Genuine — Personally Verified</span></div>
+        </div>
+
+        <div class="pi-divider"></div>
+
+        <!-- ORDER SECTION -->
+        <div class="pi-order-section">
+          <div class="pi-order-head">Place Your Order</div>
+          <div class="order-form">
+
+            <!-- Quantity -->
+            <div class="of-field">
+              <label>Quantity</label>
+              <div class="of-qty">
+                <button class="qty-btn" onclick="changeQty(-1)"><i class="fas fa-minus"></i></button>
+                <span class="qty-num" id="qty-display">1</span>
+                <button class="qty-btn" onclick="changeQty(1)"><i class="fas fa-plus"></i></button>
+                <span style="font-size:0.82rem;color:var(--body);margin-left:8px;">× ৳${p.price.toLocaleString()} = <strong id="total-price" style="color:var(--green);">৳${p.price.toLocaleString()}</strong></span>
+              </div>
+            </div>
+
+            <!-- Customer name -->
+            <div class="of-field">
+              <label>Your Name</label>
+              <input type="text" id="order-name" placeholder="e.g. Farida Akhter">
+            </div>
+
+            <!-- Phone -->
+            <div class="of-field">
+              <label>Phone Number</label>
+              <input type="tel" id="order-phone" placeholder="e.g. 01XXXXXXXXX">
+            </div>
+
+            <!-- Address -->
+            <div class="of-field">
+              <label>Delivery Address</label>
+              <textarea id="order-address" placeholder="House/Road, Area, City..."></textarea>
+            </div>
+
+            <!-- Note -->
+            <div class="of-field">
+              <label>Special Note <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--body);font-size:0.78rem;">(optional)</span></label>
+              <input type="text" id="order-note" placeholder="e.g. Colour preference, size, gift wrap...">
+            </div>
+
+            <!-- Order buttons -->
+            <div class="order-btns">
+              <button class="btn-wa" onclick="orderViaWhatsApp()">
+                <i class="fab fa-whatsapp" style="font-size:1.1rem;"></i>
+                Order via WhatsApp
+              </button>
+              <a href="https://www.facebook.com/skfashionnn/" target="_blank" class="btn-fb">
+                <i class="fab fa-facebook" style="font-size:1rem;"></i>
+                Order via Facebook
+              </a>
+            </div>
+
+            <!-- Trust badges -->
+            <div class="trust-badges">
+              <div class="trust-b green"><i class="fas fa-truck"></i> Cash on Delivery</div>
+              <div class="trust-b pink"><i class="fas fa-shield-alt"></i> 100% Authentic</div>
+              <div class="trust-b blue"><i class="fas fa-undo"></i> Easy Returns</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    `;
+  };
+
+  // ============================================================
+  // RENDER RELATED PRODUCTS
+  // ============================================================
+  window.renderRelated = function(products) {
+    const section = document.getElementById('related');
+    const grid    = document.getElementById('related-grid');
+    if (!section || !grid) return;
+
+    grid.innerHTML = products.map(p => {
+      const hasPhoto = p.photos && p.photos.length > 0;
+      return `
+        <div class="rel-card" onclick="goTo('product.html?id=${p.id}')">
+          <div class="rel-img">
+            <div class="rel-img-inner" style="${!hasPhoto ? 'background:' + (CAT_BG[p.category]||'#eee') : ''}">
+              ${hasPhoto
+                ? `<img src="${p.photos[0]}" alt="${p.name}" loading="lazy" onerror="this.parentElement.innerHTML='<span style=font-size:2.5rem>${CAT_EMOJI[p.category]||'🛍️'}</span>'">`
+                : `<span style="font-size:2.5rem;">${CAT_EMOJI[p.category]||'🛍️'}</span>`}
+            </div>
+          </div>
+          <div class="rel-body">
+            <div class="rel-cat">${CAT_LABEL[p.category]||p.category}</div>
+            <div class="rel-name">${p.name}</div>
+            <div class="rel-price">৳${p.price.toLocaleString()}</div>
+          </div>
+        </div>`;
+    }).join('');
+
+    section.style.display = 'block';
+  };
+
+  // ============================================================
+  // QUANTITY CONTROLS
+  // ============================================================
+  function changeQty(delta) {
+    qty = Math.max(1, qty + delta);
+    document.getElementById('qty-display').textContent = qty;
+    if (currentProduct) {
+      document.getElementById('total-price').textContent =
+        '৳' + (currentProduct.price * qty).toLocaleString();
+    }
+  }
+  window.changeQty = changeQty;
+
+  // ============================================================
+  // ORDER VIA WHATSAPP
+  // Pre-fills message with product name, qty, customer details
+  // ============================================================
+  function orderViaWhatsApp() {
+    const name    = document.getElementById('order-name')?.value.trim();
+    const phone   = document.getElementById('order-phone')?.value.trim();
+    const address = document.getElementById('order-address')?.value.trim();
+    const note    = document.getElementById('order-note')?.value.trim();
+
+    if (!name)    { showAlert('Please enter your name 👤'); return; }
+    if (!phone)   { showAlert('Please enter your phone number 📱'); return; }
+    if (!address) { showAlert('Please enter your delivery address 📍'); return; }
+
+    const productName  = currentProduct?.name || 'Product';
+    const productPrice = currentProduct?.price || 0;
+    const total        = productPrice * qty;
+
+    const msg = `*🛍️ New Order from SK Fashion Website*
+
+*Product:* ${productName}
+*Quantity:* ${qty}
+*Price:* ৳${productPrice.toLocaleString()} each
+*Total:* ৳${total.toLocaleString()}
+
+*Customer Details:*
+👤 Name: ${name}
+📱 Phone: ${phone}
+📍 Address: ${address}
+${note ? `📝 Note: ${note}` : ''}
+
+*Payment:* Cash on Delivery (COD)
+
+Please confirm this order. Thank you! 🙏`;
+
+    const url = `https://wa.me/8801676456965?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+  }
+  window.orderViaWhatsApp = orderViaWhatsApp;
+
+  // ============================================================
+  // PHOTO GALLERY
+  // ============================================================
+  function switchPhoto(url, thumbEl) {
+    const mainImg = document.getElementById('main-product-img');
+    if (mainImg) mainImg.src = url;
+    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+    if (thumbEl) thumbEl.classList.add('active');
+  }
+  window.switchPhoto = switchPhoto;
+
+  // ============================================================
+  // LIGHTBOX
+  // ============================================================
+  function openLightbox(url) {
+    document.getElementById('lightbox-img').src = url;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  window.openLightbox  = openLightbox;
+  window.closeLightbox = closeLightbox;
+  document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this) closeLightbox();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+  // ============================================================
+  // SHARE PRODUCT
+  // ============================================================
+  function shareProduct() {
+    if (navigator.share) {
+      navigator.share({
+        title: currentProduct?.name || 'SK Fashion Product',
+        text:  `Check out ${currentProduct?.name} at SK Fashion Bangladesh!`,
+        url:   window.location.href
+      }).catch(() => copyLink());
+    } else {
+      copyLink();
+    }
+  }
+  function copyLink() {
+    navigator.clipboard?.writeText(window.location.href);
+    showAlert('Link copied to clipboard! 🔗');
+  }
+  window.shareProduct = shareProduct;
+
+  // Alert helper
+  function showAlert(msg) {
+    let el = document.getElementById('alert-toast');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'alert-toast';
+      el.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(10px);background:#12101E;color:white;padding:11px 22px;border-radius:50px;font-size:0.84rem;font-family:"Jost",sans-serif;z-index:9999;opacity:0;transition:all 0.3s;white-space:nowrap;border:1px solid rgba(255,255,255,0.1);pointer-events:none;';
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.style.opacity = '1';
+    el.style.transform = 'translateX(-50%) translateY(0)';
+    setTimeout(() => { el.style.opacity='0'; el.style.transform='translateX(-50%) translateY(10px)'; }, 2800);
+  }
+</script>
+</body>
+</html>
