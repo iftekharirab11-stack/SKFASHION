@@ -345,7 +345,7 @@
             <!-- 🔥 FIREBASE: Google Sign In                                  -->
             <!-- Replace onclick with: signInWithGoogle()                     -->
             <!-- ============================================================ -->
-            <button class="soc-btn soc-google" onclick="showToast('Google login coming soon!', 'success')">
+            <button class="soc-btn soc-google" onclick="window.fb_googleLogin?.()">
               <svg class="soc-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
               <span>Continue with Google</span>
             </button>
@@ -353,7 +353,7 @@
             <!-- 🔥 FIREBASE: Facebook Sign In                                -->
             <!-- Replace onclick with: signInWithFacebook()                   -->
             <!-- ============================================================ -->
-            <button class="soc-btn soc-facebook" onclick="showToast('Facebook login coming soon!', 'success')">
+            <button class="soc-btn soc-facebook" onclick="showFloatMsg('Facebook login — enable in Firebase Console')">
               <i class="fab fa-facebook-f" style="font-size:1.1rem;"></i>
               <span>Continue with Facebook</span>
             </button>
@@ -395,7 +395,7 @@
           <!-- 🔥 FIREBASE: Email Login button                              -->
           <!-- Replace onclick with: loginWithEmail()                        -->
           <!-- ============================================================ -->
-          <button class="auth-btn" onclick="demoLogin()">
+          <button class="auth-btn" onclick="window.fb_emailLogin?.()">
             <i class="fas fa-sign-in-alt"></i> Sign In
           </button>
 
@@ -414,11 +414,11 @@
 
           <!-- Social Signup -->
           <div class="social-btns">
-            <button class="soc-btn soc-google" onclick="showToast('Google signup coming soon!', 'success')">
+            <button class="soc-btn soc-google" onclick="window.fb_googleLogin?.()">
               <svg class="soc-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
               <span>Sign up with Google</span>
             </button>
-            <button class="soc-btn soc-facebook" onclick="showToast('Facebook signup coming soon!', 'success')">
+            <button class="soc-btn soc-facebook" onclick="showFloatMsg('Facebook login — enable in Firebase Console')">
               <i class="fab fa-facebook-f" style="font-size:1.1rem;"></i>
               <span>Sign up with Facebook</span>
             </button>
@@ -482,7 +482,7 @@
           <!-- 🔥 FIREBASE: Signup button                                    -->
           <!-- Replace onclick with: signUpWithEmail()                       -->
           <!-- ============================================================ -->
-          <button class="auth-btn" onclick="demoSignup()">
+          <button class="auth-btn" onclick="window.fb_emailSignup?.()">
             <i class="fas fa-user-plus"></i> Create My Account
           </button>
 
@@ -503,7 +503,7 @@
             <div class="step-dot"></div>
           </div>
           <h2 class="auth-h">Verify Your Phone 📱</h2>
-          <p class="auth-sub" id="otp-subtitle">We sent a 6-digit code to +880 17XXXXXXXX</p>
+          <p class="auth-sub" id="otp-subtitle">We sent a 6-digit code to your phone</p>
 
           <div class="otp-fields">
             <input class="otp-input" type="text" maxlength="1" oninput="otpNext(this, 0)">
@@ -518,7 +518,7 @@
           <!-- 🔥 FIREBASE: OTP Verify button                               -->
           <!-- Replace onclick with: verifyOTP()                            -->
           <!-- ============================================================ -->
-          <button class="auth-btn" onclick="demoOTPVerify()">
+          <button class="auth-btn" onclick="window.fb_verifyOTP?.()">
             <i class="fas fa-shield-alt"></i> Verify &amp; Continue
           </button>
 
@@ -552,7 +552,7 @@
           <!-- 🔥 FIREBASE: Send Password Reset Email                        -->
           <!-- Replace onclick with: sendPasswordReset()                     -->
           <!-- ============================================================ -->
-          <button class="auth-btn" onclick="demoForgot()">
+          <button class="auth-btn" onclick="window.fb_forgotPassword?.()">
             <i class="fas fa-paper-plane"></i> Send Reset Link
           </button>
 
@@ -743,12 +743,12 @@
           <!-- ============================================================ -->
           <div class="pf-field"><label>Full Name</label><input type="text" value="Farida Akhter"></div>
           <div class="pf-field"><label>Email Address</label><input type="email" value="farida@example.com"></div>
-          <div class="pf-field"><label>Phone Number</label><input type="tel" value="017XXXXXXXX"></div>
+          <div class="pf-field"><label>Phone Number</label><input type="tel" placeholder="e.g. 01XXXXXXXXX" id="profile-phone"></div>
           <!-- ============================================================ -->
           <!-- 🔥 FIREBASE: Save profile changes                            -->
           <!-- Replace onclick with: updateProfile()                         -->
           <!-- ============================================================ -->
-          <button class="pf-save" onclick="showToast('Profile updated! ✅', 'success')"><i class="fas fa-save"></i> Save Changes</button>
+          <button class="pf-save" onclick="window.fb_updateProfile?.()"><i class="fas fa-save"></i> Save Changes</button>
         </div>
 
         <!-- Saved Addresses -->
@@ -837,77 +837,235 @@
 
 <!-- ============================================================ -->
 <!-- 🔥 FIREBASE CONNECTION BLOCK                                  -->
-<!-- PASTE SAME FIREBASE CODE AS OTHER PAGES WHEN READY           -->
 <!-- ============================================================ -->
-<!--
+<!-- 🔥 FIREBASE: ACTIVE — Customer Login System                  -->
+<!-- ============================================================ -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signInWithEmailAndPassword,
            createUserWithEmailAndPassword, signOut, GoogleAuthProvider,
-           signInWithPopup, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"
+           signInWithPopup, sendPasswordResetEmail, updateProfile }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import { getFirestore, doc, getDoc, setDoc, collection,
-           query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"
+           query, where, getDocs, orderBy }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "AIzaSyARyH6aE1ovNsVPketz4Q-FiG6Tt14n43s",
-    authDomain: "skfashion-1.firebaseapp.com",
-    projectId: "skfashion-1",
-    storageBucket: "skfashion-1.firebasestorage.app",
+    apiKey:            "AIzaSyARyH6aE1ovNsVPketz4Q-FiG6Tt14n43s",
+    authDomain:        "skfashion-1.firebaseapp.com",
+    projectId:         "skfashion-1",
+    storageBucket:     "skfashion-1.firebasestorage.app",
     messagingSenderId: "524555632799",
-    appId: "1:524555632799:web:93f2cfbf606cae8da462aa"
-  }
+    appId:             "1:524555632799:web:93f2cfbf606cae8da462aa"
+  };
 
-  const app = initializeApp(firebaseConfig)
-  const auth = getAuth(app)
-  const db = getFirestore(app)
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
 
-  // Auto check login state
+  // ── AUTO CHECK LOGIN STATE ──
   onAuthStateChanged(auth, async (user) => {
     if (user) {
-      const customerData = await getDoc(doc(db, 'CUSTOMERS', user.uid))
-      showDashboard(user, customerData.data())
+      // Load customer data from Firestore
+      try {
+        const snap = await getDoc(doc(db, 'CUSTOMERS', user.uid));
+        const data = snap.exists() ? snap.data() : {};
+        window.showDashboardScreen(user, data);
+
+        // Load real orders
+        try {
+          const ordersQ = query(
+            collection(db, 'ORDERS'),
+            where('customerId', '==', user.uid),
+            orderBy('createdAt', 'desc')
+          );
+          const ordersSnap = await getDocs(ordersQ);
+          const orders = ordersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+          window.renderRealOrders(orders);
+        } catch(e) {
+          console.warn('Orders load:', e.message);
+        }
+
+        // Load real wishlist
+        try {
+          const wishQ = query(
+            collection(db, 'WISHLIST'),
+            where('customerId', '==', user.uid)
+          );
+          const wishSnap = await getDocs(wishQ);
+          const wishes = wishSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+          if (wishes.length > 0) window.renderRealWishlist(wishes);
+        } catch(e) {
+          console.warn('Wishlist load:', e.message);
+        }
+
+      } catch(e) {
+        console.warn('Customer data load:', e.message);
+        window.showDashboardScreen(user, {});
+      }
     } else {
-      showAuthScreen()
+      // Not logged in — show auth screen
+      document.getElementById('auth-screen').style.display = 'flex';
+      document.getElementById('dashboard-screen').classList.remove('show');
     }
-  })
+  });
 
-  // LOGIN
-  window.loginWithEmail = async () => {
-    const email = document.getElementById('login-email').value
-    const pass = document.getElementById('login-pass').value
+  // ── EMAIL LOGIN ──
+  window.fb_emailLogin = async function() {
+    const email = document.getElementById('login-email')?.value?.trim();
+    const pass  = document.getElementById('login-pass')?.value;
+    const btn   = document.querySelector('#panel-login .auth-btn');
+
+    if (!email || !pass) {
+      showError('login-error', 'Please enter your email and password.');
+      return;
+    }
+    if (btn) { btn.textContent = 'Signing in...'; btn.disabled = true; }
     try {
-      await signInWithEmailAndPassword(auth, email, pass)
+      await signInWithEmailAndPassword(auth, email, pass);
+      // onAuthStateChanged handles the rest
     } catch(e) {
-      showError('login-error', 'Invalid email or password.')
+      if (btn) { btn.textContent = 'Sign In'; btn.disabled = false; }
+      const msgs = {
+        'auth/user-not-found':     'No account found with this email.',
+        'auth/wrong-password':     'Wrong password. Please try again.',
+        'auth/invalid-credential': 'Wrong email or password.',
+        'auth/too-many-requests':  'Too many attempts. Please wait.',
+        'auth/invalid-email':      'Please enter a valid email address.'
+      };
+      showError('login-error', msgs[e.code] || e.message);
     }
-  }
+  };
 
-  // SIGNUP
-  window.signUpWithEmail = async () => {
-    const name = document.getElementById('signup-name').value
-    const email = document.getElementById('signup-email').value
-    const pass = document.getElementById('signup-pass').value
+  // ── EMAIL SIGNUP ──
+  window.fb_emailSignup = async function() {
+    const name  = document.getElementById('signup-name')?.value?.trim();
+    const phone = document.getElementById('signup-phone')?.value?.trim();
+    const email = document.getElementById('signup-email')?.value?.trim();
+    const pass  = document.getElementById('signup-pass')?.value;
+    const terms = document.getElementById('terms-check')?.checked;
+    const btn   = document.querySelector('#panel-signup .auth-btn');
+
+    if (!name)  { showError('signup-error', 'Please enter your full name.'); return; }
+    if (!phone) { showError('signup-error', 'Please enter your phone number.'); return; }
+    if (!email) { showError('signup-error', 'Please enter your email.'); return; }
+    if (!pass || pass.length < 8) { showError('signup-error', 'Password must be at least 8 characters.'); return; }
+    if (!terms) { showError('signup-error', 'Please accept the Terms of Service.'); return; }
+
+    if (btn) { btn.textContent = 'Creating account...'; btn.disabled = true; }
+
+    // Show OTP screen with real phone
+    const otpSub = document.getElementById('otp-subtitle');
+    if (otpSub) otpSub.textContent = `We sent a 6-digit code to +880 ${phone}`;
+    showPanel('otp');
+    if (btn) { btn.textContent = 'Create My Account'; btn.disabled = false; }
+
+    // Store for after OTP verified
+    window._pendingSignup = { name, phone, email, pass };
+  };
+
+  // ── OTP VERIFY (creates account) ──
+  window.fb_verifyOTP = async function() {
+    const pending = window._pendingSignup;
+    if (!pending) { showPanel('signup'); return; }
+
+    const otp = Array.from(document.querySelectorAll('.otp-input'))
+      .map(i => i.value).join('');
+    if (otp.length < 6) { showAlert('Please enter the complete 6-digit code', 'error'); return; }
+
     try {
-      const cred = await createUserWithEmailAndPassword(auth, email, pass)
+      const cred = await createUserWithEmailAndPassword(auth, pending.email, pending.pass);
+      // Update display name
+      await updateProfile(cred.user, { displayName: pending.name });
+      // Save to Firestore
       await setDoc(doc(db, 'CUSTOMERS', cred.user.uid), {
-        name, email, phone: '', totalOrders: 0,
-        totalSpent: 0, joinedAt: new Date(), isBlocked: false
-      })
+        name:        pending.name,
+        phone:       '+880' + pending.phone,
+        email:       pending.email,
+        addresses:   [],
+        totalOrders: 0,
+        totalSpent:  0,
+        joinedAt:    new Date(),
+        isBlocked:   false
+      });
+      window._pendingSignup = null;
+      // onAuthStateChanged shows dashboard
     } catch(e) {
-      showError('signup-error', e.message)
+      const msgs = {
+        'auth/email-already-in-use': 'This email is already registered. Please login.',
+        'auth/weak-password':        'Password is too weak.',
+        'auth/invalid-email':        'Invalid email address.'
+      };
+      showAlert(msgs[e.code] || e.message, 'error');
+      showPanel('signup');
     }
-  }
+  };
 
-  // GOOGLE
-  window.signInWithGoogle = async () => {
-    const provider = new GoogleAuthProvider()
-    await signInWithPopup(auth, provider)
-  }
+  // ── GOOGLE LOGIN ──
+  window.fb_googleLogin = async function() {
+    try {
+      const provider = new GoogleAuthProvider();
+      const cred = await signInWithPopup(auth, provider);
+      // Create customer record if new user
+      const snap = await getDoc(doc(db, 'CUSTOMERS', cred.user.uid));
+      if (!snap.exists()) {
+        await setDoc(doc(db, 'CUSTOMERS', cred.user.uid), {
+          name:        cred.user.displayName || '',
+          phone:       cred.user.phoneNumber || '',
+          email:       cred.user.email || '',
+          addresses:   [],
+          totalOrders: 0,
+          totalSpent:  0,
+          joinedAt:    new Date(),
+          isBlocked:   false
+        });
+      }
+    } catch(e) {
+      if (e.code !== 'auth/popup-closed-by-user') {
+        showAlert('Google login failed. Please try again.', 'error');
+      }
+    }
+  };
 
-  // LOGOUT
-  window.realLogout = () => signOut(auth)
+  // ── FORGOT PASSWORD ──
+  window.fb_forgotPassword = async function() {
+    const email = document.getElementById('forgot-email')?.value?.trim();
+    if (!email) { showAlert('Please enter your email address.', 'error'); return; }
+    try {
+      await sendPasswordResetEmail(auth, email);
+      document.getElementById('forgot-success')?.classList.add('show');
+      setTimeout(() => showPanel('login'), 3500);
+    } catch(e) {
+      showAlert('Could not send reset email. Check the address.', 'error');
+    }
+  };
+
+  // ── LOGOUT ──
+  window.fb_logout = async function() {
+    await signOut(auth);
+    document.getElementById('dashboard-screen').classList.remove('show');
+    document.getElementById('auth-screen').style.display = 'flex';
+    switchTab('login');
+    showFloatMsg('Logged out successfully 👋');
+  };
+
+  // ── UPDATE PROFILE ──
+  window.fb_updateProfile = async function() {
+    if (!auth.currentUser) return;
+    const name    = document.querySelector('#dash-profile input[type="text"]')?.value;
+    const phone   = document.getElementById('profile-phone')?.value;
+    try {
+      await setDoc(doc(db, 'CUSTOMERS', auth.currentUser.uid), {
+        name, phone, updatedAt: new Date()
+      }, { merge: true });
+      showFloatMsg('Profile updated! ✅');
+    } catch(e) {
+      showFloatMsg('Error saving: ' + e.message);
+    }
+  };
+
 </script>
--->
 
 <script>
   // ── PAGE LOAD ──
@@ -985,13 +1143,23 @@
 
   // ── DEMO SIGNUP ──
   function demoSignup() {
-    const name = document.getElementById('signup-name').value;
-    const email = document.getElementById('signup-email').value;
-    const pass = document.getElementById('signup-pass').value;
+    const name  = document.getElementById('signup-name').value.trim();
+    const phone = document.getElementById('signup-phone').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const pass  = document.getElementById('signup-pass').value;
     const terms = document.getElementById('terms-check').checked;
-    if (!name || !email || !pass) { showError('signup-error', 'Please fill in all fields.'); return; }
-    if (!terms) { showError('signup-error', 'Please accept the Terms of Service.'); return; }
+
+    if (!name)  { showError('signup-error', 'Please enter your full name.'); return; }
+    if (!phone) { showError('signup-error', 'Please enter your phone number.'); return; }
+    if (!email) { showError('signup-error', 'Please enter your email address.'); return; }
+    if (!pass)  { showError('signup-error', 'Please enter a password.'); return; }
     if (pass.length < 8) { showError('signup-error', 'Password must be at least 8 characters.'); return; }
+    if (!terms) { showError('signup-error', 'Please accept the Terms of Service.'); return; }
+
+    // Show actual phone number in OTP screen
+    const otpSub = document.getElementById('otp-subtitle');
+    if (otpSub) otpSub.textContent = `We sent a 6-digit code to +880 ${phone}`;
+
     showPanel('otp');
   }
 
@@ -1012,35 +1180,155 @@
   }
 
   // ── SHOW DASHBOARD ──
-  function showDashboardScreen(user) {
+  function showDashboardScreen(user, firestoreData) {
     document.getElementById('auth-screen').style.display = 'none';
     const dash = document.getElementById('dashboard-screen');
     dash.classList.add('show');
-    if (user.displayName) {
-      document.getElementById('dash-name').textContent = user.displayName;
-      document.getElementById('dash-avatar').textContent = user.displayName.charAt(0).toUpperCase();
-    }
-    showToast('Welcome to SK Fashion! 🎉', 'success');
+
+    const name = firestoreData?.name || user.displayName || user.email?.split('@')[0] || 'Customer';
+    const initial = name.charAt(0).toUpperCase();
+
+    document.getElementById('dash-name').textContent    = name;
+    document.getElementById('dash-avatar').textContent  = initial;
+
+    // Fill profile fields
+    const profileName  = document.querySelector('#dash-profile input[type="text"]');
+    const profileEmail = document.querySelector('#dash-profile input[type="email"]');
+    const profilePhone = document.getElementById('profile-phone');
+    if (profileName)  profileName.value  = firestoreData?.name  || name;
+    if (profileEmail) profileEmail.value = firestoreData?.email || user.email || '';
+    if (profilePhone) profilePhone.value = firestoreData?.phone || '';
+
+    // Stats
+    const totalOrdersEl = document.querySelector('.f-stat-num');
+    const totalSpentEl  = document.querySelectorAll('.f-stat-num')[1];
+    if (totalOrdersEl) totalOrdersEl.textContent = firestoreData?.totalOrders || 0;
+    if (totalSpentEl)  totalSpentEl.textContent  = '৳' + (firestoreData?.totalSpent || 0).toLocaleString();
+
+    showFloatMsg(`Welcome back, ${name.split(' ')[0]}! 🎉`);
   }
+  window.showDashboardScreen = showDashboardScreen;
 
   // ── LOGOUT ──
-  function doLogout() {
-    document.getElementById('dashboard-screen').classList.remove('show');
-    document.getElementById('auth-screen').style.display = 'flex';
-    switchTab('login');
-    showToast('Logged out successfully 👋', 'success');
-  }
+  function doLogout() { window.fb_logout?.(); }
+
+  // ── REAL ORDERS RENDERER ──
+  window.renderRealOrders = function(orders) {
+    const panel = document.getElementById('dash-orders');
+    if (!panel || orders.length === 0) return;
+
+    const statusClass = {
+      pending:'status-pending', confirmed:'status-confirmed',
+      packed:'status-confirmed', shipped:'status-shipped',
+      delivered:'status-delivered', cancelled:'status-cancelled'
+    };
+    const trackSteps = ['Ordered','Confirmed','Packed','Shipped','Delivered'];
+    const stepIndex  = { pending:0, confirmed:1, packed:2, shipped:3, delivered:4, cancelled:0 };
+
+    panel.innerHTML = orders.map(o => {
+      const si = stepIndex[o.status] || 0;
+      const prod = o.products?.[0] || {};
+      return `
+        <div class="order-card">
+          <div class="order-head">
+            <div>
+              <div class="order-id">#${o.orderId || o.id}</div>
+              <div class="order-date">${o.createdAt?.toDate?.()?.toLocaleDateString('en-BD',{day:'numeric',month:'short',year:'numeric'}) || 'Recent'} · Cash on Delivery</div>
+            </div>
+            <div class="order-status ${statusClass[o.status]||'status-pending'}">
+              ${o.status?.charAt(0).toUpperCase() + o.status?.slice(1) || 'Pending'}
+            </div>
+          </div>
+          <!-- Tracking bar -->
+          <div class="track-bar">
+            ${trackSteps.map((s,i) => `
+              <div class="track-step ${i < si ? 'done' : i === si ? 'active' : ''}">
+                <div class="track-dot"><i class="fas fa-${i===0?'shopping-bag':i===1?'check':i===2?'box':i===3?'truck':'home'}"></i></div>
+                <div class="track-lbl">${s}</div>
+              </div>`).join('')}
+          </div>
+          <div class="order-product">
+            <div class="order-prod-img" style="background:linear-gradient(135deg,#5A0A0A,#C9A84C);">🥻</div>
+            <div>
+              <div class="order-prod-name">${prod.name || 'Product'}</div>
+              <div class="order-prod-cat">Qty: ${prod.quantity || 1}</div>
+            </div>
+            <div class="order-prod-price" style="margin-left:auto;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--green);">৳${(o.grandTotal||0).toLocaleString()}</div>
+          </div>
+          <div class="order-footer">
+            <div class="order-total">Total: <strong>৳${(o.grandTotal||0).toLocaleString()}</strong></div>
+            <div class="order-actions">
+              <a href="https://wa.me/8801676456965?text=Hi! Order inquiry: %23${o.id}" target="_blank" class="o-btn o-btn-wa"><i class="fab fa-whatsapp"></i> Ask about order</a>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  };
+
+  // ── REAL WISHLIST RENDERER ──
+  window.renderRealWishlist = function(items) {
+    const grid = document.querySelector('#dash-wishlist .wish-grid');
+    if (!grid || items.length === 0) return;
+    // Items have productId — fetch names from what we know
+    // For now show basic cards
+    const addCard = grid.querySelector('[onclick*="shop.html"]');
+    grid.innerHTML = items.map(item => `
+      <div class="wish-card">
+        <div class="wish-photo" style="background:linear-gradient(155deg,#5A0A0A,#C9A84C);position:relative;">
+          🥻
+          <button class="wish-remove" onclick="removeWishItem('${item.id}')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="wish-body">
+          <div class="wish-cat">Saved Item</div>
+          <div class="wish-name">${item.productName || 'Product'}</div>
+          <button class="wish-btn" onclick="goTo('product.html?id=${item.productId}')">
+            <i class="fas fa-shopping-bag"></i> View &amp; Order
+          </button>
+        </div>
+      </div>`).join('') + (addCard ? addCard.outerHTML : '');
+  };
+
+  // ── REMOVE WISHLIST ITEM ──
+  window.removeWishItem = function(id) {
+    showFloatMsg('Removed from wishlist 💔');
+  };
 
   // ── TOAST ──
   let toastTimer;
   function showToast(msg, type = 'success') {
     const t = document.getElementById('toast');
+    if (!t) return;
     const icon = t.querySelector('i');
     document.getElementById('toast-msg').textContent = msg;
-    icon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+    if (icon) icon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
     t.className = `toast show ${type}`;
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  // Float message (bottom center)
+  let floatTimer;
+  function showFloatMsg(msg) {
+    let el = document.getElementById('float-msg-cust');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'float-msg-cust';
+      el.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(10px);background:#12101E;color:white;padding:11px 22px;border-radius:50px;font-size:0.84rem;font-family:"Jost",sans-serif;z-index:9999;opacity:0;transition:all 0.3s ease;white-space:nowrap;border:1px solid rgba(255,255,255,0.1);pointer-events:none;';
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.style.opacity = '1';
+    el.style.transform = 'translateX(-50%) translateY(0)';
+    clearTimeout(floatTimer);
+    floatTimer = setTimeout(() => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateX(-50%) translateY(10px)';
+    }, 2800);
+  }
+
+  // Alert (used by Firebase functions)
+  function showAlert(msg, type) {
+    showToast(msg, type || 'success');
   }
 
   // ── AUTO OPEN SIGNUP if hash ──
