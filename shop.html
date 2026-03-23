@@ -699,6 +699,15 @@
     }
 
     grid.innerHTML = products.map((p, i) => {
+      // ── SMART PHOTO GETTER ──
+      // Handles: array, string, empty, undefined
+      const getPhoto = (p) => {
+        if (!p.photos) return null;
+        if (Array.isArray(p.photos) && p.photos.length > 0 && p.photos[0]) return p.photos[0];
+        if (typeof p.photos === 'string' && p.photos.length > 0) return p.photos;
+        return null;
+      };
+
       const hasPhoto = p.photos && p.photos.length > 0;
       const stockDot = p.stock > 5 ? '' : p.stock > 0 ? 'low' : 'out';
       const stockTxt = p.stock > 5 ? 'In Stock' : p.stock > 0 ? `Only ${p.stock} left` : 'Out of Stock';
@@ -707,9 +716,9 @@
         <div class="prod-card" style="animation-delay:${i * 0.06}s" onclick="goToProduct('${p.id}')">
 
           <div class="pc-img">
-            <div class="pc-img-inner" style="${!hasPhoto ? 'background:' + (CAT_BG[p.category] || '#eee') : ''}">
-              ${hasPhoto
-                ? `<img src="${p.photos[0]}" alt="${p.name}" loading="lazy" onerror="this.parentElement.innerHTML='<span style=font-size:3.5rem>${CAT_EMOJI[p.category]||'🛍️'}</span>'">`
+            <div class="pc-img-inner" style="${!getPhoto(p) ? 'background:' + (CAT_BG[p.category] || '#eee') : ''}">
+              ${getPhoto(p)
+                ? `<img src="${getPhoto(p)}" alt="${p.name}" loading="lazy" onerror="this.style.display='none';this.parentElement.style.background='${CAT_BG[p.category]||'#eee'}';this.parentElement.innerHTML+='<span style=font-size:3.5rem>${CAT_EMOJI[p.category]||'🛍️'}</span>'">`
                 : `<span style="font-size:3.5rem;">${CAT_EMOJI[p.category] || '🛍️'}</span>`}
             </div>
 
