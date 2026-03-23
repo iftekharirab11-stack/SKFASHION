@@ -960,20 +960,45 @@ tr:hover td{background:rgba(255,255,255,0.02);}
     <div class="modal-body">
 
       <!-- ============================================================ -->
-      <!-- 🖼️ PHOTO: Paste Google Drive converted link here             -->
-      <!-- Format: https://drive.google.com/uc?export=view&id=FILE_ID   -->
+      <!-- 🖼️ PHOTO UPLOAD SECTION                                      -->
+      <!-- Use ImgBB (NOT Google Drive — Drive is blocked by browsers)  -->
       <!-- ============================================================ -->
-      <div class="form-row">
-        <label>📸 Photo URL (Google Drive / ImgBB link)</label>
-        <input type="url" id="prod-photo-url" placeholder="https://drive.google.com/uc?export=view&id=YOUR_FILE_ID">
+
+      <!-- Live preview -->
+      <div id="photo-preview-wrap" style="display:none;margin-bottom:1rem;border-radius:14px;overflow:hidden;height:180px;background:rgba(255,255,255,0.05);border:1px solid var(--border);position:relative;">
+        <img id="photo-preview-img" src="" alt="Preview" style="width:100%;height:100%;object-fit:cover;">
+        <button onclick="clearPhotoUrl()" style="position:absolute;top:8px;right:8px;background:rgba(239,68,68,0.8);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;color:white;font-size:0.75rem;display:flex;align-items:center;justify-content:center;"><i class="fas fa-times"></i></button>
+      </div>
+      <div id="photo-placeholder" style="border:2px dashed rgba(212,68,154,0.25);border-radius:14px;padding:1.5rem;text-align:center;margin-bottom:1rem;background:rgba(212,68,154,0.03);">
+        <i class="fas fa-image" style="font-size:2rem;color:var(--muted);display:block;margin-bottom:0.5rem;"></i>
+        <p style="font-size:0.82rem;color:var(--muted);">Photo preview will appear here</p>
       </div>
 
-      <!-- Auto-convert Google Drive link helper -->
-      <div style="background:rgba(212,68,154,0.06);border:1px solid rgba(212,68,154,0.15);border-radius:10px;padding:0.8rem 1rem;margin-bottom:1rem;font-size:0.8rem;color:var(--muted);">
-        💡 <strong style="color:var(--text);">Google Drive tip:</strong> Share photo → Copy link → Paste above → 
-        <button onclick="convertDriveLink()" style="background:rgba(212,68,154,0.2);border:none;color:var(--pink-soft,#F0A8D8);padding:3px 10px;border-radius:6px;cursor:pointer;font-size:0.78rem;font-family:'DM Sans',sans-serif;margin-left:4px;">
-          Auto Convert ✨
-        </button>
+      <!-- ImgBB recommended -->
+      <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:1rem 1.2rem;margin-bottom:1rem;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.6rem;">
+          <span style="font-size:1rem;">✅</span>
+          <strong style="font-size:0.85rem;color:var(--text);">Recommended: Use ImgBB (Free, No CORS issues)</strong>
+        </div>
+        <ol style="font-size:0.78rem;color:var(--muted);padding-left:1.2rem;line-height:1.9;">
+          <li>Go to <a href="https://imgbb.com" target="_blank" style="color:#6FFFAB;text-decoration:none;font-weight:600;">imgbb.com</a></li>
+          <li>Upload your product photo</li>
+          <li>Copy the <strong style="color:var(--text);">"Direct link"</strong> (starts with i.ibb.co)</li>
+          <li>Paste it in the field below ✅</li>
+        </ol>
+      </div>
+
+      <!-- Google Drive warning -->
+      <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.18);border-radius:12px;padding:0.8rem 1rem;margin-bottom:1rem;">
+        <span style="font-size:0.78rem;color:#FCA5A5;">⛔ <strong>Google Drive links don't work</strong> — browsers block them (CORS policy). Use ImgBB instead.</span>
+      </div>
+
+      <div class="form-row">
+        <label>📸 Photo URL — Paste ImgBB "Direct link" here</label>
+        <input type="url" id="prod-photo-url"
+          placeholder="https://i.ibb.co/xxxxxxx/your-photo.jpg"
+          oninput="previewPhoto(this.value)"
+          style="font-size:0.82rem;">
       </div>
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
@@ -1101,41 +1126,39 @@ tr:hover td{background:rgba(255,255,255,0.02);}
   // 🔐 LOGIN FUNCTION
   // ============================================================
   window.fb_doLogin = async function() {
-    const email = document.getElementById('login-email').value.trim();
-    const pass  = document.getElementById('login-pass').value;
-    const btn   = document.getElementById('login-submit-btn');
+    const email = document.getElementById('login-email')?.value?.trim();
+    const pass  = document.getElementById('login-pass')?.value;
+    const btn   = document.getElementById('login-submit-btn') || document.querySelector('.login-btn');
     const err   = document.getElementById('login-error');
 
     if (!email || !pass) {
-      showLoginError('Please enter your email and password.');
+      if (err) { err.style.display = 'flex'; document.getElementById('login-error-text').textContent = 'Please enter your email and password.'; }
       return;
     }
 
-    // Hide any previous error
-    err.style.display = 'none';
-
-    // Show loading state
-    if (btn) {
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> &nbsp;Signing in...';
-      btn.disabled = true;
-    }
+    // Hide error, show loading
+    if (err) err.style.display = 'none';
+    if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> &nbsp;Signing in...'; btn.disabled = true; }
 
     try {
       await signInWithEmailAndPassword(auth, email, pass);
-      // onAuthStateChanged above handles the rest
-    } catch (e) {
-      if (btn) {
-        btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> &nbsp;Sign In to Admin Panel';
-        btn.disabled = false;
-      }
-      if (e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') {
-        showLoginError('Wrong email or password. Please try again.');
-      } else if (e.code === 'auth/too-many-requests') {
-        showLoginError('Too many failed attempts. Please wait a few minutes.');
-      } else if (e.code === 'auth/network-request-failed') {
-        showLoginError('Network error. Check your internet connection.');
-      } else {
-        showLoginError('Login failed: ' + e.message);
+      // onAuthStateChanged handles rest
+    } catch(e) {
+      if (btn) { btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> &nbsp;Sign In to Admin Panel'; btn.disabled = false; }
+      const msgs = {
+        'auth/user-not-found':     'No account found with this email.',
+        'auth/wrong-password':     'Wrong password. Please try again.',
+        'auth/invalid-credential': 'Wrong email or password.',
+        'auth/too-many-requests':  'Too many attempts. Please wait a few minutes.',
+        'auth/network-request-failed': 'Network error. Check your internet.'
+      };
+      const msg = msgs[e.code] || e.message;
+      if (err) {
+        const txt = document.getElementById('login-error-text');
+        if (txt) txt.textContent = msg; else err.textContent = msg;
+        err.style.display = 'flex';
+        err.style.alignItems = 'center';
+        err.style.gap = '8px';
       }
     }
   };
@@ -1170,77 +1193,76 @@ tr:hover td{background:rgba(255,255,255,0.02);}
   // ============================================================
   async function loadDashboardData() {
     try {
-      // Load orders count
-      const ordersSnap    = await getDocs(collection(db, 'ORDERS'));
-      const customersSnap = await getDocs(collection(db, 'CUSTOMERS'));
-      const productsSnap  = await getDocs(collection(db, 'PRODUCTS'));
-      const messagesSnap  = await getDocs(collection(db, 'MESSAGES'));
+      // Load all collections
+      const [ordersSnap, customersSnap, productsSnap, messagesSnap] = await Promise.all([
+        getDocs(collection(db, 'ORDERS')),
+        getDocs(collection(db, 'CUSTOMERS')),
+        getDocs(collection(db, 'PRODUCTS')),
+        getDocs(collection(db, 'MESSAGES'))
+      ]);
 
-      const orders    = [];
-      const products  = [];
-      const customers = [];
-      const messages  = [];
+      const orders    = ordersSnap.docs.map(d    => ({ id: d.id, ...d.data() }));
+      const products  = productsSnap.docs.map(d  => ({ id: d.id, ...d.data() }));
+      const customers = customersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      const messages  = messagesSnap.docs.map(d  => ({ id: d.id, ...d.data() }));
 
-      ordersSnap.forEach(d    => orders.push({ id: d.id, ...d.data() }));
-      productsSnap.forEach(d  => products.push({ id: d.id, ...d.data() }));
-      customersSnap.forEach(d => customers.push({ id: d.id, ...d.data() }));
-      messagesSnap.forEach(d  => messages.push({ id: d.id, ...d.data() }));
-
-      // Calculate total revenue
-      const revenue = orders.reduce((sum, o) => sum + (o.grandTotal || 0), 0);
+      // Calculate totals
+      const revenue    = orders.reduce((sum, o) => sum + (o.grandTotal || 0), 0);
       const unreadMsgs = messages.filter(m => !m.isRead).length;
 
-      // Update dashboard stats
-      updateStat(0, orders.length    + ' Orders');
-      updateStat(1, '৳' + revenue.toLocaleString());
-      updateStat(2, customers.length + ' Customers');
-      updateStat(3, products.length  + ' Products');
+      // Update all dashboard stats
+      updateDashStats(orders, customers, products, revenue, unreadMsgs);
 
-      // Update sidebar badges
-      updateBadge('orders',   orders.filter(o => o.status === 'pending').length);
-      updateBadge('messages', unreadMsgs);
-
-      // Render orders table
+      // Render all sections
       renderOrders(orders);
-
-      // Render products grid
       renderProducts(products);
-
-      // Render customers table
       renderCustomers(customers);
-
-      // Render messages
       renderMessages(messages);
 
-      // Update admin name in sidebar
-      if (auth.currentUser) {
-        const adminName = auth.currentUser.email.split('@')[0];
-        const nameEl = document.querySelector('.sb-user-name');
-        if (nameEl) nameEl.textContent = 'Aftabun Nahar';
-      }
+      // Update admin name
+      const nameEl = document.querySelector('.sb-user-name');
+      if (nameEl) nameEl.textContent = 'Aftabun Nahar';
 
-      showToast('Dashboard loaded ✅');
+      window.showToast('Dashboard loaded ✅');
 
-    } catch (e) {
+    } catch(e) {
       console.error('Load error:', e);
-      showToast('Error loading data: ' + e.message);
+      window.showToast('Error: ' + e.message);
     }
   }
 
-  // ── Update stat cards ──
+  // ── Update stat cards by position ──
   function updateStat(index, value) {
     const stats = document.querySelectorAll('.stat-num');
     if (stats[index]) stats[index].textContent = value;
   }
 
-  // ── Update sidebar badge count ──
-  function updateBadge(page, count) {
-    const link = document.querySelector(`[onclick*="showPage('${page}'"]`);
-    if (link) {
-      const badge = link.querySelector('.sb-badge');
-      if (badge && count > 0) badge.textContent = count;
-      else if (badge && count === 0) badge.style.display = 'none';
-    }
+  // ── Update dashboard stat cards with real data ──
+  function updateDashStats(orders, customers, products, revenue, unreadMsgs) {
+    const pending   = orders.filter(o => o.status === 'pending').length;
+    const confirmed = orders.filter(o => o.status === 'confirmed').length;
+
+    // Stat cards
+    updateStat(0, orders.length);
+    updateStat(1, '৳' + revenue.toLocaleString());
+    updateStat(2, customers.length);
+    updateStat(3, products.length);
+
+    // Stat change labels
+    const changeEls = document.querySelectorAll('.stat-change');
+    if (changeEls[0]) changeEls[0].innerHTML = `<i class="fas fa-clock"></i> ${pending} pending`;
+    if (changeEls[2]) changeEls[2].innerHTML = `<i class="fas fa-envelope"></i> ${unreadMsgs} unread msgs`;
+
+    // Sidebar badges
+    const orderBadge = document.querySelector('.sb-nav a[onclick*="\'orders\'"] .sb-badge');
+    const msgBadge   = document.querySelector('.sb-nav a[onclick*="\'messages\'"] .sb-badge');
+    if (orderBadge) { orderBadge.textContent = pending; orderBadge.style.display = pending > 0 ? '' : 'none'; }
+    if (msgBadge)   { msgBadge.textContent = unreadMsgs; msgBadge.style.display = unreadMsgs > 0 ? '' : 'none'; }
+
+    // Quick stats in dashboard sidebar
+    const qsVals = document.querySelectorAll('.qs-val');
+    if (qsVals[0]) qsVals[0].textContent = unreadMsgs + ' new';
+    if (qsVals[1]) qsVals[1].textContent = orders.filter(o => o.status === 'delivered').length + ' delivered';
   }
 
   // ============================================================
@@ -1310,6 +1332,14 @@ tr:hover td{background:rgba(255,255,255,0.02);}
   // ============================================================
   // 🛍️ RENDER PRODUCTS GRID
   // ============================================================
+  // ── Smart photo getter (handles array, string, empty) ──
+  function getPhotoUrl(p) {
+    if (!p.photos) return null;
+    if (Array.isArray(p.photos) && p.photos.length > 0 && p.photos[0]) return p.photos[0];
+    if (typeof p.photos === 'string' && p.photos.length > 0) return p.photos;
+    return null;
+  }
+
   function renderProducts(products) {
     const grid = document.querySelector('#page-products .products-grid');
     if (!grid) return;
@@ -1317,15 +1347,17 @@ tr:hover td{background:rgba(255,255,255,0.02);}
     // Keep the "add product" placeholder
     const addCard = grid.querySelector('[onclick*="add-product-modal"]');
 
-    const productHTML = products.map(p => `
+    const productHTML = products.map(p => {
+      const photo = getPhotoUrl(p);
+      return `
       <div class="prod-card">
-        <div class="prod-photo" style="background:${getCatColor(p.category)};position:relative;">
-          ${p.photos?.[0]
-            ? `<img src="${p.photos[0]}" style="width:100%;height:100%;object-fit:cover;">`
+        <div class="prod-photo" style="background:${getCatColor(p.category)};position:relative;overflow:hidden;">
+          ${photo
+            ? `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" onerror="this.remove()">`
             : getCatEmoji(p.category)}
           <div class="prod-overlay">
             <button class="btn btn-sm btn-outline" onclick="editProduct('${p.id}')"><i class="fas fa-edit"></i></button>
-            <button class="btn btn-sm btn-danger" onclick="deleteProduct('${p.id}', '${p.name}')"><i class="fas fa-trash"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteProduct('${p.id}', '${(p.name||'').replace(/'/g,"\\'")}')"><i class="fas fa-trash"></i></button>
           </div>
         </div>
         <div class="prod-body">
@@ -1333,20 +1365,27 @@ tr:hover td{background:rgba(255,255,255,0.02);}
           <div class="prod-name">${p.name || '—'}</div>
           <div class="prod-name-bn">${p.nameBangla || ''}</div>
           <div class="prod-price-row">
-            <div><span class="prod-price">৳${(p.price||0).toLocaleString()}</span>${p.originalPrice ? `<span class="prod-orig">৳${p.originalPrice.toLocaleString()}</span>` : ''}</div>
+            <div>
+              <span class="prod-price">৳${(p.price||0).toLocaleString()}</span>
+              ${p.originalPrice && p.originalPrice > p.price ? `<span class="prod-orig">৳${p.originalPrice.toLocaleString()}</span>` : ''}
+            </div>
             ${p.discount ? `<span class="prod-disc">${p.discount}% OFF</span>` : ''}
           </div>
         </div>
         <div class="prod-footer">
           <span class="prod-stock">Stock: ${p.stock || 0}</span>
-          <span class="badge ${p.stock > 5 ? 'instock' : p.stock > 0 ? 'lowstock' : 'outofstock'}">
-            ${p.stock > 5 ? 'In Stock' : p.stock > 0 ? 'Low Stock' : 'Out of Stock'}
+          <span class="badge ${(p.stock||0) > 5 ? 'instock' : (p.stock||0) > 0 ? 'lowstock' : 'outofstock'}">
+            ${(p.stock||0) > 5 ? 'In Stock' : (p.stock||0) > 0 ? 'Low Stock' : 'Out of Stock'}
           </span>
         </div>
       </div>
-    `).join('');
+    `}).join('');
 
     grid.innerHTML = productHTML + (addCard ? addCard.outerHTML : '');
+
+    // Update product count chip in sidebar
+    const prodBadge = document.querySelector('.sb-nav a[onclick*="products"] .sb-badge');
+    if (prodBadge) prodBadge.textContent = products.length;
   }
 
   // ============================================================
@@ -1653,6 +1692,35 @@ tr:hover td{background:rgba(255,255,255,0.02);}
       inp.type = 'password';
       ico.innerHTML = '<i class="fas fa-eye"></i>';
     }
+  }
+
+  // ── Photo preview in add product modal ──
+  function previewPhoto(url) {
+    const wrap  = document.getElementById('photo-preview-wrap');
+    const img   = document.getElementById('photo-preview-img');
+    const placeholder = document.getElementById('photo-placeholder');
+    if (!url || url.trim() === '') {
+      wrap.style.display = 'none';
+      placeholder.style.display = 'block';
+      return;
+    }
+    img.src = url.trim();
+    img.onload = function() {
+      wrap.style.display = 'block';
+      placeholder.style.display = 'none';
+    };
+    img.onerror = function() {
+      wrap.style.display = 'none';
+      placeholder.style.display = 'block';
+      placeholder.innerHTML = '<i class="fas fa-exclamation-triangle" style="font-size:2rem;color:var(--red,#EF4444);display:block;margin-bottom:0.5rem;"></i><p style="font-size:0.82rem;color:var(--muted);">Could not load image. Check the link.</p>';
+    };
+  }
+
+  function clearPhotoUrl() {
+    document.getElementById('prod-photo-url').value = '';
+    document.getElementById('photo-preview-wrap').style.display = 'none';
+    document.getElementById('photo-placeholder').style.display = 'block';
+    document.getElementById('photo-placeholder').innerHTML = '<i class="fas fa-image" style="font-size:2rem;color:var(--muted);display:block;margin-bottom:0.5rem;"></i><p style="font-size:0.82rem;color:var(--muted);">Photo preview will appear here</p>';
   }
 
   document.getElementById('login-pass')?.addEventListener('keydown', e => {
