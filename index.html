@@ -13,11 +13,36 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- ============================================================ -->
-  <!-- 🔥 FIREBASE: PASTE YOUR 3 FIREBASE SCRIPT TAGS HERE          -->
-  <!-- Step 1: Delete these comment lines                            -->
-  <!-- Step 2: Paste the 3 script import lines from Firebase        -->
+  <!-- 🔥 FIREBASE: Firebase App + Auth                            -->
   <!-- ============================================================ -->
-  <!-- PASTE FIREBASE SCRIPTS HERE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyARyH6aE1ovNsVPketz4Q-FiG6Tt14n43s",
+      authDomain: "skfashion-1.firebaseapp.com",
+      projectId: "skfashion-1",
+      storageBucket: "skfashion-1.firebasestorage.app",
+      messagingSenderId: "524555632799",
+      appId: "1:524555632799:web:93f2cfbf606cae8da462aa"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Make auth available globally
+    window._firebaseAuth = auth;
+    window._firebaseApp = app;
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.showUserInNav(user);
+      } else {
+        window.showLoginInNav();
+      }
+    });
+  </script>
 
   <style>
     :root {
@@ -498,39 +523,6 @@
   <a href="https://wa.me/8801676456965" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i></a>
 </div>
 
-<!-- ============================================================ -->
-<!-- 🔥 FIREBASE CONNECTION BLOCK                                  -->
-<!-- WHEN READY: Delete the comments below and paste real code     -->
-<!-- ============================================================ -->
-<!--
-PASTE THIS WHEN FIREBASE IS READY:
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyARyH6aE1ovNsVPketz4Q-FiG6Tt14n43s",
-    authDomain: "skfashion-1.firebaseapp.com",
-    projectId: "skfashion-1",
-    storageBucket: "skfashion-1.firebasestorage.app",
-    messagingSenderId: "524555632799",
-    appId: "1:524555632799:web:93f2cfbf606cae8da462aa"
-  }
-
-  const app = initializeApp(firebaseConfig)
-  const auth = getAuth(app)
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      showUserInNav(user)
-    } else {
-      showLoginInNav()
-    }
-  })
-</script>
--->
-
 <script>
   // PAGE TRANSITIONS
   function goTo(href) { document.body.classList.add('exiting'); setTimeout(() => { window.location.href = href; }, 420); }
@@ -572,7 +564,7 @@ PASTE THIS WHEN FIREBASE IS READY:
   // 🔥 FIREBASE: These functions called by Firebase auth above
   // DO NOT DELETE — Firebase will call these automatically
   // ============================================================
-  function showUserInNav(user) {
+  window.showUserInNav = function(user) {
     document.querySelectorAll('.nav-login, .nav-signup').forEach(el => el.closest('li').style.display = 'none');
     const btn = document.getElementById('nav-user-btn');
     if (btn) {
@@ -582,12 +574,12 @@ PASTE THIS WHEN FIREBASE IS READY:
         document.getElementById('nav-user-initial').textContent = user.displayName.charAt(0).toUpperCase();
       }
     }
-  }
-  function showLoginInNav() {
+  };
+  window.showLoginInNav = function() {
     document.querySelectorAll('.nav-login, .nav-signup').forEach(el => el.closest('li').style.display = '');
     const btn = document.getElementById('nav-user-btn');
     if (btn) btn.classList.remove('show');
-  }
+  };
 </script>
 </body>
 </html>

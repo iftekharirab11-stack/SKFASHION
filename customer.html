@@ -8,9 +8,42 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- ============================================================ -->
-  <!-- 🔥 FIREBASE: PASTE YOUR FIREBASE SCRIPTS HERE                -->
+  <!-- 🔥 FIREBASE: Firebase App + Auth + Google Provider            -->
   <!-- ============================================================ -->
-  <!-- PASTE FIREBASE SCRIPTS HERE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyARyH6aE1ovNsVPketz4Q-FiG6Tt14n43s",
+      authDomain: "skfashion-1.firebaseapp.com",
+      projectId: "skfashion-1",
+      storageBucket: "skfashion-1.firebasestorage.app",
+      messagingSenderId: "524555632799",
+      appId: "1:524555632799:web:93f2cfbf606cae8da462aa"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const googleProvider = new GoogleAuthProvider();
+
+    window._firebaseAuth = auth;
+    window._firebaseApp = app;
+    window._firebaseDb = db;
+    window._googleProvider = googleProvider;
+
+    // Check auth state on load
+    onAuthStateChanged(auth, (user) => {
+      window._currentUser = user;
+      if (user) {
+        showDashboard(user);
+      } else {
+        showAuthScreen();
+      }
+    });
+  </script>
 
   <style>
     :root {
@@ -1331,7 +1364,145 @@
     showToast(msg, type || 'success');
   }
 
-  // ── AUTO OPEN SIGNUP if hash ──
+  // ── FIREBASE AUTH FUNCTIONS ──
+  
+  // Show auth screen (logged out)
+  window.showAuthScreen = function() {
+    document.getElementById('auth-screen').style.display = 'flex';
+    document.getElementById('dashboard-screen').classList.remove('show');
+  };
+
+  // Show dashboard (logged in)
+  window.showDashboard = async function(user) {
+    // Get additional user data from Firestore if exists
+    let firestoreData = null;
+    try {
+      const userDoc = await getDoc(doc(window._firebaseDb, 'CUSTOMERS', user.uid));
+      if (userDoc.exists()) {
+        firestoreData = userDoc.data();
+      }
+    } catch(e) { console.log('No firestore data:', e); }
+    
+    document.getElementById('auth-screen').style.display = 'none';
+    const dash = document.getElementById('dashboard-screen');
+    dash.classList.add('show');
+
+    const name = firestoreData?.name || user.displayName || user.email?.split('@')[0] || 'Customer';
+    const initial = name.charAt(0).toUpperCase();
+
+    document.getElementById('dash-name').textContent = name;
+    document.getElementById('dash-avatar').textContent = initial;
+  };
+
+  // Google Login
+  window.fb_googleLogin = async function() {
+    try {
+      const result = await signInWithPopup(window._firebaseAuth, window._googleProvider);
+      showToast('Welcome to SK Fashion! 🎉', 'success');
+    } catch(e) {
+      if (e.code !== 'auth/popup-closed-by-user') {
+        showToast(getAuthError(e), 'error');
+      }
+    }
+  };
+
+  // Email Login
+  window.fb_emailLogin = async function() {
+    const email = document.getElementById('login-email').value.trim();
+    const pass = document.getElementById('login-pass').value;
+    if (!email || !pass) { showError('login-error', 'Please enter email and password'); return; }
+    
+    try {
+      await signInWithEmailAndPassword(window._firebaseAuth, email, pass);
+      showToast('Welcome back! 🎉', 'success');
+    } catch(e) {
+      showError('login-error', getAuthError(e));
+    }
+  };
+
+  // Email Signup
+  window.fb_emailSignup = async function() {
+    const name = document.getElementById('signup-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const pass = document.getElementById('signup-pass').value;
+    const terms = document.getElementById('terms-check')?.checked;
+
+    if (!name) { showError('signup-error', 'Please enter your full name'); return; }
+    if (!email) { showError('signup-error', 'Please enter your email'); return; }
+    if (!pass || pass.length < 8) { showError('signup-error', 'Password must be at least 8 characters'); return; }
+    if (!terms) { showError('signup-error', 'Please accept Terms of Service'); return; }
+
+    try {
+      const cred = await createUserWithEmailAndPassword(window._firebaseAuth, email, pass);
+      await updateProfile(cred.user, { displayName: name });
+      
+      // Save to Firestore
+      await setDoc(doc(window._firebaseDb, 'CUSTOMERS', cred.user.uid), {
+        name: name,
+        email: email,
+        phone: document.getElementById('signup-phone')?.value || '',
+        createdAt: new Date().toISOString()
+      });
+      
+      showToast('Account created! Welcome to SK Fashion! 🎉', 'success');
+    } catch(e) {
+      showError('signup-error', getAuthError(e));
+    }
+  };
+
+  // Password Reset
+  window.fb_forgotPassword = async function() {
+    const email = document.getElementById('forgot-email').value.trim();
+    if (!email) { showToast('Please enter your email', 'error'); return; }
+    
+    try {
+      await sendPasswordResetEmail(window._firebaseAuth, email);
+      document.getElementById('forgot-success').classList.add('show');
+      showToast('Password reset email sent!', 'success');
+    } catch(e) {
+      showToast(getAuthError(e), 'error');
+    }
+  };
+
+  // Logout
+  window.doLogout = async function() {
+    try {
+      await signOut(window._firebaseAuth);
+      showToast('Logged out successfully', 'success');
+    } catch(e) {
+      console.log('Logout error:', e);
+    }
+  };
+
+  // Helper: Get auth error message
+  function getAuthError(e) {
+    const code = e.code || '';
+    if (code.includes('email-already-in-use')) return 'Email already registered';
+    if (code.includes('invalid-email')) return 'Invalid email address';
+    if (code.includes('user-not-found')) return 'No account found with this email';
+    if (code.includes('wrong-password')) return 'Incorrect password';
+    if (code.includes('too-many-requests')) return 'Too many attempts. Try again later';
+    if (code.includes('pop')) return 'Popup closed. Please try again';
+    return e.message || 'An error occurred';
+  }
+
+  // Demo functions (fallback when Firebase not available)
+  window.demoLogin = function() {
+    const email = document.getElementById('login-email').value;
+    const pass = document.getElementById('login-pass').value;
+    if (!email || !pass) { showError('login-error', 'Please enter email and password'); return; }
+    showDashboardScreen({ displayName: email.split('@')[0] });
+    showToast('Demo login successful!', 'success');
+  };
+
+  window.demoSignup = function() {
+    const name = document.getElementById('signup-name').value;
+    if (!name) { showError('signup-error', 'Please enter your full name'); return; }
+    showDashboardScreen({ displayName: name });
+    showToast('Demo account created!', 'success');
+  };
+
+  // Auto open signup if hash
   if (window.location.hash === '#signup') {
     document.querySelectorAll('.auth-tab')[1].classList.add('active');
     document.querySelectorAll('.auth-tab')[0].classList.remove('active');
