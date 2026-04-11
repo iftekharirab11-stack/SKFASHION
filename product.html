@@ -7,10 +7,7 @@
   <meta name="description" content="View product details at SK Fashion Bangladesh. Authentic sarees, Jamdani, Panjabi and handcrafted bags.">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- ============================================================ -->
-  <!-- 🔥 FIREBASE: PASTE YOUR FIREBASE SCRIPTS HERE                -->
-  <!-- ============================================================ -->
-  <!-- PASTE FIREBASE SCRIPTS HERE -->
+  
   <style>
     :root {
       --pink:#D4449A;--pink-soft:#F0A8D8;--blue:#2B5CE6;--blue-soft:#93AEFF;
@@ -291,10 +288,8 @@
     <li><a href="index.html" class="plink">Home</a></li>
     <li><a href="shop.html" class="plink">Shop</a></li>
     <li><a href="about.html" class="plink">Our Story</a></li>
-    <li><a href="customer.html" class="plink" style="border:1.5px solid rgba(212,68,154,0.4);color:var(--pink);padding:7px 16px;border-radius:50px;font-weight:600;">Login</a></li>
+    <li><a href="https://wa.me/8801676456965" target="_blank" style="border:1.5px solid rgba(212,68,154,0.4);color:var(--pink);padding:7px 16px;border-radius:50px;font-weight:600;">Order Help</a></li>
     <li><a href="https://wa.me/8801676456965" target="_blank" class="nav-wa"><i class="fab fa-whatsapp"></i> Order</a></li>
-    <!-- 👤 User Profile — shown by Firebase when logged in -->
-    <li><a href="customer.html" class="plink" id="nav-user-btn" style="display:none;align-items:center;gap:8px;background:rgba(212,68,154,0.08);border:1px solid rgba(212,68,154,0.2);padding:6px 14px 6px 6px;border-radius:50px;"><div id="nav-user-initial" style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--blue));display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;color:white;">?</div><span id="nav-user-name" style="font-size:0.8rem;font-weight:600;">My Account</span></a></li>
   </ul>
   <div class="burger" id="burger"><span></span><span></span><span></span></div>
 </nav>
@@ -304,7 +299,7 @@
   <a href="index.html" class="plink" onclick="closeMob()">Home</a>
   <a href="shop.html" class="plink" onclick="closeMob()">Shop</a>
   <a href="about.html" class="plink" onclick="closeMob()">Our Story</a>
-  <a href="customer.html" class="plink" onclick="closeMob()" style="color:var(--pink)!important;font-weight:700!important;">Login / My Account</a>
+  <a href="https://wa.me/8801676456965" target="_blank" style="color:var(--pink)!important;font-weight:700!important;">Order Help</a>
   <a href="https://www.facebook.com/skfashionnn/" target="_blank"><i class="fab fa-facebook"></i> &nbsp;Facebook Shop</a>
   <a href="https://wa.me/8801676456965" target="_blank"><i class="fab fa-whatsapp"></i> &nbsp;WhatsApp Order</a>
 </nav>
@@ -392,48 +387,7 @@
   <img id="lightbox-img" src="" alt="Product zoom">
 </div>
 
-<!-- ============================================================ -->
-<!-- 🔥 FIREBASE: LOAD PRODUCT FROM FIRESTORE                     -->
-<!-- Reads ?id=PRODUCT_ID from URL → fetches from PRODUCTS        -->
-<!-- ============================================================ -->
-<script type="module">
-  import { initializeApp }
-    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, doc, getDoc, collection, getDocs, query, where, limit }
-    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  import { getAuth, onAuthStateChanged }
-    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey:            "AIzaSyAfkLbLmEEdxYV_vBzpq-9PcIFpcqmWISo",
-    authDomain:        "skfashion-6fdab.firebaseapp.com",
-    projectId:         "skfashion-6fdab",
-    storageBucket:     "skfashion-6fdab.firebasestorage.app",
-    messagingSenderId: "577389144954",
-    appId:             "1:577389144954:web:e5b5d2eac7d4e037dd84c3",
-    measurementId:     "G-DXQKXNXRET"
-  };
-
-  const app  = initializeApp(firebaseConfig);
-  const db   = getFirestore(app);
-  const auth = getAuth(app);
-
-  // Auth state for navbar
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const btn = document.getElementById('nav-user-btn');
-      if (btn) {
-        btn.style.display = 'flex';
-        const nameEl = document.getElementById('nav-user-name');
-        const initEl = document.getElementById('nav-user-initial');
-        if (user.displayName && nameEl) {
-          nameEl.textContent = user.displayName.split(' ')[0];
-          initEl.textContent = user.displayName.charAt(0).toUpperCase();
-        }
-      }
-    }
-  });
-
+<script>
   // Get product ID from URL
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get('id');
@@ -444,53 +398,19 @@
       return;
     }
 
-    try {
-      // Fetch product from Firebase
-      const snap = await getDoc(doc(db, 'PRODUCTS', productId));
-
-      if (!snap.exists()) {
-        // Try demo products
-        const demo = window._demoProducts?.find(p => p.id === productId);
-        if (demo) {
-          window.renderProduct(demo);
-          loadRelated(demo.category, productId, null);
-        } else {
-          showError('Product not found', 'This product may have been removed or is no longer available.');
-        }
-      } else {
-        const product = { id: snap.id, ...snap.data() };
-        window.renderProduct(product);
-        loadRelated(product.category, productId, db);
-      }
-    } catch(e) {
-      console.warn('Firebase error, trying demo:', e.message);
-      // Fallback to demo products
-      const demo = window._demoProducts?.find(p => p.id === productId);
-      if (demo) {
-        window.renderProduct(demo);
-        loadRelated(demo.category, productId, null);
-      } else {
-        showError('Connection error', 'Could not load product. Please check your connection.');
-      }
+    // Try demo products
+    const demo = window._demoProducts?.find(p => p.id === productId);
+    if (demo) {
+      window.renderProduct(demo);
+      loadRelated(demo.category, productId);
+    } else {
+      showError('Product not found', 'This product may have been removed or is no longer available.');
     }
   });
 
-  // Load related products
-  async function loadRelated(category, currentId, db) {
-    try {
-      let related = [];
-      if (db) {
-        const q = query(collection(db, 'PRODUCTS'), where('category', '==', category), limit(5));
-        const snap = await getDocs(q);
-        related = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.id !== currentId).slice(0, 4);
-      } else {
-        // Demo fallback
-        related = (window._demoProducts || []).filter(p => p.category === category && p.id !== currentId).slice(0, 4);
-      }
-      if (related.length > 0) window.renderRelated(related);
-    } catch(e) {
-      console.warn('Related load error:', e.message);
-    }
+  function loadRelated(category, currentId) {
+    const related = (window._demoProducts || []).filter(p => p.category === category && p.id !== currentId).slice(0, 4);
+    if (related.length > 0) window.renderRelated(related);
   }
 
   function showError(title, msg) {
@@ -505,7 +425,6 @@
         </div>
       </div>`;
   }
-
 </script>
 
 <script>
@@ -649,169 +568,73 @@
           <div class="pi-order-head">Place Your Order</div>
           <div class="order-form">
 
-            <!-- Quantity -->
+            <div class="of-field">
+              <label>Your Full Name *</label>
+              <input type="text" id="order-name" placeholder="e.g. Farida Akhter">
+            </div>
+            <div class="of-field">
+              <label>Phone Number *</label>
+              <input type="tel" id="order-phone" placeholder="01XXXXXXXXX">
+            </div>
+            <div class="of-field">
+              <label>Delivery Address *</label>
+              <textarea id="order-address" placeholder="House/Road, Area, City"></textarea>
+            </div>
             <div class="of-field">
               <label>Quantity</label>
               <div class="of-qty">
-                <button class="qty-btn" onclick="changeQty(-1)"><i class="fas fa-minus"></i></button>
+                <button type="button" class="qty-btn" onclick="changeQty(-1)">−</button>
                 <span class="qty-num" id="qty-display">1</span>
-                <button class="qty-btn" onclick="changeQty(1)"><i class="fas fa-plus"></i></button>
-                <span style="font-size:0.82rem;color:var(--body);margin-left:8px;">× ৳${p.price.toLocaleString()} = <strong id="total-price" style="color:var(--green);">৳${p.price.toLocaleString()}</strong></span>
+                <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
+                <span style="margin-left:12px;font-size:0.85rem;color:var(--body);">
+                  × ৳<span id="unit-price">${p.price.toLocaleString()}</span> = <strong>৳<span id="item-total">${p.price.toLocaleString()}</span></strong>
+                </span>
               </div>
             </div>
-
-            <!-- Customer name -->
             <div class="of-field">
-              <label>Your Name</label>
-              <input type="text" id="order-name" placeholder="e.g. Farida Akhter">
+              <label>Special Note (optional)</label>
+              <input type="text" id="order-note" placeholder="Colour, size, gift wrap, etc.">
+            </div>
+            <div class="of-field">
+              <label>Payment Method *</label>
+              <select id="payment-method" onchange="togglePaymentFields()">
+                <option value="cod">Cash on Delivery</option>
+                <option value="bkash">Pay Now (bKash)</option>
+                <option value="nagad">Pay Now (Nagad)</option>
+              </select>
+            </div>
+            <div id="mobile-payment-fields" style="display:none;">
+              <div class="of-field">
+                <label>Amount You Paid (৳) *</label>
+                <input type="number" id="paid-amount" placeholder="e.g. ${p.price.toLocaleString()}" min="1">
+              </div>
+              <div class="of-field">
+                <label>Your bKash/Nagad Number *</label>
+                <input type="tel" id="sender-number" placeholder="01XXXXXXXXX">
+              </div>
+              <p style="font-size:0.8rem;color:var(--body);margin:-0.5rem 0 0.5rem;">
+                📱 Send payment to: <strong>01676-456965</strong> (Personal bKash/Nagad)
+              </p>
             </div>
 
-            <!-- Phone -->
-            <div class="of-field">
-              <label>Phone Number</label>
-              <input type="tel" id="order-phone" placeholder="e.g. 01XXXXXXXXX">
-            </div>
-
-            <!-- Address -->
-            <div class="of-field">
-              <label>Delivery Address</label>
-              <textarea id="order-address" placeholder="House/Road, Area, City..."></textarea>
-            </div>
-
-            <!-- Note -->
-            <div class="of-field">
-              <label>Special Note <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--body);font-size:0.78rem;">(optional)</span></label>
-              <input type="text" id="order-note" placeholder="e.g. Colour, size, gift wrap...">
-            </div>
-
-            <!-- BUY NOW BUTTON -->
-            <button class="btn-buy-now" onclick="showPaymentSection()">
-              <i class="fas fa-bolt"></i> Buy Now — ৳<span id="buy-total">${p.price.toLocaleString()}</span>
+            <button type="button" class="btn-buy-now" onclick="submitOrderToSheet()">
+              <i class="fas fa-check-circle"></i> Place Order
             </button>
-
-            <!-- WhatsApp + Facebook side by side -->
-            <div class="order-btns">
-              <button class="btn-wa" onclick="orderViaWhatsApp()">
-                <i class="fab fa-whatsapp"></i> WhatsApp Order
-              </button>
-              <a href="https://www.facebook.com/skfashionnn/" target="_blank" class="btn-fb">
-                <i class="fab fa-facebook"></i> Facebook
-              </a>
-            </div>
-
+            <button type="button" class="btn-wa" onclick="orderViaWhatsApp()" style="margin-top:10px;">
+              <i class="fab fa-whatsapp"></i> Order via WhatsApp
+            </button>
+            <p style="text-align:center;font-size:0.75rem;color:var(--body);margin-top:0.8rem;">
+              ✅ 100% secure · Cash on Delivery available
+            </p>
           </div>
 
-          <!-- ============================================================ -->
-          <!-- PAYMENT SECTION — slides in after Buy Now clicked           -->
-          <!-- ============================================================ -->
-          <div class="payment-section" id="payment-section" style="display:none;">
-
-            <!-- Order summary -->
-            <div class="order-summary">
-              <div class="os-item">
-                <div class="os-label">Product</div>
-                <div class="os-val" style="font-size:0.82rem;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</div>
-              </div>
-              <div class="os-sep"></div>
-              <div class="os-item">
-                <div class="os-label">Qty</div>
-                <div class="os-val" id="summary-qty">1</div>
-              </div>
-              <div class="os-sep"></div>
-              <div class="os-item">
-                <div class="os-label">Delivery</div>
-                <div class="os-val">৳80+</div>
-              </div>
-              <div class="os-sep"></div>
-              <div class="os-item">
-                <div class="os-label">Total</div>
-                <div class="os-val green" id="summary-total">৳${p.price.toLocaleString()}</div>
-              </div>
-            </div>
-
-            <!-- Payment title -->
-            <div class="payment-title">
-              <i class="fas fa-credit-card"></i> Choose Payment Method
-            </div>
-
-            <!-- Payment methods -->
-            <div class="payment-methods">
-              <button class="pay-method selected" onclick="selectPayment('cod',this)">
-                <div class="pm-radio"></div>
-                <div class="pm-logo cod"><i class="fas fa-money-bill" style="font-size:0.9rem;"></i></div>
-                <div><div class="pm-name">Cash on Delivery</div><div class="pm-desc">Pay when received</div></div>
-              </button>
-              <button class="pay-method" onclick="selectPayment('bkash',this)">
-                <div class="pm-radio"></div>
-                <div class="pm-logo bkash">bKash</div>
-                <div><div class="pm-name">bKash</div><div class="pm-desc">Mobile banking</div></div>
-              </button>
-              <button class="pay-method" onclick="selectPayment('nagad',this)">
-                <div class="pm-radio"></div>
-                <div class="pm-logo nagad">Nagad</div>
-                <div><div class="pm-name">Nagad</div><div class="pm-desc">Mobile banking</div></div>
-              </button>
-              <button class="pay-method" onclick="selectPayment('rocket',this)">
-                <div class="pm-radio"></div>
-                <div class="pm-logo rocket">Rocket</div>
-                <div><div class="pm-name">Rocket</div><div class="pm-desc">DBBL Mobile</div></div>
-              </button>
-            </div>
-
-            <!-- COD detail -->
-            <div class="pay-detail show" id="detail-cod">
-              <div class="cod-note">
-                <strong>✅ Cash on Delivery Available!</strong><br>
-                No advance payment. Pay <strong>৳<span class="detail-total">${p.price.toLocaleString()}</span></strong> when your order arrives.<br><br>
-                <span style="font-size:0.78rem;">🚚 ৳80 inside Dhaka &nbsp;·&nbsp; ৳150 outside Dhaka</span>
-              </div>
-            </div>
-
-            <!-- bKash detail -->
-            <div class="pay-detail" id="detail-bkash">
-              <p style="font-size:0.8rem;color:var(--body);margin-bottom:0.5rem;">Send <strong style="color:var(--dark);">৳<span class="detail-total">${p.price.toLocaleString()}</span></strong> to this bKash number:</p>
-              <div class="pay-detail-num">01676-456965</div>
-              <div class="pay-detail-name">Aftabun Nahar (Personal)</div>
-              <div class="pay-detail-note">📌 Add your name + product as reference<br>📸 Screenshot → send to WhatsApp for confirmation</div>
-              <button class="copy-btn" onclick="copyText('01676456965')"><i class="fas fa-copy"></i> Copy Number</button>
-            </div>
-
-            <!-- Nagad detail -->
-            <div class="pay-detail" id="detail-nagad">
-              <p style="font-size:0.8rem;color:var(--body);margin-bottom:0.5rem;">Send <strong style="color:var(--dark);">৳<span class="detail-total">${p.price.toLocaleString()}</span></strong> to this Nagad number:</p>
-              <div class="pay-detail-num">01676-456965</div>
-              <div class="pay-detail-name">Aftabun Nahar (Personal)</div>
-              <div class="pay-detail-note">📌 Add your name + product as reference<br>📸 Screenshot → send to WhatsApp for confirmation</div>
-              <button class="copy-btn" onclick="copyText('01676456965')"><i class="fas fa-copy"></i> Copy Number</button>
-            </div>
-
-            <!-- Rocket detail -->
-            <div class="pay-detail" id="detail-rocket">
-              <p style="font-size:0.8rem;color:var(--body);margin-bottom:0.5rem;">Send <strong style="color:var(--dark);">৳<span class="detail-total">${p.price.toLocaleString()}</span></strong> to this Rocket number:</p>
-              <div class="pay-detail-num">01676-456965</div>
-              <div class="pay-detail-name">Aftabun Nahar (Personal)</div>
-              <div class="pay-detail-note">📌 Add your name + product as reference<br>📸 Screenshot → send to WhatsApp for confirmation</div>
-              <button class="copy-btn" onclick="copyText('01676456965')"><i class="fas fa-copy"></i> Copy Number</button>
-            </div>
-
-            <!-- Confirm button -->
-            <button class="btn-buy-now" onclick="confirmOrder()" style="margin-top:0.5rem;">
-              <i class="fas fa-check-circle"></i> Confirm Order via WhatsApp
-            </button>
-            <p style="text-align:center;font-size:0.74rem;color:var(--body);margin-top:0.7rem;opacity:0.7;">
-              Order details + payment method sent to SK Fashion via WhatsApp
-            </p>
-
-          </div><!-- end payment-section -->
-
-          <!-- Trust badges -->
           <div class="trust-badges">
             <div class="trust-b green"><i class="fas fa-truck"></i> Cash on Delivery</div>
             <div class="trust-b pink"><i class="fas fa-shield-alt"></i> 100% Authentic</div>
             <div class="trust-b blue"><i class="fas fa-lock"></i> Secure Order</div>
           </div>
 
-        </div><!-- end pi-order-section -->
+        </div>
 
       </div>
     `;
@@ -851,149 +674,118 @@
   // ============================================================
   // QUANTITY CONTROLS
   // ============================================================
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzJSYmUcStrI1wezuukRgPMYilGeKdDq-xWqVig65RWJkb7_jsoD0GriD2LDMM4e4FL/exec';
+
   function changeQty(delta) {
     qty = Math.max(1, qty + delta);
-    const qtyEl   = document.getElementById('qty-display');
-    const totalEl = document.getElementById('total-price');
-    const buyEl   = document.getElementById('buy-total');
-    const sumQty  = document.getElementById('summary-qty');
-    const sumTot  = document.getElementById('summary-total');
-    if (qtyEl)   qtyEl.textContent   = qty;
-    if (totalEl && currentProduct) totalEl.textContent = '৳' + (currentProduct.price * qty).toLocaleString();
-    if (buyEl   && currentProduct) buyEl.textContent   = (currentProduct.price * qty).toLocaleString();
-    if (sumQty)  sumQty.textContent  = qty;
-    if (sumTot  && currentProduct) sumTot.textContent  = '৳' + (currentProduct.price * qty).toLocaleString();
-    // Update all detail-total spans
-    document.querySelectorAll('.detail-total').forEach(el => {
-      if (currentProduct) el.textContent = (currentProduct.price * qty).toLocaleString();
-    });
+    document.getElementById('qty-display').textContent = qty;
+    updateTotals();
   }
   window.changeQty = changeQty;
 
-  // ============================================================
-  // SHOW PAYMENT SECTION
-  // ============================================================
-  function showPaymentSection() {
-    const name    = document.getElementById('order-name')?.value.trim();
-    const phone   = document.getElementById('order-phone')?.value.trim();
-    const address = document.getElementById('order-address')?.value.trim();
-    if (!name)    { showAlert('Please enter your name 👤'); return; }
-    if (!phone)   { showAlert('Please enter your phone number 📱'); return; }
-    if (!address) { showAlert('Please enter your delivery address 📍'); return; }
-
-    const section = document.getElementById('payment-section');
-    if (!section) return;
-    section.style.display = 'block';
-    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  function updateTotals() {
+    if (!currentProduct) return;
+    const price = currentProduct.price || 0;
+    document.getElementById('unit-price').textContent = price.toLocaleString();
+    document.getElementById('item-total').textContent = (price * qty).toLocaleString();
   }
-  window.showPaymentSection = showPaymentSection;
 
-  // ============================================================
-  // SELECT PAYMENT METHOD
-  // ============================================================
-  let selectedPayment = 'cod';
-  function selectPayment(method, el) {
-    selectedPayment = method;
-    // Update method buttons
-    document.querySelectorAll('.pay-method').forEach(b => b.classList.remove('selected'));
-    if (el) el.classList.add('selected');
-    // Show correct detail panel
-    document.querySelectorAll('.pay-detail').forEach(d => d.classList.remove('show'));
-    const detail = document.getElementById('detail-' + method);
-    if (detail) detail.classList.add('show');
+  function togglePaymentFields() {
+    const method = document.getElementById('payment-method').value;
+    const fields = document.getElementById('mobile-payment-fields');
+    fields.style.display = (method === 'bkash' || method === 'nagad') ? 'block' : 'none';
   }
-  window.selectPayment = selectPayment;
+  window.togglePaymentFields = togglePaymentFields;
 
-  // ============================================================
-  // CONFIRM ORDER — sends to WhatsApp with payment method
-  // ============================================================
-  function confirmOrder() {
-    const name    = document.getElementById('order-name')?.value.trim();
-    const phone   = document.getElementById('order-phone')?.value.trim();
-    const address = document.getElementById('order-address')?.value.trim();
-    const note    = document.getElementById('order-note')?.value.trim();
+  function validateOrderForm() {
+    const name = document.getElementById('order-name').value.trim();
+    const phone = document.getElementById('order-phone').value.trim();
+    const address = document.getElementById('order-address').value.trim();
+    const method = document.getElementById('payment-method').value;
 
-    const productName  = currentProduct?.name || 'Product';
-    const productPrice = currentProduct?.price || 0;
-    const total        = productPrice * qty;
+    if (!name) { alert('Please enter your full name'); return false; }
+    if (!phone) { alert('Please enter your phone number'); return false; }
+    if (!address) { alert('Please enter your delivery address'); return false; }
 
-    const paymentLabel = {
-      cod:    'Cash on Delivery (COD)',
-      bkash:  'bKash — 01676-456965',
-      nagad:  'Nagad — 01676-456965',
-      rocket: 'Rocket — 01676-456965'
-    }[selectedPayment] || 'Cash on Delivery';
-
-    const msg = `*🛍️ New Order — SK Fashion Website*
-
-*Product:* ${productName}
-*Quantity:* ${qty}
-*Price each:* ৳${productPrice.toLocaleString()}
-*Total:* ৳${total.toLocaleString()}
-
-*Customer:*
-👤 ${name}
-📱 ${phone}
-📍 ${address}
-${note ? `📝 ${note}` : ''}
-
-*Payment Method:* ${paymentLabel}
-
-Please confirm this order. Thank you! 🙏`;
-
-    window.open(`https://wa.me/8801676456965?text=${encodeURIComponent(msg)}`, '_blank');
+    if (method === 'bkash' || method === 'nagad') {
+      const paid = document.getElementById('paid-amount').value;
+      const sender = document.getElementById('sender-number').value.trim();
+      if (!paid || paid <= 0) { alert('Please enter the amount you paid'); return false; }
+      if (!sender) { alert('Please enter your bKash/Nagad number'); return false; }
+    }
+    return true;
   }
-  window.confirmOrder = confirmOrder;
 
-  // ============================================================
-  // COPY NUMBER TO CLIPBOARD
-  // ============================================================
-  function copyText(text) {
-    navigator.clipboard?.writeText(text).then(() => {
-      showAlert('Number copied! ' + text + ' 📋');
-    }).catch(() => {
-      showAlert('Copy manually: ' + text);
-    });
+  function getOrderData() {
+    const method = document.getElementById('payment-method').value;
+    const order = {
+      customer: {
+        name: document.getElementById('order-name').value.trim(),
+        phone: document.getElementById('order-phone').value.trim(),
+        address: document.getElementById('order-address').value.trim(),
+        note: document.getElementById('order-note').value.trim()
+      },
+      product: {
+        name: currentProduct.name,
+        price: currentProduct.price,
+        quantity: qty
+      },
+      paymentMethod: method
+    };
+    if (method === 'bkash' || method === 'nagad') {
+      order.paidAmount = document.getElementById('paid-amount').value;
+      order.senderNumber = document.getElementById('sender-number').value.trim();
+    }
+    return order;
   }
-  window.copyText = copyText;
 
-  // ============================================================
-  // ORDER VIA WHATSAPP
-  // Pre-fills message with product name, qty, customer details
-  // ============================================================
+  async function submitOrderToSheet() {
+    if (!validateOrderForm()) return;
+    const orderData = getOrderData();
+    const btn = event.target;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Placing Order...';
+    try {
+      const response = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(orderData)
+      });
+      const result = await response.json();
+      if (result.success) {
+        alert(`✅ Order placed successfully!\nOrder ID: ${result.orderId}\n\nWe will contact you soon.`);
+      } else {
+        alert('❌ Order failed. Please try again or use WhatsApp.');
+      }
+    } catch (error) {
+      alert('❌ Network error. Please use WhatsApp to order.');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-check-circle"></i> Place Order';
+    }
+  }
+  window.submitOrderToSheet = submitOrderToSheet;
+
   function orderViaWhatsApp() {
-    const name    = document.getElementById('order-name')?.value.trim();
-    const phone   = document.getElementById('order-phone')?.value.trim();
-    const address = document.getElementById('order-address')?.value.trim();
-    const note    = document.getElementById('order-note')?.value.trim();
-
-    if (!name)    { showAlert('Please enter your name 👤'); return; }
-    if (!phone)   { showAlert('Please enter your phone number 📱'); return; }
-    if (!address) { showAlert('Please enter your delivery address 📍'); return; }
-
-    const productName  = currentProduct?.name || 'Product';
-    const productPrice = currentProduct?.price || 0;
-    const total        = productPrice * qty;
-
-    const msg = `*🛍️ New Order from SK Fashion Website*
-
-*Product:* ${productName}
-*Quantity:* ${qty}
-*Price:* ৳${productPrice.toLocaleString()} each
-*Total:* ৳${total.toLocaleString()}
-
-*Customer Details:*
-👤 Name: ${name}
-📱 Phone: ${phone}
-📍 Address: ${address}
-${note ? `📝 Note: ${note}` : ''}
-
-*Payment:* Cash on Delivery (COD)
-
-Please confirm this order. Thank you! 🙏`;
-
-    const url = `https://wa.me/8801676456965?text=${encodeURIComponent(msg)}`;
-    window.open(url, '_blank');
+    if (!validateOrderForm()) return;
+    const order = getOrderData();
+    const total = order.product.price * order.product.quantity;
+    let paymentInfo = `*Payment:* ${order.paymentMethod === 'cod' ? 'Cash on Delivery' : order.paymentMethod.toUpperCase()}`;
+    if (order.paymentMethod === 'bkash' || order.paymentMethod === 'nagad') {
+      paymentInfo += `\n*Paid:* ৳${order.paidAmount}\n*Sender Number:* ${order.senderNumber}`;
+    }
+    const message = `*🛍️ New Order from Website*\n\n` +
+      `*Product:* ${order.product.name}\n` +
+      `*Qty:* ${order.product.quantity}\n` +
+      `*Price:* ৳${order.product.price}\n` +
+      `*Total:* ৳${total}\n\n` +
+      `*Customer:*\n` +
+      `👤 ${order.customer.name}\n` +
+      `📱 ${order.customer.phone}\n` +
+      `📍 ${order.customer.address}\n` +
+      `📝 ${order.customer.note || '—'}\n\n` +
+      paymentInfo;
+    const waUrl = `https://wa.me/8801676456965?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, '_blank');
   }
   window.orderViaWhatsApp = orderViaWhatsApp;
 
