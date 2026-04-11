@@ -674,7 +674,7 @@
   // ============================================================
   // QUANTITY CONTROLS
   // ============================================================
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzJSYmUcStrI1wezuukRgPMYilGeKdDq-xWqVig65RWJkb7_jsoD0GriD2LDMM4e4FL/exec';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz4D_zowMicCZloZ8-d1GsCl6D-dCssViAD4ZR3USg0zA4YnsY7l-WtG3QPdGIKsn7l/exec';
 
   function changeQty(delta) {
     qty = Math.max(1, qty + delta);
@@ -746,17 +746,30 @@
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Placing Order...';
     try {
+      const formData = new FormData();
+      formData.append('data', JSON.stringify(orderData));
+      
       const response = await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        body: JSON.stringify(orderData)
+        body: formData
       });
-      const result = await response.json();
+      
+      const text = await response.text();
+      let result;
+      try {
+        result = JSON.parse(text);
+      } catch (e) {
+        console.error('Parse error:', text);
+        throw new Error('Invalid response');
+      }
+      
       if (result.success) {
         alert(`✅ Order placed successfully!\nOrder ID: ${result.orderId}\n\nWe will contact you soon.`);
       } else {
-        alert('❌ Order failed. Please try again or use WhatsApp.');
+        alert('❌ Order failed: ' + (result.error || 'Unknown error'));
       }
     } catch (error) {
+      console.error('Order error:', error);
       alert('❌ Network error. Please use WhatsApp to order.');
     } finally {
       btn.disabled = false;

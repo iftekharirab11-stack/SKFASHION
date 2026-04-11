@@ -438,8 +438,9 @@
 
   async function loadOrders() {
     try {
-      const res = await fetch(APPS_SCRIPT_URL);
-      const data = await res.json();
+      const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: '' });
+      const text = await res.text();
+      const data = JSON.parse(text);
       allOrders = data.data || [];
       renderDashboard();
       renderOrdersTable();
@@ -518,17 +519,28 @@
       reader.onload = async function(e) {
         try {
           const base64 = e.target.result.split(',')[1];
+          const formData = new FormData();
+          formData.append('action', 'upload');
+          formData.append('data', base64);
+          formData.append('mimeType', file.type);
+          formData.append('fileName', file.name);
+          formData.append('folderId', DRIVE_FOLDER_ID);
+          
           const res = await fetch(APPS_SCRIPT_URL, {
             method: 'POST',
-            body: JSON.stringify({
-              action: 'upload',
-              data: base64,
-              mimeType: file.type,
-              fileName: file.name,
-              folderId: DRIVE_FOLDER_ID
-            })
+            body: formData
           });
-          const result = await res.json();
+          
+          const text = await res.text();
+          let result;
+          try {
+            result = JSON.parse(text);
+          } catch (parseErr) {
+            console.error('Parse error:', text);
+            reject(new Error('Invalid response from server'));
+            return;
+          }
+          
           if (result.success && result.fileUrl) {
             resolve(result.fileUrl);
           } else {
@@ -538,7 +550,7 @@
           reject(err);
         }
       };
-      reader.onerror = reject;
+      reader.onerror = () => reject(new Error('Failed to read file'));
     });
   }
 
@@ -575,9 +587,12 @@
       };
 
       // Save to sheet (new row)
+      const saveForm = new FormData();
+      saveForm.append('action', 'addProduct');
+      saveForm.append('data', JSON.stringify(product));
       await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        body: JSON.stringify({ action: 'addProduct', ...product })
+        body: saveForm
       });
 
       showToast('Product saved successfully!', 'success');
