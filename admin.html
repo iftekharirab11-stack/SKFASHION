@@ -960,45 +960,45 @@ tr:hover td{background:rgba(255,255,255,0.02);}
     <div class="modal-body">
 
       <!-- ============================================================ -->
-      <!-- 🖼️ PHOTO UPLOAD SECTION                                      -->
-      <!-- Use ImgBB (NOT Google Drive — Drive is blocked by browsers)  -->
+      <!-- 🖼️ PHOTO UPLOAD SECTION - Multiple Images                     -->
       <!-- ============================================================ -->
 
-      <!-- Live preview -->
-      <div id="photo-preview-wrap" style="display:none;margin-bottom:1rem;border-radius:14px;overflow:hidden;height:180px;background:rgba(255,255,255,0.05);border:1px solid var(--border);position:relative;">
-        <img id="photo-preview-img" src="" alt="Preview" style="width:100%;height:100%;object-fit:cover;">
-        <button onclick="clearPhotoUrl()" style="position:absolute;top:8px;right:8px;background:rgba(239,68,68,0.8);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;color:white;font-size:0.75rem;display:flex;align-items:center;justify-content:center;"><i class="fas fa-times"></i></button>
-      </div>
-      <div id="photo-placeholder" style="border:2px dashed rgba(212,68,154,0.25);border-radius:14px;padding:1.5rem;text-align:center;margin-bottom:1rem;background:rgba(212,68,154,0.03);">
-        <i class="fas fa-image" style="font-size:2rem;color:var(--muted);display:block;margin-bottom:0.5rem;"></i>
-        <p style="font-size:0.82rem;color:var(--muted);">Photo preview will appear here</p>
+      <!-- Hidden file input for multiple images -->
+      <input type="file" id="prod-photo-upload" accept="image/*" multiple style="display:none" onchange="handlePhotoUpload(this)">
+
+      <!-- Upload area -->
+      <div id="photo-upload-area" onclick="document.getElementById('prod-photo-upload').click()" 
+           style="border:2px dashed rgba(212,68,154,0.3);border-radius:14px;padding:1.8rem;text-align:center;margin-bottom:1rem;cursor:pointer;background:rgba(212,68,154,0.03);transition:all 0.3s;">
+        <i class="fas fa-cloud-upload-alt" style="font-size:2.5rem;color:var(--muted);display:block;margin-bottom:0.8rem;"></i>
+        <p style="font-size:0.85rem;color:var(--text);margin-bottom:0.4rem;">Click to upload photos (up to 5)</p>
+        <p style="font-size:0.75rem;color:var(--muted);">Supports: JPG, PNG, WEBP</p>
       </div>
 
-      <!-- ImgBB recommended -->
-      <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:1rem 1.2rem;margin-bottom:1rem;">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.6rem;">
-          <span style="font-size:1rem;">✅</span>
-          <strong style="font-size:0.85rem;color:var(--text);">Recommended: Use ImgBB (Free, No CORS issues)</strong>
+      <!-- Upload progress -->
+      <div id="upload-progress" style="display:none;background:rgba(43,92,230,0.1);border:1px solid rgba(43,92,230,0.2);border-radius:12px;padding:1rem;margin-bottom:1rem;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.5rem;">
+          <i class="fas fa-spinner fa-spin" style="color:var(--blue);"></i>
+          <span style="font-size:0.84rem;color:var(--text);" id="upload-status-text">Uploading photos...</span>
         </div>
-        <ol style="font-size:0.78rem;color:var(--muted);padding-left:1.2rem;line-height:1.9;">
-          <li>Go to <a href="https://imgbb.com" target="_blank" style="color:#6FFFAB;text-decoration:none;font-weight:600;">imgbb.com</a></li>
-          <li>Upload your product photo</li>
-          <li>Copy the <strong style="color:var(--text);">"Direct link"</strong> (starts with i.ibb.co)</li>
-          <li>Paste it in the field below ✅</li>
-        </ol>
+        <div style="background:rgba(255,255,255,0.1);border-radius:50px;height:6px;overflow:hidden;">
+          <div id="upload-progress-bar" style="background:linear-gradient(90deg,var(--pink),var(--blue));height:100%;width:0%;transition:width 0.3s;"></div>
+        </div>
       </div>
 
-      <!-- Google Drive warning -->
-      <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.18);border-radius:12px;padding:0.8rem 1rem;margin-bottom:1rem;">
-        <span style="font-size:0.78rem;color:#FCA5A5;">⛔ <strong>Google Drive links don't work</strong> — browsers block them (CORS policy). Use ImgBB instead.</span>
+      <!-- Photo preview grid -->
+      <div id="photo-preview-grid" style="display:none;margin-bottom:1rem;">
+        <p style="font-size:0.78rem;color:var(--muted);margin-bottom:0.6rem;">Uploaded Photos (drag to reorder):</p>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;" id="photo-thumbs-container">
+        </div>
       </div>
 
-      <div class="form-row">
-        <label>📸 Photo URL — Paste ImgBB "Direct link" here</label>
-        <input type="url" id="prod-photo-url"
-          placeholder="https://i.ibb.co/xxxxxxx/your-photo.jpg"
-          oninput="previewPhoto(this.value)"
-          style="font-size:0.82rem;">
+      <!-- Fallback: URL input -->
+      <div style="margin-top:0.8rem;padding-top:0.8rem;border-top:1px solid var(--border);">
+        <p style="font-size:0.76rem;color:var(--muted);margin-bottom:0.5rem;">Or paste image URL as fallback:</p>
+        <div class="form-row">
+          <input type="url" id="prod-photo-url" placeholder="https://i.ibb.co/xxxxxxx/photo.jpg (optional)"
+            style="font-size:0.82rem;">
+        </div>
       </div>
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
@@ -1076,9 +1076,11 @@ tr:hover td{background:rgba(255,255,255,0.02);}
   import { getFirestore, collection, getDocs, doc, getDoc,
            addDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy }
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getStorage, ref, uploadBytes, getDownloadURL }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
   // ============================================================
-  // 🔑 YOUR REAL FIREBASE CONFIG
+  // 🔑 FIREBASE CONFIG - Auth & Firestore (Original Key)
   // ============================================================
   const firebaseConfig = {
     apiKey:            "AIzaSyARyH6aE1ovNsVPketz4Q-FiG6Tt14n43s",
@@ -1089,10 +1091,24 @@ tr:hover td{background:rgba(255,255,255,0.02);}
     appId:             "1:524555632799:web:93f2cfbf606cae8da462aa"
   };
 
+  // ============================================================
+  // 🔑 STORAGE CONFIG - Photo Upload (New API Key)
+  // ============================================================
+  const storageConfig = {
+    apiKey:            "AIzaSyCYnxgFPRr6kGGjCuuqNqkL64umCI2Ilwg",
+    authDomain:        "skfashion-1.firebaseapp.com",
+    projectId:         "skfashion-1",
+    storageBucket:     "skfashion-1.firebasestorage.app",
+    messagingSenderId: "524555632799",
+    appId:             "1:524555632799:web:93f2cfbf606cae8da462aa"
+  };
+
   // ── INITIALIZE ──
   const app  = initializeApp(firebaseConfig);
+  const appStorage = initializeApp(storageConfig, 'storageApp');
   const auth = getAuth(app);
   const db   = getFirestore(app);
+  const storage = getStorage(appStorage);
 
   // ── ADMIN EMAILS ALLOWED ──
   // Only these emails can access admin panel
@@ -1496,18 +1512,33 @@ tr:hover td{background:rgba(255,255,255,0.02);}
       return;
     }
 
+    // Determine photos: use uploaded first, then fallback to URL
+    let finalPhotos = [];
+    if (uploadedPhotos.length > 0) {
+      finalPhotos = uploadedPhotos;
+    } else if (photoUrl) {
+      finalPhotos = [photoUrl];
+    }
+
     try {
       const discount = origPrice ? Math.round(((origPrice - price) / origPrice) * 100) : 0;
       await addDoc(collection(db, 'PRODUCTS'), {
         name, nameBangla, category, price,
         originalPrice: origPrice || price,
         discount, stock: stock || 0, description,
-        photos: photoUrl ? [photoUrl] : [],
+        photos: finalPhotos,
         isAvailable: true, isFeatured: false,
         isNewArrival: true,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       });
+      
+      // Reset uploaded photos after successful save
+      uploadedPhotos = [];
+      document.getElementById('photo-preview-grid').style.display = 'none';
+      document.getElementById('photo-thumbs-container').innerHTML = '';
+      document.getElementById('prod-photo-url').value = '';
+      
       closeModal('add-product-modal');
       showToast('Product added successfully! 🎉');
       // Reload products
@@ -1516,6 +1547,119 @@ tr:hover td{background:rgba(255,255,255,0.02);}
       renderProducts(products);
     } catch(e) {
       showToast('Error adding product: ' + e.message);
+    }
+  };
+
+  // ============================================================
+  // 🖼️ MULTIPLE PHOTO UPLOAD TO FIREBASE STORAGE
+  // ============================================================
+  let uploadedPhotos = []; // Store uploaded photo URLs
+
+  window.handlePhotoUpload = async function(input) {
+    const files = Array.from(input.files);
+    if (files.length === 0) return;
+    
+    if (files.length > 5) {
+      showToast('Maximum 5 photos allowed', 'error');
+      return;
+    }
+
+    const progressDiv = document.getElementById('upload-progress');
+    const progressBar = document.getElementById('upload-progress-bar');
+    const statusText = document.getElementById('upload-status-text');
+    const photoGrid = document.getElementById('photo-preview-grid');
+    const thumbsContainer = document.getElementById('photo-thumbs-container');
+
+    progressDiv.style.display = 'block';
+    uploadedPhotos = []; // Reset
+    let uploadedCount = 0;
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        showToast(`Invalid file type: ${file.name}`, 'error');
+        continue;
+      }
+      
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        showToast(`File too large: ${file.name} (max 5MB)`, 'error');
+        continue;
+      }
+
+      statusText.textContent = `Uploading ${i + 1}/${files.length}: ${file.name}`;
+      
+      try {
+        // Generate unique filename
+        const timestamp = Date.now();
+        const random = Math.random().toString(36).substr(2, 9);
+        const ext = file.name.split('.').pop();
+        const filename = `products/${timestamp}_${random}.${ext}`;
+        
+        // Upload to Firebase Storage
+        const storageRef = ref(storage, filename);
+        await uploadBytes(storageRef, file);
+        
+        // Get download URL
+        const downloadURL = await getDownloadURL(storageRef);
+        uploadedPhotos.push(downloadURL);
+        uploadedCount++;
+        
+        // Update progress
+        const progress = (uploadedCount / files.length) * 100;
+        progressBar.style.width = progress + '%';
+        
+        // Add thumbnail
+        const thumbDiv = document.createElement('div');
+        thumbDiv.style.cssText = 'position:relative;aspect-ratio:1;overflow:hidden;border-radius:10px;background:var(--dark3);';
+        thumbDiv.innerHTML = `
+          <img src="${downloadURL}" style="width:100%;height:100%;object-fit:cover;">
+          <button onclick="removeUploadedPhoto('${downloadURL}', this.parentElement)" 
+            style="position:absolute;top:2px;right:2px;background:rgba(239,68,68,0.9);border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;color:white;font-size:0.65rem;">×</button>
+        `;
+        thumbsContainer.appendChild(thumbDiv);
+        
+      } catch(e) {
+        console.error('Upload error:', e);
+        showToast(`Error uploading ${file.name}: ${e.message}`, 'error');
+      }
+    }
+
+    progressDiv.style.display = 'none';
+    if (uploadedPhotos.length > 0) {
+      photoGrid.style.display = 'block';
+      showToast(`${uploadedPhotos.length} photo(s) uploaded!`, 'success');
+    }
+  };
+
+  window.removeUploadedPhoto = function(url, element) {
+    uploadedPhotos = uploadedPhotos.filter(p => p !== url);
+    element.remove();
+    if (uploadedPhotos.length === 0) {
+      document.getElementById('photo-preview-grid').style.display = 'none';
+    }
+    showToast('Photo removed', 'success');
+  };
+
+  window.clearPhotoUrl = function() {
+    document.getElementById('prod-photo-url').value = '';
+    document.getElementById('photo-preview-wrap').style.display = 'none';
+    document.getElementById('photo-placeholder').style.display = 'block';
+  };
+
+  window.previewPhoto = function(url) {
+    const wrap = document.getElementById('photo-preview-wrap');
+    const placeholder = document.getElementById('photo-placeholder');
+    const img = document.getElementById('photo-preview-img');
+    if (url) {
+      img.src = url;
+      img.onload = () => { wrap.style.display = 'block'; placeholder.style.display = 'none'; };
+      img.onerror = () => { wrap.style.display = 'none'; placeholder.style.display = 'block'; };
+    } else {
+      wrap.style.display = 'none';
+      placeholder.style.display = 'block';
     }
   };
 
@@ -1747,8 +1891,32 @@ tr:hover td{background:rgba(255,255,255,0.02);}
     document.getElementById('sidebar').classList.toggle('open');
   }
 
-  function openModal(id)  { document.getElementById(id)?.classList.add('open'); }
-  function closeModal(id) { document.getElementById(id)?.classList.remove('open'); }
+  function openModal(id)  { 
+    document.getElementById(id)?.classList.add('open'); 
+    // Reset add product form when opening
+    if (id === 'add-product-modal') {
+      uploadedPhotos = [];
+      document.getElementById('photo-preview-grid').style.display = 'none';
+      document.getElementById('photo-thumbs-container').innerHTML = '';
+      document.getElementById('prod-photo-url').value = '';
+      document.getElementById('prod-name').value = '';
+      document.getElementById('prod-name-bn').value = '';
+      document.getElementById('prod-category').value = 'silk';
+      document.getElementById('prod-price').value = '';
+      document.getElementById('prod-orig-price').value = '';
+      document.getElementById('prod-stock').value = '';
+      document.getElementById('prod-desc').value = '';
+    }
+  }
+  function closeModal(id) { 
+    document.getElementById(id)?.classList.remove('open'); 
+    // Reset add product form when closing
+    if (id === 'add-product-modal') {
+      uploadedPhotos = [];
+      document.getElementById('photo-preview-grid').style.display = 'none';
+      document.getElementById('photo-thumbs-container').innerHTML = '';
+    }
+  }
 
   document.querySelectorAll('.modal-overlay').forEach(m => {
     m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
