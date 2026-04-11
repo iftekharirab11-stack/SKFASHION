@@ -438,14 +438,46 @@
 
   async function loadOrders() {
     try {
-      const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: '' });
-      const text = await res.text();
-      const data = JSON.parse(text);
-      allOrders = data.data || [];
+      // Fetch orders using GET request with proper headers
+      const response = await Promise.race([
+        fetch(APPS_SCRIPT_URL, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }),
+        // 10 second timeout
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Request timeout')), 10000)
+        )
+      ]);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
+      const text = await response.text();
+      if (!text) {
+        console.log('Empty response - no orders yet');
+        allOrders = [];
+      } else {
+        try {
+          const data = JSON.parse(text);
+          allOrders = Array.isArray(data) ? data : (data.data || []);
+        } catch (e) {
+          console.error('Parse error:', text);
+          allOrders = [];
+        }
+      }
+      
       renderDashboard();
       renderOrdersTable();
     } catch (e) {
+      console.error('Load orders error:', e);
       showToast('Failed to load orders: ' + e.message, 'error');
+      allOrders = [];
+      renderDashboard();
+      renderOrdersTable();
     }
   }
 
@@ -516,6 +548,10 @@
   async function uploadImage(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
+      const timeoutId = setTimeout(() => {
+        reject(new Error('Image upload timeout - please try again'));
+      }, 30000); // 30 second timeout
+      
       reader.onload = async function(e) {
         try {
           const base64 = e.target.result.split(',')[1];
@@ -526,31 +562,46 @@
           formData.append('fileName', file.name);
           formData.append('folderId', DRIVE_FOLDER_ID);
           
-          const res = await fetch(APPS_SCRIPT_URL, {
+          const response = await fetch(APPS_SCRIPT_URL, {
             method: 'POST',
             body: formData
           });
           
-          const text = await res.text();
+          clearTimeout(timeoutId);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+          
+          const text = await response.text();
+          if (!text) {
+            throw new Error('Empty response from server');
+          }
+          
           let result;
           try {
             result = JSON.parse(text);
           } catch (parseErr) {
             console.error('Parse error:', text);
-            reject(new Error('Invalid response from server'));
-            return;
+            throw new Error('Invalid response format from server');
           }
           
           if (result.success && result.fileUrl) {
+            console.log('Image uploaded:', result.fileUrl);
             resolve(result.fileUrl);
           } else {
-            reject(new Error(result.error || 'Upload failed'));
+            throw new Error(result.error || 'Upload failed - unknown error');
           }
         } catch (err) {
+          clearTimeout(timeoutId);
+          console.error('Upload error:', err);
           reject(err);
         }
       };
-      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.onerror = () => {
+        clearTimeout(timeoutId);
+        reject(new Error('Failed to read file'));
+      };
     });
   }
 
@@ -577,36 +628,70 @@
       let finalImageUrl = imageUrl;
       if (fileInput.files[0] && !imageUrl) {
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading Image...';
-        finalImageUrl = await uploadImage(fileInput.files[0]);
+        try {
+          finalImageUrl = await uploadImage(fileInput.files[0]);
+          document.getElementById('uploaded-image-url').value = finalImageUrl;
+        } catch (uploadErr) {
+          throw new Error('Image upload failed: ' + uploadErr.message);
+        }
       }
 
       const product = {
-        name, category, price, description: desc,
+        action: 'addProduct',
+        name, 
+        category, 
+        price: Number(price), 
+        description: desc,
         imageUrl: finalImageUrl || '',
         createdAt: new Date().toISOString()
       };
 
-      // Save to sheet (new row)
-      const saveForm = new FormData();
-      saveForm.append('action', 'addProduct');
-      saveForm.append('data', JSON.stringify(product));
-      await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        body: saveForm
-      });
-
-      showToast('Product saved successfully!', 'success');
-      closeModal();
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving Product...';
       
-      // Reset form
-      document.getElementById('product-name').value = '';
-      document.getElementById('product-price').value = '';
-      document.getElementById('product-desc').value = '';
-      document.getElementById('uploaded-image-url').value = '';
-      document.getElementById('preview-img').style.display = 'none';
-      fileInput.value = '';
+      // Send product data as JSON
+      const response = await Promise.race([
+        fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(product)
+        }),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Save timeout')), 15000)
+        )
+      ]);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
+      const text = await response.text();
+      let result;
+      try {
+        result = text ? JSON.parse(text) : { success: true };
+      } catch (e) {
+        console.log('Response:', text);
+        result = { success: true };
+      }
+      
+      if (result.success !== false) {
+        showToast('Product saved successfully!', 'success');
+        closeModal();
+        
+        // Reset form
+        document.getElementById('product-name').value = '';
+        document.getElementById('product-price').value = '';
+        document.getElementById('product-desc').value = '';
+        document.getElementById('uploaded-image-url').value = '';
+        document.getElementById('preview-img').style.display = 'none';
+        fileInput.value = '';
+      } else {
+        throw new Error(result.error || 'Failed to save product');
+      }
 
     } catch (e) {
+      console.error('Save product error:', e);
       showToast('Error: ' + e.message, 'error');
     } finally {
       btn.disabled = false;

@@ -745,32 +745,61 @@
     const btn = event.target;
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Placing Order...';
+    
     try {
-      const formData = new FormData();
-      formData.append('data', JSON.stringify(orderData));
+      // Send as JSON with proper Content-Type header
+      const response = await Promise.race([
+        fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(orderData)
+        }),
+        // 15 second timeout
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Request timeout')), 15000)
+        )
+      ]);
       
-      const response = await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        body: formData
-      });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
       
       const text = await response.text();
+      if (!text) {
+        throw new Error('Empty response from server');
+      }
+      
       let result;
       try {
         result = JSON.parse(text);
       } catch (e) {
         console.error('Parse error:', text);
-        throw new Error('Invalid response');
+        throw new Error('Invalid response format from server');
       }
       
-      if (result.success) {
-        alert(`✅ Order placed successfully!\nOrder ID: ${result.orderId}\n\nWe will contact you soon.`);
+      if (result.success || result.orderId) {
+        alert(`✅ Order placed successfully!\nOrder ID: ${result.orderId || 'N/A'}\n\nWe will contact you soon.`);
+        // Clear form
+        document.getElementById('order-name').value = '';
+        document.getElementById('order-phone').value = '';
+        document.getElementById('order-address').value = '';
+        document.getElementById('order-note').value = '';
+        qty = 1;
+        updateTotals();
       } else {
-        alert('❌ Order failed: ' + (result.error || 'Unknown error'));
+        throw new Error(result.error || 'Order submission failed');
       }
     } catch (error) {
       console.error('Order error:', error);
-      alert('❌ Network error. Please use WhatsApp to order.');
+      if (error.message.includes('timeout')) {
+        alert('❌ Request took too long. Please try again or use WhatsApp to order.');
+      } else if (error.message.includes('Network')) {
+        alert('❌ Network connection error.\nPlease check your internet and try again, or use WhatsApp to order.');
+      } else {
+        alert('❌ Error: ' + error.message + '\n\nTry ordering via WhatsApp instead.');
+      }
     } finally {
       btn.disabled = false;
       btn.innerHTML = '<i class="fas fa-check-circle"></i> Place Order';
