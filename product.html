@@ -88,7 +88,7 @@
     .badge-hot{background:linear-gradient(135deg,#EF4444,#B91C1C);color:white;}
 
     /* ── PRODUCT INFO ── */
-    .prod-info{}
+    .prod-info{display:flex;flex-direction:column;gap:1.5rem;}
     .pi-cat{font-size:0.72rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--pink);margin-bottom:0.6rem;}
     .pi-name{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;line-height:1.2;margin-bottom:0.3rem;}
     .pi-name-bn{font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;color:var(--body);margin-bottom:1.2rem;}
@@ -437,9 +437,12 @@
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get('id');
 
-  if (!productId) {
-    showError('No product specified', 'Please go back and select a product.');
-  } else {
+  window.addEventListener('DOMContentLoaded', async () => {
+    if (!productId) {
+      showError('No product specified', 'Please go back and select a product.');
+      return;
+    }
+
     try {
       // Fetch product from Firebase
       const snap = await getDoc(doc(db, 'PRODUCTS', productId));
@@ -469,7 +472,7 @@
         showError('Connection error', 'Could not load product. Please check your connection.');
       }
     }
-  }
+  });
 
   // Load related products
   async function loadRelated(category, currentId, db) {
