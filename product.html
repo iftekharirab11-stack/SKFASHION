@@ -732,12 +732,10 @@
       },
       paymentMethod: method
     };
-
     if (method === 'bkash' || method === 'nagad') {
       order.paidAmount = document.getElementById('paid-amount').value;
       order.senderNumber = document.getElementById('sender-number').value.trim();
     }
-
     return order;
   }
 
@@ -747,7 +745,6 @@
     const btn = event.target;
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Placing Order...';
-
     try {
       const response = await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
