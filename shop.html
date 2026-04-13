@@ -545,28 +545,23 @@
 <!-- ============================================================ -->
 <!-- Products loaded via local demo data -->
 <script>
-
-    // Pass to global scope for filtering
-    window._allProducts = products;
-
-    // Remove loading skeletons
-    document.getElementById('loading-skeletons').remove();
-
-    // Render products
-    window.renderProducts(products);
-
-    // Update counts
-    window.updateCounts(products);
-
-  } catch(e) {
-    // Firebase not connected yet OR no products — show placeholders
-    console.warn('Firebase not connected yet:', e.message);
+  (function initShop() {
     window._allProducts = window._demoProducts;
     document.getElementById('loading-skeletons').remove();
     window.renderProducts(window._demoProducts);
     window.updateCounts(window._demoProducts);
-  }
-
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlCat = urlParams.get('category');
+    if (urlCat) {
+      currentCategory = urlCat;
+      document.querySelectorAll('.cat-chip').forEach(c => {
+        const matches = c.getAttribute('onclick')?.includes(`'${urlCat}'`);
+        c.classList.toggle('active', matches);
+      });
+      applyFilters();
+    }
+  })();
 </script>
 
 <script>

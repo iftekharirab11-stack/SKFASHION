@@ -718,23 +718,26 @@
 
   function getOrderData() {
     const method = document.getElementById('payment-method').value;
-    const total = currentProduct.price * qty;
     const order = {
-      action: 'addOrder',
-      CustomerName: document.getElementById('order-name').value.trim(),
-      Phone: document.getElementById('order-phone').value.trim(),
-      Address: document.getElementById('order-address').value.trim(),
-      Note: document.getElementById('order-note').value.trim(),
-      ProductName: currentProduct.name,
-      Price: currentProduct.price,
-      Quantity: qty,
-      Total: total,
-      PaymentMethod: method === 'cod' ? 'COD' : method.toUpperCase()
+      customer: {
+        name: document.getElementById('order-name').value.trim(),
+        phone: document.getElementById('order-phone').value.trim(),
+        address: document.getElementById('order-address').value.trim(),
+        note: document.getElementById('order-note').value.trim()
+      },
+      product: {
+        name: currentProduct.name,
+        price: currentProduct.price,
+        quantity: qty
+      },
+      paymentMethod: method
     };
+
     if (method === 'bkash' || method === 'nagad') {
-      order.PaidAmount = document.getElementById('paid-amount').value;
-      order.SenderNumber = document.getElementById('sender-number').value.trim();
+      order.paidAmount = document.getElementById('paid-amount').value;
+      order.senderNumber = document.getElementById('sender-number').value.trim();
     }
+
     return order;
   }
 
@@ -744,43 +747,16 @@
     const btn = event.target;
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Placing Order...';
-    
+
     try {
-      // Send as JSON with proper Content-Type header
-      const response = await Promise.race([
-        fetch(APPS_SCRIPT_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(orderData)
-        }),
-        // 15 second timeout
-        new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Request timeout')), 15000)
-        )
-      ]);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-      
-      const text = await response.text();
-      if (!text) {
-        throw new Error('Empty response from server');
-      }
-      
-      let result;
-      try {
-        result = JSON.parse(text);
-      } catch (e) {
-        console.error('Parse error:', text);
-        throw new Error('Invalid response format from server');
-      }
-      
-      if (result.success || result.orderId) {
-        alert(`✅ Order placed successfully!\nOrder ID: ${result.orderId || 'N/A'}\n\nWe will contact you soon.`);
-        // Clear form
+      const response = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+      });
+      const result = await response.json();
+      if (result.success) {
+        alert(`✅ Order placed successfully!\nOrder ID: ${result.orderId}\n\nWe will contact you soon.`);
         document.getElementById('order-name').value = '';
         document.getElementById('order-phone').value = '';
         document.getElementById('order-address').value = '';
@@ -788,17 +764,11 @@
         qty = 1;
         updateTotals();
       } else {
-        throw new Error(result.error || 'Order submission failed');
+        throw new Error(result.error || 'Order failed');
       }
     } catch (error) {
       console.error('Order error:', error);
-      if (error.message.includes('timeout')) {
-        alert('❌ Request took too long. Please try again or use WhatsApp to order.');
-      } else if (error.message.includes('Network')) {
-        alert('❌ Network connection error.\nPlease check your internet and try again, or use WhatsApp to order.');
-      } else {
-        alert('❌ Error: ' + error.message + '\n\nTry ordering via WhatsApp instead.');
-      }
+      alert('❌ ' + error.message + '\n\nTry ordering via WhatsApp instead.');
     } finally {
       btn.disabled = false;
       btn.innerHTML = '<i class="fas fa-check-circle"></i> Place Order';
