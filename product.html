@@ -718,23 +718,22 @@
 
   function getOrderData() {
     const method = document.getElementById('payment-method').value;
+    const total = currentProduct.price * qty;
     const order = {
-      customer: {
-        name: document.getElementById('order-name').value.trim(),
-        phone: document.getElementById('order-phone').value.trim(),
-        address: document.getElementById('order-address').value.trim(),
-        note: document.getElementById('order-note').value.trim()
-      },
-      product: {
-        name: currentProduct.name,
-        price: currentProduct.price,
-        quantity: qty
-      },
-      paymentMethod: method
+      action: 'addOrder',
+      CustomerName: document.getElementById('order-name').value.trim(),
+      Phone: document.getElementById('order-phone').value.trim(),
+      Address: document.getElementById('order-address').value.trim(),
+      Note: document.getElementById('order-note').value.trim(),
+      ProductName: currentProduct.name,
+      Price: currentProduct.price,
+      Quantity: qty,
+      Total: total,
+      PaymentMethod: method === 'cod' ? 'COD' : method.toUpperCase()
     };
     if (method === 'bkash' || method === 'nagad') {
-      order.paidAmount = document.getElementById('paid-amount').value;
-      order.senderNumber = document.getElementById('sender-number').value.trim();
+      order.PaidAmount = document.getElementById('paid-amount').value;
+      order.SenderNumber = document.getElementById('sender-number').value.trim();
     }
     return order;
   }
