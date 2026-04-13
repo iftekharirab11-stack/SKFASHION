@@ -10,11 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- ============================================================ -->
-  <!-- 🔥 FIREBASE: PASTE YOUR FIREBASE SCRIPTS HERE                -->
-  <!-- Same block as index.html — copy exact same code              -->
-  <!-- ============================================================ -->
-  <!-- PASTE FIREBASE SCRIPTS HERE -->
+  <!-- Products loaded via local demo data -->
 
   <style>
     :root {
@@ -547,56 +543,8 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- 🔥 FIREBASE: ACTIVE CONNECTION                               -->
-<!-- Loads products from Firestore PRODUCTS collection            -->
-<!-- ============================================================ -->
-<script type="module">
-  import { initializeApp }
-    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, getDocs, query, orderBy }
-    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  import { getAuth, onAuthStateChanged }
-    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-  // ============================================================
-  // 🔑 YOUR REAL FIREBASE CONFIG
-  // ============================================================
-  const firebaseConfig = {
-    apiKey:            "AIzaSyAfkLbLmEEdxYV_vBzpq-9PcIFpcqmWISo",
-    authDomain:        "skfashion-6fdab.firebaseapp.com",
-    projectId:         "skfashion-6fdab",
-    storageBucket:     "skfashion-6fdab.firebasestorage.app",
-    messagingSenderId: "577389144954",
-    appId:             "1:577389144954:web:e5b5d2eac7d4e037dd84c3",
-    measurementId:     "G-DXQKXNXRET"
-  };
-
-  const app  = initializeApp(firebaseConfig);
-  const db   = getFirestore(app);
-  const auth = getAuth(app);
-
-  // ── Check login state for navbar ──
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const btn = document.getElementById('nav-user-btn');
-      const nameEl = document.getElementById('nav-user-name');
-      const initEl = document.getElementById('nav-user-initial');
-      if (btn) btn.classList.add('show');
-      if (user.displayName && nameEl) {
-        nameEl.textContent = user.displayName.split(' ')[0];
-        initEl.textContent = user.displayName.charAt(0).toUpperCase();
-      }
-      // Hide login/signup
-      document.querySelectorAll('.nav-login, .nav-signup').forEach(el => {
-        if (el.closest('li')) el.closest('li').style.display = 'none';
-      });
-    }
-  });
-
-  // ── Load all products from Firebase ──
-  try {
-    const snap = await getDocs(query(collection(db, 'PRODUCTS'), orderBy('createdAt', 'desc')));
-    const products = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+<!-- Products loaded via local demo data -->
+<script>
 
     // Pass to global scope for filtering
     window._allProducts = products;

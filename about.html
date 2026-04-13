@@ -647,35 +647,6 @@
 
 <!-- ============================================================ -->
 <!-- 🔥 FIREBASE CONNECTION BLOCK — SAME AS index.html            -->
-<!-- PASTE EXACT SAME FIREBASE CODE HERE WHEN READY               -->
-<!-- ============================================================ -->
-<!--
-PASTE THIS WHEN FIREBASE IS READY (same as index.html):
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyAfkLbLmEEdxYV_vBzpq-9PcIFpcqmWISo",
-    authDomain: "skfashion-6fdab.firebaseapp.com",
-    projectId: "skfashion-6fdab",
-    storageBucket: "skfashion-6fdab.firebasestorage.app",
-    messagingSenderId: "577389144954",
-    appId: "1:577389144954:web:e5b5d2eac7d4e037dd84c3",
-    measurementId: "G-DXQKXNXRET"
-  }
-
-  const app = initializeApp(firebaseConfig)
-  const auth = getAuth(app)
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) { showUserInNav(user) }
-    else { showLoginInNav() }
-  })
-</script>
--->
-
 <script>
   // PAGE TRANSITIONS
   function goTo(href) { document.body.classList.add('exiting'); setTimeout(() => { window.location.href = href; }, 420); }
