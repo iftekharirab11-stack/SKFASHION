@@ -543,24 +543,36 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- Products loaded via local demo data -->
+<!-- Products loaded via Apps Script -->
 <script>
-  (function initShop() {
-    window._allProducts = window._demoProducts;
-    document.getElementById('loading-skeletons').remove();
-    window.renderProducts(window._demoProducts);
-    window.updateCounts(window._demoProducts);
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlCat = urlParams.get('category');
-    if (urlCat) {
-      currentCategory = urlCat;
-      document.querySelectorAll('.cat-chip').forEach(c => {
-        const matches = c.getAttribute('onclick')?.includes(`'${urlCat}'`);
-        c.classList.toggle('active', matches);
-      });
-      applyFilters();
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDputB_-dR07diENTq4ZIMRU_R9ymFEcLPOtfHHxODfAbxoipLYz0eSuG/exec';
+
+  async function initShop() {
+    try {
+      const response = await fetch(APPS_SCRIPT_URL + '?action=getProducts');
+      const products = await response.json();
+      window._allProducts = products;
+    } catch (e) {
+      console.error('Failed to load products, using demo:', e);
+      window._allProducts = window._demoProducts;
+    } finally {
+      document.getElementById('loading-skeletons').remove();
+      window.renderProducts(window._allProducts);
+      window.updateCounts(window._allProducts);
+      
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlCat = urlParams.get('category');
+      if (urlCat) {
+        currentCategory = urlCat;
+        document.querySelectorAll('.cat-chip').forEach(c => {
+          const matches = c.getAttribute('onclick')?.includes(`'${urlCat}'`);
+          c.classList.toggle('active', matches);
+        });
+        applyFilters();
+      }
     }
-  })();
+  }
+  initShop();
 </script>
 
 <script>

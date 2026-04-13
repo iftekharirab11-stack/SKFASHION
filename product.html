@@ -388,6 +388,8 @@
 </div>
 
 <script>
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDputB_-dR07diENTq4ZIMRU_R9ymFEcLPOtfHHxODfAbxoipLYz0eSuG/exec';
+  
   // Get product ID from URL
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get('id');
@@ -398,13 +400,31 @@
       return;
     }
 
-    // Try demo products
-    const demo = window._demoProducts?.find(p => p.id === productId);
-    if (demo) {
-      window.renderProduct(demo);
-      loadRelated(demo.category, productId);
-    } else {
-      showError('Product not found', 'This product may have been removed or is no longer available.');
+    try {
+      const response = await fetch(APPS_SCRIPT_URL + '?action=getProducts');
+      const products = await response.json();
+      const product = products.find(p => p.ID === productId);
+      
+      if (product) {
+        const formattedProduct = {
+          id: product.ID,
+          name: product.Name,
+          category: product.Category.toLowerCase(),
+          price: product.Price,
+          photos: product.ImageURL ? [product.ImageURL] : [],
+          description: product.Description,
+          stock: 99,
+          isNewArrival: false,
+          isFeatured: false
+        };
+        window.renderProduct(formattedProduct);
+        loadRelated(product.Category, product.ID);
+      } else {
+        showError('Product not found', 'This product may have been removed.');
+      }
+    } catch (e) {
+      console.error('Failed to load product:', e);
+      showError('Connection error', 'Could not load product. Please try again.');
     }
   });
 
@@ -674,7 +694,7 @@
   // ============================================================
   // QUANTITY CONTROLS
   // ============================================================
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz4D_zowMicCZloZ8-d1GsCl6D-dCssViAD4ZR3USg0zA4YnsY7l-WtG3QPdGIKsn7l/exec';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDputB_-dR07diENTq4ZIMRU_R9ymFEcLPOtfHHxODfAbxoipLYz0eSuG/exec';
 
   function changeQty(delta) {
     qty = Math.max(1, qty + delta);
