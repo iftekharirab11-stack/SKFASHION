@@ -59,14 +59,18 @@
     .burger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
     .burger.open span:nth-child(2) { opacity: 0; }
     .burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-    .mob-menu { display: none; position: fixed; top: 70px; left: 0; right: 0; background: rgba(250,246,240,0.97); backdrop-filter: blur(20px); flex-direction: column; padding: 1rem 5%; border-bottom: 1px solid var(--cream2); z-index: 999; }
-    .mob-menu.show { display: flex; }
-    .mob-menu a { text-decoration: none; font-size: 0.92rem; font-weight: 500; color: var(--dark); text-transform: uppercase; letter-spacing: 1px; padding: 0.85rem 0; border-bottom: 1px solid var(--cream2); transition: color 0.3s ease; }
-    .mob-menu a:last-child { border-bottom: none; }
-    .mob-menu a:hover { color: var(--pink); }
-    .mob-divider { height: 1px; background: var(--cream2); margin: 0.3rem 0; }
-    .mob-login { color: var(--pink) !important; font-weight: 700 !important; }
-    .mob-signup { color: var(--blue) !important; font-weight: 700 !important; }
+.mob-menu { display: none; position: fixed; top: 70px; left: 0; right: 0; background: rgba(250,246,240,0.97); backdrop-filter: blur(20px); flex-direction: column; padding: 1rem 5%; border-bottom: 1px solid var(--cream2); z-index: 999; }
+.mob-menu.show { display: flex; }
+.mob-menu a { text-decoration: none; font-size: 0.92rem; font-weight: 500; color: var(--dark); text-transform: uppercase; letter-spacing: 1px; padding: 0.85rem 0; border-bottom: 1px solid var(--cream2); transition: color 0.3s ease; }
+.mob-menu a:last-child { border-bottom: none; }
+.mob-menu a:hover { color: var(--pink); }
+.mob-divider { height: 1px; background: var(--cream2); margin: 0.3rem 0; }
+.mob-login { color: var(--pink) !important; font-weight: 700 !important; }
+.mob-signup { color: var(--blue) !important; font-weight: 700 !important; }
+.nav-user.mob-user { display: flex !important; align-items: center; gap: 8px; background: rgba(212,68,154,0.08); border: 1px solid rgba(212,68,154,0.2); padding: 6px 14px 6px 6px; border-radius: 50px; cursor: pointer; text-decoration: none; transition: all 0.3s ease; }
+.nav-user.mob-user::after { display: none !important; }
+.nav-user-avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, var(--pink), var(--blue)); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: white; flex-shrink: 0; }
+.nav-user-name { font-size: 0.8rem; font-weight: 600; color: var(--dark); max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     /* ── SHOP HERO ── */
     #shop-hero {
@@ -290,10 +294,18 @@
     <!-- 🔗 Shop — active on this page -->
     <li><a href="shop.html" class="active-nav">Shop</a></li>
     <li><a href="about.html" class="plink">Our Story</a></li>
-    <li><a href="https://wa.me/8801676456965" class="nav-login" target="_blank">Order Help</a></li>
-    <!-- 🔗 WhatsApp CTA -->
-    <li><a href="https://wa.me/8801676456965" target="_blank" style="background:linear-gradient(135deg,var(--pink),var(--blue))!important;color:white!important;padding:8px 18px!important;border-radius:50px!important;display:inline-flex!important;align-items:center!important;gap:6px!important;box-shadow:0 4px 14px rgba(212,68,154,0.28)!important;font-weight:600!important;" class="nav-ul a"><i class="fab fa-whatsapp"></i> Order</a></li>
-    
+     <li><a href="https://wa.me/8801676456965" class="nav-login" target="_blank">Order Help</a></li>
+     <!-- 🔗 WhatsApp CTA -->
+     <li><a href="https://wa.me/8801676456965" target="_blank" style="background:linear-gradient(135deg,var(--pink),var(--blue))!important;color:white!important;padding:8px 18px!important;border-radius:50px!important;display:inline-flex!important;align-items:center!important;gap:6px!important;box-shadow:0 4px 14px rgba(212,68,154,0.28)!important;font-weight:600!important;"><i class="fab fa-whatsapp"></i> Order</a></li>
+     
+   </ul>
+  
+  <!-- User profile (shown when logged in) -->
+  <a href="customer.html" class="nav-user" id="nav-user">
+    <div class="nav-user-avatar" id="nav-user-avatar">U</div>
+    <div class="nav-user-name" id="nav-user-name">User</div>
+  </a>
+
   <div class="burger" id="burger"><span></span><span></span><span></span></div>
 </nav>
 
@@ -303,6 +315,11 @@
   <a href="shop.html" onclick="closeMob()" style="color:var(--pink)!important;font-weight:700!important;">Shop</a>
   <a href="about.html" class="plink" onclick="closeMob()">Our Story</a>
   <div class="mob-divider"></div>
+  <!-- User profile (shown when logged in) -->
+  <a href="customer.html" class="nav-user mob-user" id="mob-nav-user" onclick="closeMob()">
+    <div class="nav-user-avatar" id="mob-nav-user-avatar">U</div>
+    <div class="nav-user-name" id="mob-nav-user-name">User</div>
+  </a>
   <a href="https://wa.me/8801676456965" target="_blank" onclick="closeMob()"><i class="fab fa-whatsapp"></i> &nbsp;Order Help</a>
   <div class="mob-divider"></div>
   <a href="https://www.facebook.com/skfashionnn/" target="_blank"><i class="fab fa-facebook"></i> &nbsp;Facebook Shop</a>
@@ -352,14 +369,16 @@
 
     <!-- Categories -->
     <div class="filter-panel">
-      <h4>
-        Categories
-        <button onclick="clearCategory()">Clear</button>
-      </h4>
-      <div class="cat-chips">
-        <!-- ============================================================ -->
+       <h4>
+         Categories
+         <button onclick="clearCategory()">Clear</button>
+       </h4>
+       <div class="cat-chips">
+         <!-- ============================================================ -->
+         <!-- 🔗 CATEGORY FILTERS                                          -->
+         <!-- ============================================================ -->
         <!-- 🔗 CATEGORY FILTERS                                          -->
-        <!-- 🔥 FIREBASE: Counts updated dynamically from Firestore       -->
+
         <!-- ============================================================ -->
         <button class="cat-chip active" onclick="filterCategory('all', this)">
           <span class="chip-icon">🛍️</span> All Products
@@ -449,11 +468,11 @@
 
     <!-- ============================================================ -->
     <!-- PRODUCTS GRID                                                 -->
-    <!-- 🔥 FIREBASE: Products loaded from Firestore PRODUCTS         -->
+
     <!-- collection. Cards generated by renderProducts() below        -->
     <!-- ============================================================ -->
     <div id="products-grid">
-      <!-- Loading skeletons shown while Firebase loads -->
+      <!-- Loading skeletons shown while data loads -->
       <div class="loading-grid" id="loading-skeletons" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;grid-column:1/-1;">
         <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line med"></div><div class="skeleton-line"></div></div></div>
         <div class="skeleton"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line med"></div><div class="skeleton-line"></div></div></div>
@@ -603,17 +622,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDput
   }
 
   // ============================================================
-  // DEMO PRODUCTS — shown before Firebase connects
-  // Replace with real products by adding them in admin panel
-  // ============================================================
-  window._demoProducts = [
-    { id: 'demo1', name: 'Royal Banarasi Silk Saree', nameBangla: 'রয়্যাল বেনারসি সিল্ক শাড়ি', category: 'silk', price: 4500, originalPrice: 5000, discount: 10, stock: 15, isNewArrival: true, isFeatured: true, photos: [], description: 'Exquisite hand-woven Banarasi silk saree perfect for weddings and special occasions.' },
-    { id: 'demo2', name: 'Traditional Jamdani Saree', nameBangla: 'ঐতিহ্যবাহী জামদানি শাড়ি', category: 'jamdani', price: 8500, originalPrice: 9000, discount: 5, stock: 8, isNewArrival: true, isFeatured: false, photos: [], description: 'Heritage handloom Jamdani — a timeless piece of Bangladeshi artistry.' },
-    { id: 'demo3', name: 'Premium Eid Panjabi', nameBangla: 'প্রিমিয়াম ঈদ পাঞ্জাবি', category: 'panjabi', price: 2200, originalPrice: 2500, discount: 12, stock: 20, isNewArrival: false, isFeatured: true, photos: [], description: 'Elegant premium Panjabi for Eid and special celebrations.' },
-    { id: 'demo4', name: 'Handcrafted Suti Bag', nameBangla: 'হাতে বোনা সুতি ব্যাগ', category: 'handbag', price: 850, originalPrice: 1000, discount: 15, stock: 30, isNewArrival: true, isFeatured: false, photos: [], description: 'Beautiful handcrafted ladies handbag made from authentic Suti Kapor fabric.' },
-    { id: 'demo5', name: 'Kanjivaram Silk Saree', nameBangla: 'কাঞ্জিভরম সিল্ক শাড়ি', category: 'silk', price: 6500, originalPrice: 7000, discount: 7, stock: 5, isNewArrival: false, isFeatured: true, photos: [], description: 'South Indian Kanjivaram silk with rich gold zari work.' },
-    { id: 'demo6', name: 'Muslin Jamdani Saree', nameBangla: 'মসলিন জামদানি শাড়ি', category: 'jamdani', price: 5500, originalPrice: 6000, discount: 8, stock: 12, isNewArrival: true, isFeatured: false, photos: [], description: 'Lightweight muslin Jamdani perfect for casual and formal occasions.' },
-  ];
+
 
   // ============================================================
   // STATE
@@ -782,7 +791,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDput
       case 'price-high':  filtered.sort((a, b) => b.price - a.price); break;
       case 'name-az':     filtered.sort((a, b) => a.name.localeCompare(b.name)); break;
       case 'discount':    filtered.sort((a, b) => (b.discount || 0) - (a.discount || 0)); break;
-      default: break; // newest = already sorted by Firebase
+       default: break; // newest = already sorted
     }
 
     window.renderProducts(filtered);
@@ -884,7 +893,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDput
   window.setView = setView;
 
   // ============================================================
-  // WISHLIST TOGGLE (visual only — Firebase connects later)
+   // WISHLIST TOGGLE (visual only)
   // ============================================================
   function toggleWishlist(e, productId) {
     e.stopPropagation();
@@ -901,12 +910,11 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDput
   }
   window.toggleWishlist = toggleWishlist;
 
-  // ============================================================
-  // GO TO PRODUCT PAGE
-  // 🔗 LINK: product.html?id=PRODUCT_ID
-  // The product page reads the ID from the URL
-  // and loads that specific product from Firebase
-  // ============================================================
+   // ============================================================
+   // GO TO PRODUCT PAGE
+   // 🔗 LINK: product.html?id=PRODUCT_ID
+   // The product page reads the ID from the URL
+   // ============================================================
   function goToProduct(productId) {
     goTo(`product.html?id=${productId}`);
   }
@@ -947,17 +955,19 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDput
     }, 2500);
   }
 
-  // ── MOBILE FILTERS ──
-  function toggleMobileFilters() {
-    const overlay = document.getElementById('mob-filter-overlay');
-    const drawer  = document.getElementById('mob-filter-drawer');
-    const isOpen  = overlay.style.display === 'block';
-    overlay.style.display = isOpen ? 'none' : 'block';
-    drawer.style.display  = isOpen ? 'none' : 'block';
-    setTimeout(() => { drawer.style.transform = isOpen ? 'translateY(100%)' : 'translateY(0)'; }, 10);
-  }
-  window.toggleMobileFilters = toggleMobileFilters;
+   // ── MOBILE FILTERS ──
+   function toggleMobileFilters() {
+     const overlay = document.getElementById('mob-filter-overlay');
+     const drawer  = document.getElementById('mob-filter-drawer');
+     const isOpen  = overlay.style.display === 'block';
+     overlay.style.display = isOpen ? 'none' : 'block';
+     drawer.style.display  = isOpen ? 'none' : 'block';
+     setTimeout(() => { drawer.style.transform = isOpen ? 'translateY(100%)' : 'translateY(0)'; }, 10);
+   }
+   window.toggleMobileFilters = toggleMobileFilters;
 
-</script>
+
+
+ </script>
 </body>
 </html>

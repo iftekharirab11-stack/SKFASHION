@@ -515,10 +515,7 @@
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-  // ============================================================
-  // 🔥 FIREBASE: These functions called by Firebase auth above
-  // DO NOT DELETE — Firebase will call these automatically
-  // ============================================================
+
   window.showUserInNav = function(user) {
     document.querySelectorAll('.nav-login, .nav-signup').forEach(el => el.closest('li').style.display = 'none');
     const btn = document.getElementById('nav-user-btn');
