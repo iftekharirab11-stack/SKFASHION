@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shop – SK Fashion Bangladesh</title>
-  <meta name="description" content="Browse SK Fashion's full collection — Silk Sarees, Jamdani, Men's Panjabi and handcrafted Suti Kapor handbags. Order via WhatsApp.">
+  <title>Shop â€“ SK Fashion Bangladesh</title>
+  <meta name="description" content="Browse SK Fashion's full collection â€” Silk Sarees, Jamdani, Men's Panjabi and handcrafted Suti Kapor handbags. Order via WhatsApp.">
 
-  <!-- 🔗 LINK: Google Fonts -->
+  <!-- ðŸ”— LINK: Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- Products loaded via local demo data -->
+  <!-- Products loaded from API -->
 
   <style>
     :root {
@@ -28,7 +28,7 @@
     body.loaded { opacity: 1; }
     body.exiting { opacity: 0 !important; transition: opacity 0.35s ease; }
 
-    /* ── NAVBAR ── */
+    /* â”€â”€ NAVBAR â”€â”€ */
     #nav { position: fixed; top: 0; left: 0; right: 0; height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; background: rgba(250,246,240,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(212,68,154,0.08); z-index: 1000; transition: height 0.3s var(--ease), box-shadow 0.3s ease; }
     #nav.scrolled { height: 60px; box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
     .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
@@ -72,7 +72,7 @@
 .nav-user-avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, var(--pink), var(--blue)); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: white; flex-shrink: 0; }
 .nav-user-name { font-size: 0.8rem; font-weight: 600; color: var(--dark); max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-    /* ── SHOP HERO ── */
+    /* â”€â”€ SHOP HERO â”€â”€ */
     #shop-hero {
       padding-top: 70px;
       background: linear-gradient(145deg, #0E0C1F 0%, #1E0B30 45%, #0D1540 100%);
@@ -97,7 +97,7 @@
     .sh-count-num { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, var(--pink), var(--blue-soft)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .sh-count-lbl { font-size: 0.7rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 2px; }
 
-    /* ── SEARCH BAR IN HERO ── */
+    /* â”€â”€ SEARCH BAR IN HERO â”€â”€ */
     .sh-search-wrap { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 50px; display: flex; align-items: center; gap: 10px; padding: 10px 20px; min-width: 280px; transition: all 0.3s ease; }
     .sh-search-wrap:focus-within { background: rgba(255,255,255,0.12); border-color: rgba(212,68,154,0.4); box-shadow: 0 0 0 4px rgba(212,68,154,0.1); }
     .sh-search-wrap i { color: rgba(255,255,255,0.35); font-size: 0.88rem; flex-shrink: 0; }
@@ -107,10 +107,10 @@
     .sh-search-clear.show { display: flex; }
     .sh-search-clear:hover { background: rgba(255,255,255,0.2); color: white; }
 
-    /* ── MAIN LAYOUT ── */
+    /* â”€â”€ MAIN LAYOUT â”€â”€ */
     #shop-main { width: 90%; max-width: 1300px; margin: 0 auto; padding: 2.5rem 0 5rem; display: grid; grid-template-columns: 260px 1fr; gap: 2.5rem; }
 
-    /* ── SIDEBAR FILTERS ── */
+    /* â”€â”€ SIDEBAR FILTERS â”€â”€ */
     #filters-sidebar { position: sticky; top: 84px; height: fit-content; }
     .filter-panel { background: white; border-radius: 18px; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid var(--cream2); margin-bottom: 1.2rem; }
     .filter-panel h4 { font-family: 'Cinzel', serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--body); margin-bottom: 1.2rem; display: flex; align-items: center; justify-content: space-between; }
@@ -145,7 +145,7 @@
     .tf-toggle input:checked + .tf-slider { background: linear-gradient(135deg, var(--pink), var(--blue)); }
     .tf-toggle input:checked + .tf-slider::before { transform: translateX(16px); }
 
-    /* ── PRODUCTS AREA ── */
+    /* â”€â”€ PRODUCTS AREA â”€â”€ */
 
     /* Toolbar */
     .shop-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.8rem; flex-wrap: wrap; gap: 1rem; }
@@ -159,7 +159,7 @@
     .view-btn { width: 36px; height: 36px; background: white; border: 1px solid var(--cream2); border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--body); font-size: 0.85rem; transition: all 0.2s ease; }
     .view-btn.active, .view-btn:hover { background: linear-gradient(135deg, var(--pink), var(--blue)); border-color: transparent; color: white; }
 
-    /* ── PRODUCT GRID ── */
+    /* â”€â”€ PRODUCT GRID â”€â”€ */
     #products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
     #products-grid.list-view { grid-template-columns: 1fr; }
 
@@ -242,7 +242,7 @@
     .skeleton-line.med { width: 80%; }
     @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
-    /* ── FOOTER ── */
+    /* â”€â”€ FOOTER â”€â”€ */
     footer { background: #0A0818; padding: 4rem 5% 2rem; }
     .ft-top { display: grid; grid-template-columns: 1.6fr 1fr 1.1fr; gap: 3rem; padding-bottom: 2.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .ft-brand-tagline { font-size: 0.86rem; line-height: 1.75; color: rgba(255,255,255,0.35); margin-top: 1rem; max-width: 250px; }
@@ -284,22 +284,22 @@
 <!-- NAVBAR                                                        -->
 <!-- ============================================================ -->
 <nav id="nav">
-  <!-- 🔗 LOGO → Homepage -->
+  <!-- ðŸ”— LOGO â†’ Homepage -->
   <a href="index.html" class="logo plink">
     <div class="logo-sk"><span class="s">S</span><span class="k">K</span></div>
     <div class="logo-words"><span class="w1">SK</span><span class="w2">Fashion</span></div>
   </a>
    <ul class="nav-ul">
      <li><a href="index.html" class="plink">Home</a></li>
-     <!-- 🔗 Shop — active on this page -->
+     <!-- ðŸ”— Shop â€” active on this page -->
      <li><a href="shop.html" class="active-nav">Shop</a></li>
      <li><a href="about.html" class="plink">Our Story</a></li>
      
-     <!-- 🔗 AUTH: Login & Signup -->
+     <!-- ðŸ”— AUTH: Login & Signup -->
      <li><a href="auth/login.html" class="nav-login">Sign In</a></li>
      <li><a href="auth/signup.html" class="nav-signup">Sign Up</a></li>
      
-     <!-- 🔗 AUTH: User Profile -->
+     <!-- ðŸ”— AUTH: User Profile -->
      <li>
        <a href="auth/customer.html" class="nav-user" id="nav-user" style="display:none;">
          <div class="nav-user-avatar" id="nav-user-avatar">U</div>
@@ -307,7 +307,7 @@
        </a>
      </li>
      
-     <!-- 🔗 WhatsApp CTA -->
+     <!-- ðŸ”— WhatsApp CTA -->
      <li><a href="https://wa.me/8801676456965" target="_blank" style="background:linear-gradient(135deg,var(--pink),var(--blue))!important;color:white!important;padding:8px 18px!important;border-radius:50px!important;display:inline-flex!important;align-items:center!important;gap:6px!important;box-shadow:0 4px 14px rgba(212,68,154,0.28)!important;font-weight:600!important;"><i class="fab fa-whatsapp"></i> Order</a></li>
    </ul>
   
@@ -356,7 +356,7 @@
         <span style="color:rgba(255,255,255,0.55)">Shop</span>
       </div>
       <h1 class="sh-title">All <span>Collections</span></h1>
-      <p class="sh-sub">Handpicked fashion — authentic, beautiful, delivered to your door</p>
+      <p class="sh-sub">Handpicked fashion â€” authentic, beautiful, delivered to your door</p>
     </div>
     <div class="sh-right">
       <!-- Search bar -->
@@ -367,7 +367,7 @@
       </div>
       <!-- Counts -->
       <div class="sh-count">
-        <div class="sh-count-num" id="hero-count">—</div>
+        <div class="sh-count-num" id="hero-count">â€”</div>
         <div class="sh-count-lbl">Products</div>
       </div>
     </div>
@@ -379,7 +379,7 @@
 <!-- ============================================================ -->
 <div id="shop-main">
 
-  <!-- ── SIDEBAR FILTERS ── -->
+  <!-- â”€â”€ SIDEBAR FILTERS â”€â”€ -->
   <aside id="filters-sidebar">
 
     <!-- Categories -->
@@ -390,29 +390,29 @@
        </h4>
        <div class="cat-chips">
          <!-- ============================================================ -->
-         <!-- 🔗 CATEGORY FILTERS                                          -->
+         <!-- ðŸ”— CATEGORY FILTERS                                          -->
          <!-- ============================================================ -->
-        <!-- 🔗 CATEGORY FILTERS                                          -->
+        <!-- ðŸ”— CATEGORY FILTERS                                          -->
 
         <!-- ============================================================ -->
         <button class="cat-chip active" onclick="filterCategory('all', this)">
-          <span class="chip-icon">🛍️</span> All Products
+          <span class="chip-icon">ðŸ›ï¸</span> All Products
           <span class="chip-count" id="count-all">0</span>
         </button>
         <button class="cat-chip" onclick="filterCategory('silk', this)">
-          <span class="chip-icon">🥻</span> Silk Sarees
+          <span class="chip-icon">ðŸ¥»</span> Silk Sarees
           <span class="chip-count" id="count-silk">0</span>
         </button>
         <button class="cat-chip" onclick="filterCategory('jamdani', this)">
-          <span class="chip-icon">🌿</span> Jamdani Sarees
+          <span class="chip-icon">ðŸŒ¿</span> Jamdani Sarees
           <span class="chip-count" id="count-jamdani">0</span>
         </button>
         <button class="cat-chip" onclick="filterCategory('panjabi', this)">
-          <span class="chip-icon">👔</span> Men's Panjabi
+          <span class="chip-icon">ðŸ‘”</span> Men's Panjabi
           <span class="chip-count" id="count-panjabi">0</span>
         </button>
         <button class="cat-chip" onclick="filterCategory('handbag', this)">
-          <span class="chip-icon">👜</span> Ladies Handbags
+          <span class="chip-icon">ðŸ‘œ</span> Ladies Handbags
           <span class="chip-count" id="count-handbag">0</span>
         </button>
       </div>
@@ -423,10 +423,10 @@
       <h4>Price Range <button onclick="clearPrice()">Clear</button></h4>
       <div class="price-options">
         <label class="price-opt"><input type="radio" name="price" value="all" checked onchange="filterPrice(this.value)"> All Prices</label>
-        <label class="price-opt"><input type="radio" name="price" value="0-1000" onchange="filterPrice(this.value)"> Under ৳1,000</label>
-        <label class="price-opt"><input type="radio" name="price" value="1000-3000" onchange="filterPrice(this.value)"> ৳1,000 – ৳3,000</label>
-        <label class="price-opt"><input type="radio" name="price" value="3000-6000" onchange="filterPrice(this.value)"> ৳3,000 – ৳6,000</label>
-        <label class="price-opt"><input type="radio" name="price" value="6000-999999" onchange="filterPrice(this.value)"> Above ৳6,000</label>
+        <label class="price-opt"><input type="radio" name="price" value="0-1000" onchange="filterPrice(this.value)"> Under à§³1,000</label>
+        <label class="price-opt"><input type="radio" name="price" value="1000-3000" onchange="filterPrice(this.value)"> à§³1,000 â€“ à§³3,000</label>
+        <label class="price-opt"><input type="radio" name="price" value="3000-6000" onchange="filterPrice(this.value)"> à§³3,000 â€“ à§³6,000</label>
+        <label class="price-opt"><input type="radio" name="price" value="6000-999999" onchange="filterPrice(this.value)"> Above à§³6,000</label>
       </div>
     </div>
 
@@ -461,7 +461,7 @@
 
   </aside>
 
-  <!-- ── PRODUCTS AREA ── -->
+  <!-- â”€â”€ PRODUCTS AREA â”€â”€ -->
   <div id="products-area">
 
     <!-- Toolbar -->
@@ -511,10 +511,10 @@
   <p style="font-size:0.86rem;color:var(--body);margin-bottom:1rem;font-weight:500;">Category</p>
   <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.5rem;">
     <button onclick="filterCategory('all');toggleMobileFilters()" style="padding:8px 16px;border-radius:50px;border:1.5px solid rgba(212,68,154,0.3);background:rgba(212,68,154,0.08);color:var(--dark);font-family:'Jost',sans-serif;font-size:0.84rem;font-weight:600;cursor:pointer;">All</button>
-    <button onclick="filterCategory('silk');toggleMobileFilters()" style="padding:8px 16px;border-radius:50px;border:1px solid var(--cream2);background:white;color:var(--dark);font-family:'Jost',sans-serif;font-size:0.84rem;cursor:pointer;">🥻 Silk</button>
-    <button onclick="filterCategory('jamdani');toggleMobileFilters()" style="padding:8px 16px;border-radius:50px;border:1px solid var(--cream2);background:white;color:var(--dark);font-family:'Jost',sans-serif;font-size:0.84rem;cursor:pointer;">🌿 Jamdani</button>
-    <button onclick="filterCategory('panjabi');toggleMobileFilters()" style="padding:8px 16px;border-radius:50px;border:1px solid var(--cream2);background:white;color:var(--dark);font-family:'Jost',sans-serif;font-size:0.84rem;cursor:pointer;">👔 Panjabi</button>
-    <button onclick="filterCategory('handbag');toggleMobileFilters()" style="padding:8px 16px;border-radius:50px;border:1px solid var(--cream2);background:white;color:var(--dark);font-family:'Jost',sans-serif;font-size:0.84rem;cursor:pointer;">👜 Handbag</button>
+    <button onclick="filterCategory('silk');toggleMobileFilters()" style="padding:8px 16px;border-radius:50px;border:1px solid var(--cream2);background:white;color:var(--dark);font-family:'Jost',sans-serif;font-size:0.84rem;cursor:pointer;">ðŸ¥» Silk</button>
+    <button onclick="filterCategory('jamdani');toggleMobileFilters()" style="padding:8px 16px;border-radius:50px;border:1px solid var(--cream2);background:white;color:var(--dark);font-family:'Jost',sans-serif;font-size:0.84rem;cursor:pointer;">ðŸŒ¿ Jamdani</button>
+    <button onclick="filterCategory('panjabi');toggleMobileFilters()" style="padding:8px 16px;border-radius:50px;border:1px solid var(--cream2);background:white;color:var(--dark);font-family:'Jost',sans-serif;font-size:0.84rem;cursor:pointer;">ðŸ‘” Panjabi</button>
+    <button onclick="filterCategory('handbag');toggleMobileFilters()" style="padding:8px 16px;border-radius:50px;border:1px solid var(--cream2);background:white;color:var(--dark);font-family:'Jost',sans-serif;font-size:0.84rem;cursor:pointer;">ðŸ‘œ Handbag</button>
   </div>
   <p style="font-size:0.86rem;color:var(--body);margin-bottom:0.8rem;font-weight:500;">Sort</p>
   <select onchange="handleSort(this.value);toggleMobileFilters()" style="width:100%;background:white;border:1px solid var(--cream2);border-radius:12px;padding:11px 14px;font-family:'Jost',sans-serif;font-size:0.88rem;outline:none;margin-bottom:1.5rem;">
@@ -561,7 +561,7 @@
     </div>
   </div>
   <div class="ft-bottom">
-    <p>© 2024 SK Fashion Bangladesh. All rights reserved.</p>
+    <p>Â© 2024 SK Fashion Bangladesh. All rights reserved.</p>
     <div style="display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;">
       <a href="about.html" class="plink" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--pink),var(--blue));color:white;text-decoration:none;padding:9px 20px;border-radius:50px;font-size:0.82rem;font-weight:600;transition:transform 0.3s ease;">Our Story <i class="fas fa-arrow-right"></i></a>
       <a href="admin.html" title="Admin Panel" style="display:inline-flex;align-items:center;gap:6px;font-size:0.7rem;color:rgba(255,255,255,0.15);text-decoration:none;letter-spacing:1px;text-transform:uppercase;padding:6px 12px;border:1px solid rgba(255,255,255,0.06);border-radius:50px;transition:all 0.3s ease;cursor:pointer;position:relative;z-index:10;" onmouseover="this.style.color='rgba(212,68,154,0.7)';this.style.borderColor='rgba(212,68,154,0.25)';" onmouseout="this.style.color='rgba(255,255,255,0.15)';this.style.borderColor='rgba(255,255,255,0.06)';"><i class="fas fa-lock" style="font-size:0.62rem;"></i> Admin</a>
@@ -571,41 +571,41 @@
 
 <!-- FLOATING WHATSAPP -->
 <div class="wa-float">
-  <div class="wa-tip">Order on WhatsApp 🛍️</div>
+  <div class="wa-tip">Order on WhatsApp ðŸ›ï¸</div>
   <a href="https://wa.me/8801676456965" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i></a>
 </div>
 
 <!-- ============================================================ -->
 <!-- Products loaded via Apps Script -->
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDputB_-dR07diENTq4ZIMRU_R9ymFEcLPOtfHHxODfAbxoipLYz0eSuG/exec';
+const API_BASE = '';
 
-  async function initShop() {
-    try {
-      const response = await fetch(APPS_SCRIPT_URL + '?action=getProducts');
-      const products = await response.json();
-      window._allProducts = products;
-    } catch (e) {
-      console.error('Failed to load products, using demo:', e);
-      window._allProducts = window._demoProducts;
-    } finally {
-      document.getElementById('loading-skeletons').remove();
-      window.renderProducts(window._allProducts);
-      window.updateCounts(window._allProducts);
-      
-      const urlParams = new URLSearchParams(window.location.search);
-      const urlCat = urlParams.get('category');
-      if (urlCat) {
-        currentCategory = urlCat;
-        document.querySelectorAll('.cat-chip').forEach(c => {
-          const matches = c.getAttribute('onclick')?.includes(`'${urlCat}'`);
-          c.classList.toggle('active', matches);
-        });
-        applyFilters();
-      }
-    }
-  }
-  initShop();
+   async function initShop() {
+     try {
+       const response = await fetch('/api/products');
+       const data = await response.json();
+       window._allProducts = data.products || [];
+     } catch (e) {
+       console.error('Failed to load products:', e);
+       window._allProducts = [];
+     } finally {
+       document.getElementById('loading-skeletons').remove();
+       window.renderProducts(window._allProducts);
+       window.updateCounts(window._allProducts);
+       
+       const urlParams = new URLSearchParams(window.location.search);
+       const urlCat = urlParams.get('category');
+       if (urlCat) {
+         currentCategory = urlCat;
+         document.querySelectorAll('.cat-chip').forEach(c => {
+           const matches = c.getAttribute('onclick')?.includes(`'${urlCat}'`);
+           c.classList.toggle('active', matches);
+         });
+         applyFilters();
+       }
+     }
+   }
+   initShop();
 </script>
 
 <script>
@@ -649,7 +649,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDput
   let currentView     = 'grid';
 
   // Category emoji helper
-  const CAT_EMOJI  = { silk:'🥻', jamdani:'🌿', panjabi:'👔', handbag:'👜' };
+  const CAT_EMOJI  = { silk:'ðŸ¥»', jamdani:'ðŸŒ¿', panjabi:'ðŸ‘”', handbag:'ðŸ‘œ' };
   const CAT_BG     = { silk:'linear-gradient(155deg,#5A0A0A,#C9A84C)', jamdani:'linear-gradient(155deg,#0A2E22,#4ABAAA)', panjabi:'linear-gradient(155deg,#0A0A2E,#4A80EE)', handbag:'linear-gradient(155deg,#2E1A0A,#C48040)' };
   const CAT_LABEL  = { silk:'Silk', jamdani:'Jamdani', panjabi:'Panjabi', handbag:'Handbag' };
 
@@ -672,34 +672,30 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDput
     }
 
     grid.innerHTML = products.map((p, i) => {
-      // ── SMART PHOTO GETTER ──
-      // Handles: array, string, empty, undefined
-      const getPhoto = (p) => {
-        if (!p.photos) return null;
-        if (Array.isArray(p.photos) && p.photos.length > 0 && p.photos[0]) return p.photos[0];
-        if (typeof p.photos === 'string' && p.photos.length > 0) return p.photos;
-        return null;
-      };
-
-      const hasPhoto = p.photos && p.photos.length > 0;
+      // Normalize product fields from Supabase
+      const photos = p.images && p.images.length > 0 ? p.images : [];
+      const mainPhoto = photos[0] || null;
+      const originalPrice = p.original_price;
+      const discount = originalPrice && originalPrice > p.price
+        ? Math.round((originalPrice - p.price) / originalPrice * 100)
+        : 0;
       const stockDot = p.stock > 5 ? '' : p.stock > 0 ? 'low' : 'out';
       const stockTxt = p.stock > 5 ? 'In Stock' : p.stock > 0 ? `Only ${p.stock} left` : 'Out of Stock';
 
       return `
         <div class="prod-card" style="animation-delay:${i * 0.06}s" onclick="goToProduct('${p.id}')">
-
           <div class="pc-img">
-            <div class="pc-img-inner" style="${!getPhoto(p) ? 'background:' + (CAT_BG[p.category] || '#eee') : ''}">
-              ${getPhoto(p)
-                ? `<img src="${getPhoto(p)}" alt="${p.name}" loading="lazy" onerror="this.style.display='none';this.parentElement.style.background='${CAT_BG[p.category]||'#eee'}';this.parentElement.innerHTML+='<span style=font-size:3.5rem>${CAT_EMOJI[p.category]||'🛍️'}</span>'">`
+            <div class="pc-img-inner" style="${!mainPhoto ? 'background:' + (CAT_BG[p.category] || '#eee') : ''}">
+              ${mainPhoto
+                ? `<img src="${mainPhoto}" alt="${p.name}" loading="lazy" onerror="this.style.display='none';this.parentElement.style.background='${CAT_BG[p.category]||'#eee'}';this.parentElement.innerHTML+='<span style=font-size:3.5rem>${CAT_EMOJI[p.category]||'🛍️'}</span>'">`
                 : `<span style="font-size:3.5rem;">${CAT_EMOJI[p.category] || '🛍️'}</span>`}
             </div>
 
             <!-- Badges -->
             <div class="pc-badges">
               ${p.isNewArrival ? '<span class="pc-badge badge-new">🆕 New</span>' : ''}
-              ${p.discount >= 10 ? `<span class="pc-badge badge-sale">${p.discount}% Off</span>` : ''}
-              ${p.isFeatured ? '<span class="pc-badge badge-hot">⭐ Featured</span>' : ''}
+              ${discount >= 10 ? `<span class="pc-badge badge-sale">${discount}% Off</span>` : ''}
+              ${p.isFeatured ? '<span class="pc-badge badge-hot">🔥 Featured</span>' : ''}
             </div>
 
             <!-- Wishlist -->
@@ -726,7 +722,69 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDput
             <div class="pc-price-row">
               <div class="pc-prices">
                 <span class="pc-price">৳${p.price.toLocaleString()}</span>
-                ${p.originalPrice && p.originalPrice > p.price ? `<span class="pc-orig">৳${p.originalPrice.toLocaleString()}</span>` : ''}
+                ${originalPrice && originalPrice > p.price ? `<span class="pc-orig">৳${originalPrice.toLocaleString()}</span>` : ''}
+                ${discount ? `<span class="pc-disc">${discount}% off</span>` : ''}
+              </div>
+              <div class="pc-stock">
+                <span class="pc-stock-dot ${stockDot}"></span>
+                ${stockTxt}
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    // Update toolbar count
+    document.getElementById('result-count').innerHTML =
+      `Showing <strong>${products.length}</strong> product${products.length !== 1 ? 's' : ''}`;
+  };
+
+      const hasPhoto = p.photos && p.photos.length > 0;
+      const stockDot = p.stock > 5 ? '' : p.stock > 0 ? 'low' : 'out';
+      const stockTxt = p.stock > 5 ? 'In Stock' : p.stock > 0 ? `Only ${p.stock} left` : 'Out of Stock';
+
+      return `
+        <div class="prod-card" style="animation-delay:${i * 0.06}s" onclick="goToProduct('${p.id}')">
+
+          <div class="pc-img">
+            <div class="pc-img-inner" style="${!getPhoto(p) ? 'background:' + (CAT_BG[p.category] || '#eee') : ''}">
+              ${getPhoto(p)
+                ? `<img src="${getPhoto(p)}" alt="${p.name}" loading="lazy" onerror="this.style.display='none';this.parentElement.style.background='${CAT_BG[p.category]||'#eee'}';this.parentElement.innerHTML+='<span style=font-size:3.5rem>${CAT_EMOJI[p.category]||'ðŸ›ï¸'}</span>'">`
+                : `<span style="font-size:3.5rem;">${CAT_EMOJI[p.category] || 'ðŸ›ï¸'}</span>`}
+            </div>
+
+            <!-- Badges -->
+            <div class="pc-badges">
+              ${p.isNewArrival ? '<span class="pc-badge badge-new">ðŸ†• New</span>' : ''}
+              ${p.discount >= 10 ? `<span class="pc-badge badge-sale">${p.discount}% Off</span>` : ''}
+              ${p.isFeatured ? '<span class="pc-badge badge-hot">â­ Featured</span>' : ''}
+            </div>
+
+            <!-- Wishlist -->
+            <button class="pc-wish" onclick="toggleWishlist(event, '${p.id}')" title="Add to Wishlist">
+              <i class="far fa-heart"></i>
+            </button>
+
+            <!-- Quick actions -->
+            <div class="pc-quick" onclick="event.stopPropagation()">
+              <a href="https://wa.me/8801676456965?text=Hi! I want to order: ${encodeURIComponent(p.name)} (à§³${p.price})"
+                 target="_blank" class="pc-q-btn pc-q-wa">
+                <i class="fab fa-whatsapp"></i> Order Now
+              </a>
+              <button class="pc-q-btn pc-q-view" onclick="goToProduct('${p.id}')">
+                <i class="fas fa-eye"></i> View
+              </button>
+            </div>
+          </div>
+
+          <div class="pc-body">
+            <div class="pc-cat cat-${p.category}">${CAT_LABEL[p.category] || p.category}</div>
+            <div class="pc-name">${p.name}</div>
+            ${p.nameBangla ? `<div class="pc-name-bn">${p.nameBangla}</div>` : ''}
+            <div class="pc-price-row">
+              <div class="pc-prices">
+                <span class="pc-price">à§³${p.price.toLocaleString()}</span>
+                ${p.originalPrice && p.originalPrice > p.price ? `<span class="pc-orig">à§³${p.originalPrice.toLocaleString()}</span>` : ''}
                 ${p.discount ? `<span class="pc-disc">${p.discount}% off</span>` : ''}
               </div>
               <div class="pc-stock">
@@ -765,7 +823,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDput
   // APPLY ALL FILTERS (category + price + search + toggles)
   // ============================================================
   window.applyFilters = function() {
-    let filtered = [...(window._allProducts || window._demoProducts)];
+    let filtered = [...(window._allProducts || [])];
 
     // Category filter
     if (currentCategory !== 'all') {
@@ -800,14 +858,20 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDput
       filtered = filtered.filter(p => p.stock > 0);
     }
 
-    // Sort
-    switch (currentSort) {
-      case 'price-low':   filtered.sort((a, b) => a.price - b.price); break;
-      case 'price-high':  filtered.sort((a, b) => b.price - a.price); break;
-      case 'name-az':     filtered.sort((a, b) => a.name.localeCompare(b.name)); break;
-      case 'discount':    filtered.sort((a, b) => (b.discount || 0) - (a.discount || 0)); break;
+     // Sort
+     switch (currentSort) {
+       case 'price-low':   filtered.sort((a, b) => a.price - b.price); break;
+       case 'price-high':  filtered.sort((a, b) => b.price - a.price); break;
+       case 'name-az':     filtered.sort((a, b) => a.name.localeCompare(b.name)); break;
+       case 'discount':    
+         filtered.sort((a, b) => {
+           const da = a.original_price && a.price ? Math.round((a.original_price - a.price) / a.original_price * 100) : 0;
+           const db = b.original_price && b.price ? Math.round((b.original_price - b.price) / b.original_price * 100) : 0;
+           return db - da;
+         }); 
+         break;
        default: break; // newest = already sorted
-    }
+     }
 
     window.renderProducts(filtered);
     updateActiveFilters();
@@ -891,7 +955,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDput
     if (currentPrice !== 'all') tags.push({ label: 'Price filter', clear: 'clearPrice()' });
     if (currentSearch) tags.push({ label: `"${currentSearch}"`, clear: 'clearSearch()' });
     container.innerHTML = tags.map(t =>
-      `<span class="active-tag">${t.label} <button onclick="${t.clear}">×</button></span>`
+      `<span class="active-tag">${t.label} <button onclick="${t.clear}">Ã—</button></span>`
     ).join('');
   }
 
@@ -917,7 +981,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDput
     const icon = btn.querySelector('i');
     if (btn.classList.contains('active')) {
       icon.className = 'fas fa-heart';
-      showFloatMsg('Added to wishlist ❤️');
+      showFloatMsg('Added to wishlist â¤ï¸');
     } else {
       icon.className = 'far fa-heart';
       showFloatMsg('Removed from wishlist');
@@ -927,7 +991,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDput
 
    // ============================================================
    // GO TO PRODUCT PAGE
-   // 🔗 LINK: product.html?id=PRODUCT_ID
+   // ðŸ”— LINK: product.html?id=PRODUCT_ID
    // The product page reads the ID from the URL
    // ============================================================
   function goToProduct(productId) {
@@ -950,7 +1014,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDput
     });
   }
 
-  // ── FLOAT MESSAGE ──
+  // â”€â”€ FLOAT MESSAGE â”€â”€
   let floatTimer;
   function showFloatMsg(msg) {
     let el = document.getElementById('float-msg');
@@ -970,7 +1034,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDput
     }, 2500);
   }
 
-   // ── MOBILE FILTERS ──
+   // â”€â”€ MOBILE FILTERS â”€â”€
    function toggleMobileFilters() {
      const overlay = document.getElementById('mob-filter-overlay');
      const drawer  = document.getElementById('mob-filter-drawer');
@@ -981,7 +1045,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDput
    }
     window.toggleMobileFilters = toggleMobileFilters;
 
-  // ── AUTH STATE ──
+  // â”€â”€ AUTH STATE â”€â”€
   function initAuth() {
     const token = localStorage.getItem('skfashion_token');
     const user = JSON.parse(localStorage.getItem('skfashion_user') || 'null');
@@ -1033,3 +1097,4 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDput
  </script>
 </body>
 </html>
+

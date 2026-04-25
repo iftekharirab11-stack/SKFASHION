@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SK Fashion – Admin Panel</title>
+  <title>SK Fashion â€“ Admin Panel</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -185,7 +185,7 @@
       </div>
       <div class="login-field">
         <label>Password</label>
-        <input type="password" id="login-pass" placeholder="••••••••">
+        <input type="password" id="login-pass" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
       </div>
       <button class="login-btn" onclick="adminLogin()">Sign In</button>
       <div class="login-error" id="login-error"></div>
@@ -243,7 +243,7 @@
         <div class="stat-card blue">
           <div class="stat-icon"><i class="fas fa-taka-sign"></i></div>
           <div>
-            <div class="stat-num" id="stat-revenue">৳0</div>
+            <div class="stat-num" id="stat-revenue">à§³0</div>
             <div class="stat-lbl">Total Revenue</div>
           </div>
         </div>
@@ -344,7 +344,7 @@
         </select>
       </div>
       <div class="form-group">
-        <label>Price (৳)</label>
+        <label>Price (à§³)</label>
         <input type="number" id="product-price" placeholder="e.g. 4500">
       </div>
       <div class="form-group">
@@ -363,7 +363,7 @@
   // ============================================================
   // CONFIGURATION
   // ============================================================
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWDMygAgNBDputB_-dR07diENTq4ZIMRU_R9ymFEcLPOtfHHxODfAbxoipLYz0eSuG/exec';
+  const API_BASE = '';
   const SHEET_ID = '1rAOZaPQoEh-MLeBTHI9svGToOb6q8zgqh-cpGdnFask';
   const DRIVE_FOLDER_ID = '1bC7mXiqd_B6fuqyRUiOi7b_RfWPZArA6';
 
@@ -438,7 +438,7 @@
 
   async function loadOrders() {
     try {
-      const response = await fetch(APPS_SCRIPT_URL);
+      const response = await fetch('/api/orders');
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const text = await response.text();
       if (!text) {
@@ -464,7 +464,7 @@
     const pending = allOrders.filter(o => o.PaymentMethod === 'COD' || o.PaymentMethod === 'cod').length;
 
     document.getElementById('stat-orders').textContent = total;
-    document.getElementById('stat-revenue').textContent = '৳' + revenue.toLocaleString();
+    document.getElementById('stat-revenue').textContent = 'à§³' + revenue.toLocaleString();
     document.getElementById('stat-delivered').textContent = total - pending;
     document.getElementById('stat-pending').textContent = pending;
 
@@ -475,10 +475,10 @@
     } else {
       tbody.innerHTML = recent.map(o => `
         <tr>
-          <td style="font-weight:700;">#${o.OrderID || '—'}</td>
-          <td>${o.CustomerName || '—'}</td>
-          <td>${o.ProductName || '—'}</td>
-          <td>৳${Number(o.Total || 0).toLocaleString()}</td>
+          <td style="font-weight:700;">#${o.OrderID || 'â€”'}</td>
+          <td>${o.CustomerName || 'â€”'}</td>
+          <td>${o.ProductName || 'â€”'}</td>
+          <td>à§³${Number(o.Total || 0).toLocaleString()}</td>
           <td>${o.PaymentMethod || 'COD'}</td>
         </tr>
       `).join('');
@@ -492,13 +492,13 @@
     } else {
       tbody.innerHTML = allOrders.reverse().map(o => `
         <tr>
-          <td style="font-weight:700;">#${o.OrderID || '—'}</td>
-          <td>${o.Timestamp ? new Date(o.Timestamp).toLocaleDateString('en-GB') : '—'}</td>
-          <td>${o.CustomerName || '—'}</td>
-          <td>${o.Phone || '—'}</td>
-          <td>${o.ProductName || '—'}</td>
+          <td style="font-weight:700;">#${o.OrderID || 'â€”'}</td>
+          <td>${o.Timestamp ? new Date(o.Timestamp).toLocaleDateString('en-GB') : 'â€”'}</td>
+          <td>${o.CustomerName || 'â€”'}</td>
+          <td>${o.Phone || 'â€”'}</td>
+          <td>${o.ProductName || 'â€”'}</td>
           <td>${o.Quantity || 1}</td>
-          <td>৳${Number(o.Total || 0).toLocaleString()}</td>
+          <td>à§³${Number(o.Total || 0).toLocaleString()}</td>
           <td>${o.PaymentMethod || 'COD'}</td>
         </tr>
       `).join('');
@@ -539,7 +539,7 @@
           formData.append('fileName', file.name);
           formData.append('folderId', DRIVE_FOLDER_ID);
           
-          const response = await fetch(APPS_SCRIPT_URL, {
+          const response = await fetch('/api/admin/upload', {
             method: 'POST',
             body: formData
           });
@@ -627,10 +627,7 @@
       
       // Send product data as JSON
       const response = await Promise.race([
-        fetch(APPS_SCRIPT_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
+        fetch('/api/products', {
           },
           body: JSON.stringify(product)
         }),
