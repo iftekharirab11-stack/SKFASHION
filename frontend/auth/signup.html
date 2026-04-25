@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up – SK Fashion Bangladesh</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --pink:#D4449A;--pink-soft:#F0A8D8;--blue:#2B5CE6;--blue-soft:#93AEFF;
+      --cream:#FAF6F0;--cream2:#F0E8DC;--dark:#12101E;--dark2:#1E1B32;
+      --body:#4A4460;--green:#16A34A;--red:#EF4444;
+      --gold:#C9A84C;--radius:22px;--ease:cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--dark);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;}
+    .auth-wrap{width:100%;max-width:420px;animation:fadeIn 0.6s ease;}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+    .auth-card{background:white;border-radius:28px;padding:2.5rem;box-shadow:0 12px 60px rgba(0,0,0,0.08);position:relative;overflow:hidden;}
+    .auth-card::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--pink),var(--blue));}
+
+    .auth-logo{text-align:center;margin-bottom:2rem;}
+    .auth-logo .sk{font-family:'Dancing Script',cursive;font-size:3.2rem;line-height:1;}
+    .auth-logo .s{color:var(--pink);}.auth-logo .k{color:var(--blue);}
+    .auth-logo p{font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:5px;color:var(--body);margin-top:4px;}
+
+    .auth-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;text-align:center;margin-bottom:0.3rem;}
+    .auth-sub{font-size:0.88rem;color:var(--body);text-align:center;margin-bottom:2rem;}
+
+    .form-group{margin-bottom:1.3rem;}
+    .form-label{display:block;font-size:0.76rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--body);margin-bottom:0.5rem;}
+    .form-input{width:100%;background:var(--cream);border:2px solid transparent;border-radius:14px;padding:14px 16px;font-family:'Jost',sans-serif;font-size:0.95rem;color:var(--dark);outline:none;transition:all 0.3s;}
+    .form-input:focus{background:white;border-color:var(--pink-soft);box-shadow:0 0 0 4px rgba(212,68,154,0.08);}
+    .form-input::placeholder{color:var(--body);opacity:0.5;}
+    .form-error{font-size:0.82rem;color:var(--red);margin-top:0.5rem;display:none;}
+    .form-error.show{display:block;}
+
+    .auth-btn{width:100%;background:linear-gradient(135deg,var(--pink),var(--blue));border:none;border-radius:14px;padding:14px;color:white;font-family:'Jost',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:8px;}
+    .auth-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(212,68,154,0.35);}
+    .auth-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;box-shadow:none;}
+    .auth-btn .fab{font-size:1.2rem;}
+
+    .divider{display:flex;align-items:center;gap:1rem;margin:1.5rem 0;color:var(--body);font-size:0.82rem;}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--cream2);}
+
+    .social-btn{width:100%;background:white;border:2px solid var(--cream2);border-radius:14px;padding:12px;color:var(--dark);font-family:'Jost',sans-serif;font-size:0.92rem;font-weight:500;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:10px;}
+    .social-btn:hover{background:var(--cream);border-color:var(--pink-soft);transform:translateY(-1px);}
+    .social-btn .fab{font-size:1.3rem;}
+    .social-btn.fb{color:#1877F2;}
+    .social-btn.fb:hover{border-color:#1877F2;}
+
+    .auth-footer{text-align:center;margin-top:1.8rem;font-size:0.88rem;color:var(--body);}
+    .auth-footer a{color:var(--pink);text-decoration:none;font-weight:600;transition:color 0.2s;}
+    .auth-footer a:hover{color:var(--blue);}
+
+    .loading{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .auth-back{position:absolute;top:1.5rem;left:1.5rem;color:var(--body);text-decoration:none;font-size:0.82rem;display:flex;align-items:center;gap:6px;transition:color 0.2s;}
+    .auth-back:hover{color:var(--pink);}
+    .auth-back i{font-size:0.9rem;}
+
+    .terms{font-size:0.76rem;color:var(--body);text-align:center;margin-top:1rem;line-height:1.6;}
+    .terms a{color:var(--pink);text-decoration:none;}
+
+    @media(max-width:480px){.auth-card{padding:1.8rem 1.4rem}}
+  </style>
+</head>
+<body>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <a href="index.html" class="auth-back"><i class="fas fa-arrow-left"></i> Back</a>
+
+      <div class="auth-logo">
+        <div class="sk"><span class="s">S</span><span class="k">K</span></div>
+        <p>Fashion</p>
+      </div>
+
+      <h1 class="auth-title">Create Account</h1>
+      <p class="auth-sub">Join SK Fashion — authentic fashion delivered</p>
+
+      <form id="signup-form">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-input" id="fullName" placeholder="Your full name" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-input" id="email" placeholder="you@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" id="password" placeholder="Create a password (min 6 chars)" minlength="6" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phone (optional)</label>
+          <input type="tel" class="form-input" id="phone" placeholder="+8801XXXXXXXX">
+        </div>
+
+        <div class="form-error" id="form-error"></div>
+
+        <button type="submit" class="auth-btn" id="signup-btn">
+          <span id="btn-text">Create Account</span>
+          <span class="loading" id="btn-loading" style="display:none;"></span>
+        </button>
+      </form>
+
+      <div class="divider">or sign up with</div>
+
+      <button class="social-btn fb" id="fb-signup-btn">
+        <i class="fab fa-facebook-f"></i> Continue with Facebook
+      </button>
+
+      <div class="auth-footer">
+        Already have an account? <a href="login.html">Sign in</a>
+      </div>
+
+      <p class="terms">By signing up, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Supabase config
+    const SUPABASE_URL = 'https://xipykdvitueezmnvugjt.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpcnlkdml0aXVlZXptbnZ1Z2p0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxMzUwNzksImV4cCI6MjA1OTcxMTA3OX0.placeholder'; // Replace with actual anon key
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const API_BASE = '/api';
+
+    const form = document.getElementById('signup-form');
+    const formError = document.getElementById('form-error');
+    const signupBtn = document.getElementById('signup-btn');
+    const btnText = document.getElementById('btn-text');
+    const btnLoading = document.getElementById('btn-loading');
+    const fbSignupBtn = document.getElementById('fb-signup-btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      setLoading(true);
+      formError.classList.remove('show');
+
+      try {
+        const response = await fetch(`${API_BASE}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+            fullName: document.getElementById('fullName').value,
+            phone: document.getElementById('phone').value || null
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Registration failed');
+        }
+
+        localStorage.setItem('skfashion_token', data.token);
+        localStorage.setItem('skfashion_user', JSON.stringify(data.user));
+        window.location.href = 'customer.html';
+      } catch (error) {
+        formError.textContent = error.message;
+        formError.classList.add('show');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    fbSignupBtn.addEventListener('click', async () => {
+      setLoading(true);
+      try {
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: 'facebook',
+          options: {
+            redirectTo: window.location.origin + '/auth-callback.html'
+          }
+        });
+        if (error) throw error;
+      } catch (error) {
+        alert('Facebook signup error: ' + error.message);
+        setLoading(false);
+      }
+    });
+
+    function setLoading(loading) {
+      signupBtn.disabled = loading;
+      fbSignupBtn.disabled = loading;
+      btnText.style.display = loading ? 'none' : 'inline';
+      btnLoading.style.display = loading ? 'inline-block' : 'none';
+    }
+  </script>
+</body>
+</html>

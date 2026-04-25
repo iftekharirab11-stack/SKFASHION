@@ -221,28 +221,34 @@
     <div class="logo-words"><span class="w1">SK</span><span class="w2">Fashion</span></div>
   </a>
 
-  <ul class="nav-ul">
-    <!-- 🔗 NAV: Home -->
-    <li><a href="index.html">Home</a></li>
+   <ul class="nav-ul">
+     <!-- 🔗 NAV: Home -->
+     <li><a href="index.html">Home</a></li>
 
-    <!-- 🔗 NAV: Shop — REPLACE shop.html when created -->
-    <li><a href="shop.html" class="plink">Shop</a></li>
+     <!-- 🔗 NAV: Shop -->
+     <li><a href="shop.html" class="plink">Shop</a></li>
 
-    <!-- 🔗 NAV: Collections (scrolls down on same page) -->
-    <li><a href="#collections">Collections</a></li>
+     <!-- 🔗 NAV: Collections -->
+     <li><a href="#collections">Collections</a></li>
 
-    <!-- 🔗 NAV: About page -->
-    <li><a href="about.html" class="plink">Our Story</a></li>
+     <!-- 🔗 NAV: About page -->
+     <li><a href="about.html" class="plink">Our Story</a></li>
 
-    <li><a href="https://wa.me/8801676456965" class="nav-login" target="_blank">Order Help</a></li>
+     <!-- 🔗 AUTH: Login & Signup (shown when logged out) -->
+     <li><a href="auth/login.html" class="nav-login">Sign In</a></li>
+     <li><a href="auth/signup.html" class="nav-signup">Sign Up</a></li>
 
-    <!-- 🔗 NAV: WhatsApp Order CTA -->
-    <!-- REPLACE 8801676456965 with actual WhatsApp number if changed -->
-    <li><a href="https://wa.me/8801676456965" target="_blank" class="nav-cta"><i class="fab fa-whatsapp"></i> Order Now</a></li>
+     <!-- 🔗 AUTH: User Profile (shown when logged in) -->
+     <li>
+       <a href="auth/customer.html" class="nav-user" id="nav-user" style="display:none;">
+         <div class="nav-user-avatar" id="nav-user-avatar">U</div>
+         <div class="nav-user-name" id="nav-user-name">User</div>
+       </a>
+     </li>
 
-    
-    </li>
-  </ul>
+     <!-- 🔗 NAV: WhatsApp Order CTA -->
+     <li><a href="https://wa.me/8801676456965" target="_blank" class="nav-cta"><i class="fab fa-whatsapp"></i> Order Now</a></li>
+   </ul>
 
   <div class="burger" id="burger"><span></span><span></span><span></span></div>
 </nav>
@@ -251,18 +257,24 @@
 <!-- MOBILE MENU                                                   -->
 <!-- ============================================================ -->
 <nav class="mob-menu" id="mob">
-  <!-- 🔗 MOBILE NAV LINKS — same rules as desktop nav above -->
   <a href="index.html" onclick="closeMob()">Home</a>
   <a href="shop.html" class="plink" onclick="closeMob()">Shop</a>
   <a href="#collections" onclick="closeMob()">Collections</a>
   <a href="about.html" class="plink" onclick="closeMob()">Our Story</a>
   <div class="mob-divider"></div>
-  <!-- 🔗 MOBILE: Login & Signup — REPLACE when customer.html built -->
-  <a href="https://wa.me/8801676456965" target="_blank" onclick="closeMob()"><i class="fab fa-whatsapp"></i> &nbsp;Order Help</a>
-  <div class="mob-divider"></div>
-  <!-- 🔗 MOBILE: Social Links -->
-  <a href="https://www.facebook.com/skfashionnn/" target="_blank"><i class="fab fa-facebook"></i> &nbsp;Facebook Shop</a>
-  <a href="https://wa.me/8801676456965" target="_blank"><i class="fab fa-whatsapp"></i> &nbsp;WhatsApp Order</a>
+  
+  <a href="auth/login.html" class="mob-login" onclick="closeMob()"><i class="fas fa-sign-in-alt"></i> &nbsp;Sign In</a>
+  <a href="auth/signup.html" class="mob-signup" onclick="closeMob()"><i class="fas fa-user-plus"></i> &nbsp;Sign Up</a>
+  
+  <a href="auth/customer.html" class="nav-user mob-user" id="mob-nav-user" onclick="closeMob()" style="display:none;">
+    <div class="nav-user-avatar" id="mob-nav-user-avatar">U</div>
+    <div class="nav-user-name" id="mob-nav-user-name">User</div>
+  </a>
+  <a href="#" class="mob-logout" id="mob-logout-link" onclick="closeMob();logout();" style="display:none;">Sign Out</a>
+  <div class="mob-divider" id="mob-divider-logout" style="display:none;"></div>
+  
+  <a href="https://www.facebook.com/skfashionnn/" target="_blank" onclick="closeMob()"><i class="fab fa-facebook"></i> &nbsp;Facebook Shop</a>
+  <a href="https://wa.me/8801676456965" target="_blank" onclick="closeMob()"><i class="fab fa-whatsapp"></i> &nbsp;WhatsApp Order</a>
 </nav>
 
 <!-- ============================================================ -->
@@ -516,22 +528,76 @@
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
 
-  window.showUserInNav = function(user) {
-    document.querySelectorAll('.nav-login, .nav-signup').forEach(el => el.closest('li').style.display = 'none');
-    const btn = document.getElementById('nav-user-btn');
-    if (btn) {
-      btn.classList.add('show');
-      if (user.displayName) {
-        document.getElementById('nav-user-name').textContent = user.displayName.split(' ')[0];
-        document.getElementById('nav-user-initial').textContent = user.displayName.charAt(0).toUpperCase();
-      }
+  // AUTH STATE MANAGEMENT
+  const API_BASE = '/api';
+
+  function initAuth() {
+    const token = localStorage.getItem('skfashion_token');
+    const user = JSON.parse(localStorage.getItem('skfashion_user') || 'null');
+
+    if (token && user) {
+      showUserInNav(user);
+    } else {
+      showLoginInNav();
     }
+  }
+
+  window.showUserInNav = function(user) {
+    // Desktop: hide login/signup, show user profile
+    document.querySelectorAll('.nav-login, .nav-signup').forEach(el => el.closest('li').style.display = 'none');
+    
+    const userLink = document.getElementById('nav-user');
+    if (userLink) {
+      userLink.style.display = 'flex';
+      document.getElementById('nav-user-name').textContent = user.fullName?.split(' ')[0] || 'User';
+      document.getElementById('nav-user-avatar').textContent = user.fullName ? user.fullName.charAt(0).toUpperCase() : 'U';
+    }
+
+    // Mobile: hide login/signup links, show user profile and logout
+    const mobileLogin = document.querySelector('.mob-login');
+    const mobileSignup = document.querySelector('.mob-signup');
+    const mobileUser = document.getElementById('mob-nav-user');
+    const mobileLogout = document.getElementById('mob-logout-link');
+    const logoutDivider = document.getElementById('mob-divider-logout');
+
+    if (mobileLogin) mobileLogin.style.display = 'none';
+    if (mobileSignup) mobileSignup.style.display = 'none';
+    if (mobileUser) {
+      mobileUser.style.display = 'flex';
+      document.getElementById('mob-nav-user-name').textContent = user.fullName?.split(' ')[0] || 'User';
+      document.getElementById('mob-nav-user-avatar').textContent = user.fullName ? user.fullName.charAt(0).toUpperCase() : 'U';
+    }
+    if (mobileLogout) mobileLogout.style.display = 'block';
+    if (logoutDivider) logoutDivider.style.display = 'block';
   };
+
   window.showLoginInNav = function() {
     document.querySelectorAll('.nav-login, .nav-signup').forEach(el => el.closest('li').style.display = '');
-    const btn = document.getElementById('nav-user-btn');
-    if (btn) btn.classList.remove('show');
+    
+    const userLink = document.getElementById('nav-user');
+    if (userLink) userLink.style.display = 'none';
+
+    const mobileLogin = document.querySelector('.mob-login');
+    const mobileSignup = document.querySelector('.mob-signup');
+    const mobileUser = document.getElementById('mob-nav-user');
+    const mobileLogout = document.getElementById('mob-logout-link');
+    const logoutDivider = document.getElementById('mob-divider-logout');
+
+    if (mobileLogin) mobileLogin.style.display = 'block';
+    if (mobileSignup) mobileSignup.style.display = 'block';
+    if (mobileUser) mobileUser.style.display = 'none';
+    if (mobileLogout) mobileLogout.style.display = 'none';
+    if (logoutDivider) logoutDivider.style.display = 'none';
   };
+
+  function logout() {
+    localStorage.removeItem('skfashion_token');
+    localStorage.removeItem('skfashion_user');
+    window.location.reload();
+  }
+
+  // Init auth on page load
+  initAuth();
 </script>
 </body>
 </html>

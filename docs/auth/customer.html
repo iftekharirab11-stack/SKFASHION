@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account – SK Fashion Bangladesh</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --pink:#D4449A;--pink-soft:#F0A8D8;--blue:#2B5CE6;--blue-soft:#93AEFF;
+      --cream:#FAF6F0;--cream2:#F0E8DC;--dark:#12101E;--dark2:#1E1B32;
+      --body:#4A4460;--green:#16A34A;--red:#EF4444;--gold:#C9A84C;
+      --radius:20px;--ease:cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--dark);}
+
+    /* NAVBAR */
+    #nav{position:fixed;top:0;left:0;right:0;height:70px;background:rgba(250,246,240,0.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(212,68,154,0.08);z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 5%;transition:box-shadow 0.3s;}
+    #nav.scrolled{box-shadow:0 4px 24px rgba(0,0,0,0.07);}
+    .logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+    .logo-sk{font-family:'Dancing Script',cursive;font-size:2rem;line-height:1;}
+    .logo-sk .s{color:var(--pink);}.logo-sk .k{color:var(--blue);}
+    .logo-words{display:flex;flex-direction:column;line-height:1.15;}
+    .logo-words .w1{font-family:'Cinzel',serif;font-size:0.75rem;font-weight:700;letter-spacing:2px;color:var(--pink);}
+    .logo-words .w2{font-family:'Cinzel',serif;font-size:0.75rem;font-weight:600;letter-spacing:4px;color:var(--blue);}
+    .nav-ul{list-style:none;display:flex;align-items:center;gap:1.4rem;}
+    .nav-ul a{font-size:0.8rem;font-weight:500;text-transform:uppercase;letter-spacing:1px;color:var(--dark);text-decoration:none;position:relative;transition:color 0.3s;}
+    .nav-ul a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--pink),var(--blue));transition:width 0.3s;}
+    .nav-ul a:hover{color:var(--pink);}
+    .nav-logout{background:none;border:1px solid var(--cream2);color:var(--body);padding:7px 16px;border-radius:50px;font-weight:500;cursor:pointer;transition:all 0.2s;}
+    .nav-logout:hover{border-color:var(--pink);color:var(--pink);}
+    .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+    .burger span{width:24px;height:2px;background:var(--dark);transition:all 0.3s;display:block;}
+    .burger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+    .burger.open span:nth-child(2){opacity:0;}
+    .burger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
+    .mob-menu{display:none;position:fixed;top:70px;left:0;right:0;background:rgba(250,246,240,0.97);backdrop-filter:blur(20px);flex-direction:column;padding:1rem 5%;border-bottom:1px solid var(--cream2);z-index:999;}
+    .mob-menu.show{display:flex;}
+    .mob-menu a{text-decoration:none;font-size:0.9rem;font-weight:500;color:var(--dark);text-transform:uppercase;letter-spacing:1px;padding:0.85rem 0;border-bottom:1px solid var(--cream2);transition:color 0.3s;}
+    .mob-menu a:hover{color:var(--pink);}
+
+    /* MAIN CONTENT */
+    .main{margin-top:70px;padding:3rem 5%;max-width:1000px;margin-left:auto;margin-right:auto;}
+    .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;}
+    .page-title{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;}
+    .btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--pink),var(--blue));color:white;padding:12px 24px;border-radius:50px;text-decoration:none;font-weight:600;font-size:0.88rem;transition:all 0.3s;border:none;cursor:pointer;}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,68,154,0.35);}
+
+    .grid{display:grid;grid-template-columns:1fr 2fr;gap:2rem;align-items:start;}
+    .card{background:white;border-radius:24px;padding:2rem;box-shadow:0 4px 24px rgba(0,0,0,0.06);}
+    .card-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:10px;}
+    .card-title i{color:var(--pink);font-size:1.1rem;}
+
+    .profile-section{margin-bottom:2rem;}
+    .profile-section:last-child{margin-bottom:0;}
+    .prof-label{font-size:0.76rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--body);margin-bottom:0.5rem;}
+    .prof-value{font-size:1rem;font-weight:500;color:var(--dark);}
+    .prof-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--blue));display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:700;color:white;margin-bottom:1rem;}
+    .btn-logout{width:100%;background:var(--cream2);color:var(--body);border:none;border-radius:12px;padding:12px;font-family:'Jost',sans-serif;font-size:0.92rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+    .btn-logout:hover{background:var(--red);color:white;}
+
+    /* Orders */
+    .order-card{background:var(--cream);border-radius:16px;padding:1.4rem;margin-bottom:1rem;border:1px solid var(--cream2);transition:all 0.2s;}
+    .order-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.06);}
+    .order-card:last-child{margin-bottom:0;}
+    .ord-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.8rem;}
+    .ord-id{font-weight:700;font-size:0.92rem;}
+    .ord-status{font-size:0.76rem;font-weight:700;padding:4px 12px;border-radius:50px;background:var(--green);color:white;}
+    .ord-status.pending{background:#F59E0B;color:white;}
+    .ord-status.delivered{background:var(--green);color:white;}
+    .ord-status.cancelled{background:var(--red);color:white;}
+    .ord-date{font-size:0.82rem;color:var(--body);margin-bottom:0.6rem;}
+    .ord-items{font-size:0.88rem;color:var(--body);line-height:1.6;}
+    .ord-total{font-weight:700;color:var(--dark);margin-top:0.6rem;padding-top:0.6rem;border-top:1px solid var(--cream2);}
+
+    .empty-orders{text-align:center;padding:3rem 1rem;color:var(--body);}
+    .empty-orders i{font-size:3.5rem;color:var(--cream2);margin-bottom:1rem;}
+    .empty-orders p{font-size:0.92rem;}
+
+    .loading{text-align:center;padding:4rem;color:var(--body);}
+    .spinner{display:inline-block;width:32px;height:32px;border:3px solid var(--cream2);border-top-color:var(--pink);border-radius:50%;animation:spin 1s linear infinite;}
+
+    @media(max-width:768px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav id="nav">
+    <a href="index.html" class="logo">
+      <div class="logo-sk"><span class="s">S</span><span class="k">K</span></div>
+      <div class="logo-words"><span class="w1">SK</span><span class="w2">Fashion</span></div>
+    </a>
+    <ul class="nav-ul">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><button class="nav-logout" id="logout-btn">Logout</button></li>
+    </ul>
+    <div class="burger" id="burger"><span></span><span></span><span></span></div>
+  </nav>
+
+  <main class="main">
+    <div class="page-header">
+      <h1 class="page-title">My Account</h1>
+    </div>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p>Loading your account...</p>
+    </div>
+
+    <div class="grid" id="content" style="display:none;">
+      <!-- Profile Card -->
+      <div class="card">
+        <h2 class="card-title"><i class="fas fa-user-circle"></i> Profile</h2>
+        <div class="profile-section">
+          <div class="prof-avatar" id="user-avatar">U</div>
+          <p class="prof-label">Name</p>
+          <p class="prof-value" id="user-name">User</p>
+        </div>
+        <div class="profile-section">
+          <p class="prof-label">Email</p>
+          <p class="prof-value" id="user-email">user@example.com</p>
+        </div>
+        <div class="profile-section">
+          <p class="prof-label">Role</p>
+          <p class="prof-value" id="user-role">Customer</p>
+        </div>
+        <button class="btn-logout" id="logout-btn-mobile">Sign Out</button>
+      </div>
+
+      <!-- Orders Card -->
+      <div class="card">
+        <h2 class="card-title"><i class="fas fa-shopping-bag"></i> Recent Orders</h2>
+        <div id="orders-list">
+          <!-- Orders will be loaded here -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const token = localStorage.getItem('skfashion_token');
+    const user = JSON.parse(localStorage.getItem('skfashion_user') || 'null');
+
+    if (!token) {
+      window.location.href = 'auth/login.html';
+    }
+
+    // DOM elements
+    const loadingEl = document.getElementById('loading');
+    const contentEl = document.getElementById('content');
+    const avatarEl = document.getElementById('user-avatar');
+    const nameEl = document.getElementById('user-name');
+    const emailEl = document.getElementById('user-email');
+    const roleEl = document.getElementById('user-role');
+    const ordersEl = document.getElementById('orders-list');
+
+    // Logout buttons
+    document.getElementById('logout-btn').addEventListener('click', logout);
+    document.getElementById('logout-btn-mobile').addEventListener('click', logout);
+
+    function logout() {
+      localStorage.removeItem('skfashion_token');
+      localStorage.removeItem('skfashion_user');
+      window.location.href = 'index.html';
+    }
+
+    // Load profile
+    async function loadProfile() {
+      try {
+        const response = await fetch('/api/auth/me', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to load profile');
+        }
+
+        const u = data.user;
+        avatarEl.textContent = u.fullName ? u.fullName.charAt(0).toUpperCase() : 'U';
+        nameEl.textContent = u.fullName;
+        emailEl.textContent = u.email;
+        roleEl.textContent = u.role === 'admin' ? 'Admin' : 'Customer';
+
+        // Load orders
+        loadOrders(u.id);
+      } catch (error) {
+        alert('Error: ' + error.message);
+        logout();
+      }
+    }
+
+    // Load orders (simplified - actual orders API needs implementation)
+    async function loadOrders(userId) {
+      try {
+        const response = await fetch('/api/orders', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error('Could not load orders');
+        }
+
+        if (!data.orders || data.orders.length === 0) {
+          ordersEl.innerHTML = `
+            <div class="empty-orders">
+              <i class="fas fa-box-open"></i>
+              <p>No orders yet</p>
+              <p style="font-size:0.82rem;margin-top:0.5rem;">Start shopping to see your orders here!</p>
+            </div>
+          `;
+          return;
+        }
+
+        ordersEl.innerHTML = data.orders.map(order => `
+          <div class="order-card">
+            <div class="ord-header">
+              <span class="ord-id">Order #${order.id.substring(0,8)}...</span>
+              <span class="ord-status ${order.status}">${order.status}</span>
+            </div>
+            <p class="ord-date">${new Date(order.created_at).toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'})}</p>
+            <p class="ord-items">${JSON.parse(order.items || '[]').length} items</p>
+            <p class="ord-total">৳${(order.total || 0).toLocaleString()}</p>
+          </div>
+        `).join('');
+      } catch (error) {
+        ordersEl.innerHTML = `<div class="empty-orders"><i class="fas fa-exclamation-circle"></i><p>Could not load orders</p></div>`;
+      }
+    }
+
+    // Show app
+    loadingEl.style.display = 'none';
+    contentEl.style.display = 'grid';
+    loadProfile();
+  </script>
+</body>
+</html>

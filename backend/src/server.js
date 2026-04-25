@@ -12,6 +12,7 @@ const productsRoutes = require('./routes/products');
 const ordersRoutes = require('./routes/orders');
 const customersRoutes = require('./routes/customers');
 const adminRoutes = require('./routes/admin');
+const oauthRoutes = require('./routes/oauth');
 
 // Import config to validate environment variables
 const { nodeEnv, port } = require('./config/env');
@@ -40,6 +41,7 @@ app.get('/health', (req, res) => {
 
 // API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/oauth', oauthRoutes);
 app.use('/api/products', productsRoutes);
 app.use('/api/orders', ordersRoutes);
 app.use('/api/customers', customersRoutes);

@@ -284,13 +284,26 @@
     <div class="logo-sk"><span class="s">S</span><span class="k">K</span></div>
     <div class="logo-words"><span class="w1">SK</span><span class="w2">Fashion</span></div>
   </a>
-  <ul class="nav-ul">
-    <li><a href="index.html" class="plink">Home</a></li>
-    <li><a href="shop.html" class="plink">Shop</a></li>
-    <li><a href="about.html" class="plink">Our Story</a></li>
-    <li><a href="https://wa.me/8801676456965" target="_blank" style="border:1.5px solid rgba(212,68,154,0.4);color:var(--pink);padding:7px 16px;border-radius:50px;font-weight:600;">Order Help</a></li>
-    <li><a href="https://wa.me/8801676456965" target="_blank" class="nav-wa"><i class="fab fa-whatsapp"></i> Order</a></li>
-  </ul>
+   <ul class="nav-ul">
+     <li><a href="index.html" class="plink">Home</a></li>
+     <li><a href="shop.html" class="plink">Shop</a></li>
+     <li><a href="about.html" class="plink">Our Story</a></li>
+     
+     <!-- 🔗 AUTH: Login & Signup -->
+     <li><a href="auth/login.html" class="nav-login">Sign In</a></li>
+     <li><a href="auth/signup.html" class="nav-signup">Sign Up</a></li>
+     
+     <!-- 🔗 AUTH: User Profile -->
+     <li>
+       <a href="auth/customer.html" class="nav-user" id="nav-user" style="display:none;">
+         <div class="nav-user-avatar" id="nav-user-avatar">U</div>
+         <div class="nav-user-name" id="nav-user-name">User</div>
+       </a>
+     </li>
+     
+     <!-- 🔗 WhatsApp CTA -->
+     <li><a href="https://wa.me/8801676456965" target="_blank" class="nav-wa"><i class="fab fa-whatsapp"></i> Order</a></li>
+   </ul>
   <div class="burger" id="burger"><span></span><span></span><span></span></div>
 </nav>
 
@@ -299,9 +312,19 @@
   <a href="index.html" class="plink" onclick="closeMob()">Home</a>
   <a href="shop.html" class="plink" onclick="closeMob()">Shop</a>
   <a href="about.html" class="plink" onclick="closeMob()">Our Story</a>
-  <a href="https://wa.me/8801676456965" target="_blank" style="color:var(--pink)!important;font-weight:700!important;">Order Help</a>
-  <a href="https://www.facebook.com/skfashionnn/" target="_blank"><i class="fab fa-facebook"></i> &nbsp;Facebook Shop</a>
-  <a href="https://wa.me/8801676456965" target="_blank"><i class="fab fa-whatsapp"></i> &nbsp;WhatsApp Order</a>
+  
+  <a href="auth/login.html" class="mob-login" onclick="closeMob()"><i class="fas fa-sign-in-alt"></i> &nbsp;Sign In</a>
+  <a href="auth/signup.html" class="mob-signup" onclick="closeMob()"><i class="fas fa-user-plus"></i> &nbsp;Sign Up</a>
+  
+  <a href="auth/customer.html" class="nav-user mob-user" id="mob-nav-user" onclick="closeMob()" style="display:none;">
+    <div class="nav-user-avatar" id="mob-nav-user-avatar">U</div>
+    <div class="nav-user-name" id="mob-nav-user-name">User</div>
+  </a>
+  <a href="#" class="mob-logout" id="mob-logout-link" onclick="closeMob();logout();" style="display:none;">Sign Out</a>
+  <div class="mob-divider" id="mob-divider-logout" style="display:none;"></div>
+  
+  <a href="https://www.facebook.com/skfashionnn/" target="_blank" onclick="closeMob()"><i class="fab fa-facebook"></i> &nbsp;Facebook Shop</a>
+  <a href="https://wa.me/8801676456965" target="_blank" onclick="closeMob()"><i class="fab fa-whatsapp"></i> &nbsp;WhatsApp Order</a>
 </nav>
 
 <!-- BREADCRUMB -->
@@ -836,10 +859,66 @@
     document.getElementById('lightbox').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
-  function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('open');
-    document.body.style.overflow = '';
+  function showAlert(msg) {
+    let el = document.getElementById('alert-toast');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'alert-toast';
+      el.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(10px);background:#12101E;color:white;padding:11px 22px;border-radius:50px;font-size:0.84rem;font-family:"Jost",sans-serif;z-index:9999;opacity:0;transition:all 0.3s;white-space:nowrap;border:1px solid rgba(255,255,255,0.1);pointer-events:none;';
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.style.opacity = '1';
+    el.style.transform = 'translateX(-50%) translateY(0)';
+    setTimeout(() => { el.style.opacity='0'; el.style.transform='translateX(-50%) translateY(10px)'; }, 2800);
   }
+
+  // ── AUTH STATE ──
+  function initAuth() {
+    const token = localStorage.getItem('skfashion_token');
+    const user = JSON.parse(localStorage.getItem('skfashion_user') || 'null');
+    if (token && user) {
+      showUserInNav(user);
+    } else {
+      showLoginInNav();
+    }
+  }
+  window.showUserInNav = function(user) {
+    document.querySelectorAll('.nav-login, .nav-signup').forEach(el => el.closest('li').style.display = 'none');
+    const userLink = document.getElementById('nav-user');
+    if (userLink) {
+      userLink.style.display = 'flex';
+      document.getElementById('nav-user-name').textContent = user.fullName?.split(' ')[0] || 'User';
+      document.getElementById('nav-user-avatar').textContent = user.fullName ? user.fullName.charAt(0).toUpperCase() : 'U';
+    }
+    const mLogin = document.querySelector('.mob-login'); if (mLogin) mLogin.style.display = 'none';
+    const mSignup = document.querySelector('.mob-signup'); if (mSignup) mSignup.style.display = 'none';
+    const mUser = document.getElementById('mob-nav-user'); if (mUser) {
+      mUser.style.display = 'flex';
+      document.getElementById('mob-nav-user-name').textContent = user.fullName?.split(' ')[0] || 'User';
+      document.getElementById('mob-nav-user-avatar').textContent = user.fullName ? user.fullName.charAt(0).toUpperCase() : 'U';
+    }
+    const mLogout = document.getElementById('mob-logout-link'); if (mLogout) mLogout.style.display = 'block';
+    const mDiv = document.getElementById('mob-divider-logout'); if (mDiv) mDiv.style.display = 'block';
+  };
+  window.showLoginInNav = function() {
+    document.querySelectorAll('.nav-login, .nav-signup').forEach(el => el.closest('li').style.display = '');
+    const userLink = document.getElementById('nav-user'); if (userLink) userLink.style.display = 'none';
+    const mLogin = document.querySelector('.mob-login'); if (mLogin) mLogin.style.display = 'block';
+    const mSignup = document.querySelector('.mob-signup'); if (mSignup) mSignup.style.display = 'block';
+    const mUser = document.getElementById('mob-nav-user'); if (mUser) mUser.style.display = 'none';
+    const mLogout = document.getElementById('mob-logout-link'); if (mLogout) mLogout.style.display = 'none';
+    const mDiv = document.getElementById('mob-divider-logout'); if (mDiv) mDiv.style.display = 'none';
+  };
+  window.logout = function() {
+    localStorage.removeItem('skfashion_token');
+    localStorage.removeItem('skfashion_user');
+    window.location.reload();
+  };
+
+  // Init
+  initAuth();
+  closeMob();
   window.openLightbox  = openLightbox;
   window.closeLightbox = closeLightbox;
   document.getElementById('lightbox').addEventListener('click', function(e) {
