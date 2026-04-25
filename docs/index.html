@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK Fashion – Premium Sarees & Fashion | Bangladesh</title>
+  <meta name="description" content="SK Fashion – Bangladesh's finest collection of Silk Sarees, Jamdani, Men's Panjabi and handcrafted Suti Kapor bags.">
+
+  <!-- ============================================================ -->
+  <!-- 🔗 LINK: Google Fonts — No change needed                     -->
+  <!-- ============================================================ -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  
+
+  <style>
+    :root {
+      --pink: #D4449A; --pink-soft: #F0A8D8; --blue: #2B5CE6; --blue-soft: #93AEFF;
+      --cream: #FAF6F0; --cream2: #F0E8DC; --dark: #12101E; --dark2: #1E1B32;
+      --gold: #C9A84C; --body: #4A4460; --radius: 22px;
+      --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--dark); opacity: 0; transition: opacity 0.5s ease; overflow-x: hidden; }
+    body.loaded { opacity: 1; }
+    body.exiting { opacity: 0 !important; transition: opacity 0.4s ease; }
+
+    /* PRELOADER */
+    #preloader { position: fixed; inset: 0; background: var(--dark); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.7s ease, visibility 0.7s ease; }
+    #preloader.gone { opacity: 0; visibility: hidden; pointer-events: none; }
+    .pl-logo { font-family: 'Dancing Script', cursive; font-size: 5.5rem; line-height: 1; animation: plPulse 1.5s ease-in-out infinite; }
+    .pl-logo .s { color: var(--pink); } .pl-logo .k { color: var(--blue-soft); }
+    .pl-sub { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 8px; color: rgba(255,255,255,0.35); margin-top: 6px; text-transform: uppercase; }
+    .pl-bar { width: 180px; height: 2px; background: rgba(255,255,255,0.08); border-radius: 2px; margin-top: 28px; overflow: hidden; }
+    .pl-fill { height: 100%; background: linear-gradient(90deg, var(--pink), var(--blue)); animation: fillBar 1.9s ease forwards; }
+    @keyframes fillBar { from { width: 0 } to { width: 100% } }
+    @keyframes plPulse { 0%,100% { transform: scale(1) } 50% { transform: scale(1.04) } }
+
+    /* NAVBAR */
+    #nav { position: fixed; top: 0; left: 0; right: 0; height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 6%; background: rgba(250,246,240,0.94); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(212,68,154,0.08); z-index: 1000; transition: height 0.3s var(--ease), box-shadow 0.3s ease; }
+    #nav.scrolled { height: 62px; box-shadow: 0 4px 28px rgba(0,0,0,0.07); }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-sk { font-family: 'Dancing Script', cursive; font-size: 2.1rem; line-height: 1; }
+    .logo-sk .s { color: var(--pink); } .logo-sk .k { color: var(--blue); }
+    .logo-words { display: flex; flex-direction: column; line-height: 1.15; }
+    .logo-words .w1 { font-family: 'Cinzel', serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 2px; color: var(--pink); }
+    .logo-words .w2 { font-family: 'Cinzel', serif; font-size: 0.8rem; font-weight: 600; letter-spacing: 4px; color: var(--blue); }
+    .nav-ul { list-style: none; display: flex; align-items: center; gap: 1.4rem; }
+    .nav-ul a { font-size: 0.82rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; color: var(--dark); text-decoration: none; position: relative; transition: color 0.3s ease; }
+    .nav-ul a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: linear-gradient(90deg, var(--pink), var(--blue)); transition: width 0.3s ease; }
+    .nav-ul a:hover { color: var(--pink); }
+    .nav-ul a:hover::after { width: 100%; }
+    .nav-login { background: transparent !important; border: 1.5px solid rgba(212,68,154,0.4) !important; color: var(--pink) !important; padding: 8px 18px !important; border-radius: 50px !important; font-weight: 600 !important; transition: all 0.3s ease !important; }
+    .nav-login::after { display: none !important; }
+    .nav-login:hover { background: rgba(212,68,154,0.08) !important; transform: translateY(-2px); }
+    .nav-signup { background: linear-gradient(135deg, var(--pink), var(--blue)) !important; color: white !important; padding: 9px 20px !important; border-radius: 50px !important; display: inline-flex !important; align-items: center !important; gap: 7px !important; box-shadow: 0 4px 18px rgba(212,68,154,0.3) !important; font-weight: 600 !important; transition: transform 0.3s ease, box-shadow 0.3s ease !important; }
+    .nav-signup::after { display: none !important; }
+    .nav-signup:hover { transform: translateY(-2px) !important; box-shadow: 0 8px 28px rgba(212,68,154,0.5) !important; color: white !important; }
+    .nav-cta { background: linear-gradient(135deg, var(--pink), var(--blue)) !important; color: white !important; padding: 9px 20px !important; border-radius: 50px !important; display: inline-flex !important; align-items: center !important; gap: 7px !important; box-shadow: 0 4px 18px rgba(212,68,154,0.3) !important; transition: transform 0.3s ease !important; font-weight: 600 !important; }
+    .nav-cta::after { display: none !important; }
+    .nav-cta:hover { transform: translateY(-2px) !important; color: white !important; }
+    /* User profile pill — hidden until logged in */
+    .nav-user { display: none; align-items: center; gap: 8px; background: rgba(212,68,154,0.08); border: 1px solid rgba(212,68,154,0.2); padding: 7px 14px 7px 7px; border-radius: 50px; cursor: pointer; text-decoration: none; transition: all 0.3s ease; }
+    .nav-user.show { display: flex !important; }
+    .nav-user::after { display: none !important; }
+    .nav-user:hover { background: rgba(212,68,154,0.15); transform: translateY(-1px); }
+    .nav-user-avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, var(--pink), var(--blue)); display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; color: white; flex-shrink: 0; }
+    .nav-user-name { font-size: 0.82rem; font-weight: 600; color: var(--dark); max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .burger span { width: 24px; height: 2px; background: var(--dark); transition: all 0.3s ease; display: block; }
+    .burger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .burger.open span:nth-child(2) { opacity: 0; }
+    .burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+    .mob-menu { display: none; position: fixed; top: 72px; left: 0; right: 0; background: rgba(250,246,240,0.97); backdrop-filter: blur(20px); flex-direction: column; padding: 1rem 6%; gap: 0; border-bottom: 1px solid var(--cream2); z-index: 999; }
+    .mob-menu.show { display: flex; }
+    .mob-menu a { text-decoration: none; font-size: 0.95rem; font-weight: 500; color: var(--dark); text-transform: uppercase; letter-spacing: 1px; padding: 0.9rem 0; border-bottom: 1px solid var(--cream2); transition: color 0.3s ease; }
+    .mob-menu a:hover { color: var(--pink); }
+    .mob-menu a:last-child { border-bottom: none; }
+    .mob-divider { height: 1px; background: var(--cream2); margin: 0.3rem 0; }
+    .mob-login { color: var(--pink) !important; font-weight: 700 !important; }
+    .mob-signup { color: var(--blue) !important; font-weight: 700 !important; }
+
+    /* HERO */
+    #hero { min-height: 100vh; padding-top: 72px; position: relative; display: flex; align-items: center; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: linear-gradient(145deg, #0E0C1F 0%, #1E0B30 35%, #0D1540 65%, #0A0A18 100%); }
+    .hero-silk { position: absolute; inset: 0; opacity: 0.06; background-image: repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(255,255,255,0.4) 30px, rgba(255,255,255,0.4) 31px), repeating-linear-gradient(90deg, transparent, transparent 30px, rgba(255,255,255,0.3) 30px, rgba(255,255,255,0.3) 31px); }
+    .orb1 { position: absolute; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(212,68,154,0.25) 0%, transparent 65%); top: -180px; right: -180px; animation: orbDrift 7s ease-in-out infinite; }
+    .orb2 { position: absolute; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(43,92,230,0.22) 0%, transparent 65%); bottom: -150px; left: -100px; animation: orbDrift 9s ease-in-out infinite reverse; }
+    .orb3 { position: absolute; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(201,168,76,0.15) 0%, transparent 65%); top: 40%; left: 40%; animation: orbDrift 11s ease-in-out infinite 2s; }
+    @keyframes orbDrift { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(25px,-35px) scale(1.04)} 66%{transform:translate(-15px,20px) scale(0.97)} }
+    .hero-wrap { position: relative; z-index: 2; width: 90%; max-width: 1250px; margin: 0 auto; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 4rem; align-items: center; padding: 5rem 0; }
+    .hero-tag { display: inline-flex; align-items: center; gap: 9px; background: rgba(212,68,154,0.12); border: 1px solid rgba(212,68,154,0.25); color: var(--pink-soft); padding: 6px 18px; border-radius: 50px; font-size: 0.73rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 500; margin-bottom: 1.8rem; animation: fadeUp 0.8s ease 0.3s both; }
+    .tag-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--pink); animation: tagPulse 2s ease-in-out infinite; }
+    @keyframes tagPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.6)} }
+    .hero-h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 4.5vw, 4rem); font-weight: 700; color: white; line-height: 1.18; margin-bottom: 0.6rem; animation: fadeUp 0.8s ease 0.5s both; }
+    .h1-grad { display: block; background: linear-gradient(135deg, var(--pink), var(--blue-soft)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-bangla { font-family: 'Playfair Display', serif; font-size: clamp(1rem, 2.2vw, 1.35rem); font-style: italic; color: rgba(255,255,255,0.5); margin-bottom: 1.6rem; animation: fadeUp 0.8s ease 0.7s both; }
+    .hero-desc { font-size: 1rem; color: rgba(255,255,255,0.6); line-height: 1.85; max-width: 480px; margin-bottom: 2.5rem; font-weight: 300; animation: fadeUp 0.8s ease 0.9s both; }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.8s ease 1.1s both; }
+    .btn-a { display: inline-flex; align-items: center; gap: 9px; background: linear-gradient(135deg, var(--pink), #9B2070); color: white; text-decoration: none; padding: 14px 28px; border-radius: 50px; font-size: 0.92rem; font-weight: 600; box-shadow: 0 8px 28px rgba(212,68,154,0.38); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .btn-a:hover { transform: translateY(-3px); box-shadow: 0 14px 38px rgba(212,68,154,0.58); }
+    .btn-b { display: inline-flex; align-items: center; gap: 9px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.22); color: white; text-decoration: none; padding: 14px 28px; border-radius: 50px; font-size: 0.92rem; font-weight: 500; transition: background 0.3s ease, transform 0.3s ease; backdrop-filter: blur(8px); }
+    .btn-b:hover { background: rgba(255,255,255,0.16); transform: translateY(-3px); }
+    .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; animation: fadeRight 0.9s ease 0.8s both; }
+    .stat-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 1.6rem 1.4rem; text-align: center; transition: transform 0.3s ease; backdrop-filter: blur(8px); }
+    .stat-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-6px); }
+    .stat-card.wide { grid-column: span 2; background: linear-gradient(135deg, rgba(212,68,154,0.18), rgba(43,92,230,0.18)); border-color: rgba(212,68,154,0.25); }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 700; background: linear-gradient(135deg, var(--pink), var(--blue-soft)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .stat-em { font-size: 2rem; margin-bottom: 4px; }
+    .stat-lbl { font-size: 0.72rem; color: rgba(255,255,255,0.5); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+    .hero-scroll { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgba(255,255,255,0.3); font-size: 0.65rem; letter-spacing: 4px; text-transform: uppercase; animation: fadeIn 1s ease 2.5s both; }
+    .scroll-chevron { width: 28px; height: 28px; border-right: 1px solid rgba(255,255,255,0.25); border-bottom: 1px solid rgba(255,255,255,0.25); transform: rotate(45deg); animation: chevBounce 2s ease-in-out infinite; }
+    @keyframes chevBounce { 0%,100%{transform:rotate(45deg) translateY(0)} 50%{transform:rotate(45deg) translateY(6px)} }
+
+    /* COLLECTIONS */
+    #collections { padding: 7rem 6%; }
+    .sec-head { text-align: center; margin-bottom: 3.5rem; }
+    .sec-tag { font-size: 0.73rem; font-weight: 600; letter-spacing: 5px; text-transform: uppercase; color: var(--pink); display: block; margin-bottom: 0.9rem; }
+    .sec-title { font-family: 'Playfair Display', serif; font-size: clamp(1.9rem, 3.8vw, 2.9rem); font-weight: 700; line-height: 1.2; margin-bottom: 0.9rem; }
+    .sec-sub { font-size: 0.97rem; color: var(--body); max-width: 500px; margin: 0 auto; line-height: 1.75; }
+    .sec-line { width: 55px; height: 3px; background: linear-gradient(90deg, var(--pink), var(--blue)); border-radius: 3px; margin: 1.4rem auto 0; }
+    .col-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.4rem; max-width: 1300px; margin: 0 auto; }
+    .col-card { border-radius: var(--radius); overflow: hidden; position: relative; height: 420px; cursor: pointer; box-shadow: 0 12px 40px rgba(0,0,0,0.1); transition: transform 0.4s var(--ease), box-shadow 0.4s ease; }
+    .col-card:hover { transform: translateY(-10px); box-shadow: 0 28px 70px rgba(0,0,0,0.18); }
+    .col-card:hover .c-bg { transform: scale(1.06); }
+    .col-card:hover .c-btn { opacity: 1; transform: translateY(0); }
+    .c-bg { position: absolute; inset: 0; transition: transform 0.6s ease; }
+    .c-dots { position: absolute; inset: 0; opacity: 0.12; background-image: radial-gradient(rgba(255,255,255,0.9) 1px, transparent 1px); background-size: 22px 22px; }
+    .c-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.35) 55%, transparent 100%); }
+    .silk-bg { background: linear-gradient(155deg, #5A0A0A, #8B1A1A, #BB4422, #C9A84C); }
+    .jam-bg  { background: linear-gradient(155deg, #0A2E22, #1A5940, #2A7A55, #4ABAAA); }
+    .pan-bg  { background: linear-gradient(155deg, #0A0A2E, #151570, #2040A0, #4A80EE); }
+    .bag-bg  { background: linear-gradient(155deg, #2E1A0A, #5A3018, #8B5230, #C48040); }
+    .c-body { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.8rem; z-index: 2; }
+    .c-icon { font-size: 2.4rem; display: block; margin-bottom: 0.7rem; }
+    .c-name { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; color: white; margin-bottom: 0.25rem; }
+    .c-bangla { font-size: 0.88rem; color: rgba(255,255,255,0.65); font-style: italic; margin-bottom: 0.4rem; }
+    .c-range { font-size: 0.82rem; color: rgba(255,255,255,0.75); }
+    .c-btn { display: inline-flex; align-items: center; gap: 7px; margin-top: 1rem; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.38); color: white; padding: 8px 18px; border-radius: 50px; font-size: 0.78rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; backdrop-filter: blur(8px); opacity: 0; transform: translateY(10px); transition: opacity 0.35s ease, transform 0.35s ease; }
+
+    /* WHY SK */
+    #why { padding: 7rem 6%; background: var(--dark); position: relative; overflow: hidden; }
+    #why::before { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 24px); }
+    #why .sec-title { color: white; }
+    #why .sec-sub { color: rgba(255,255,255,0.5); }
+    .why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.8rem; max-width: 1200px; margin: 0 auto; }
+    .why-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; padding: 2.2rem 1.8rem; text-align: center; position: relative; overflow: hidden; transition: transform 0.3s ease; }
+    .why-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--pink), var(--blue)); transform: scaleX(0); transition: transform 0.4s ease; }
+    .why-card:hover::before { transform: scaleX(1); }
+    .why-card:hover { transform: translateY(-6px); background: rgba(255,255,255,0.07); }
+    .why-ico { width: 68px; height: 68px; border-radius: 50%; background: linear-gradient(135deg, rgba(212,68,154,0.18), rgba(43,92,230,0.18)); border: 1px solid rgba(212,68,154,0.28); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.4rem; font-size: 1.8rem; transition: transform 0.3s ease; }
+    .why-card:hover .why-ico { background: linear-gradient(135deg, var(--pink), var(--blue)); transform: scale(1.1) rotate(8deg); }
+    .why-ttl { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; color: white; margin-bottom: 0.7rem; }
+    .why-dsc { font-size: 0.88rem; color: rgba(255,255,255,0.5); line-height: 1.75; }
+    .badges-row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1.5rem 2.5rem; margin-top: 4rem; padding-top: 3rem; border-top: 1px solid rgba(255,255,255,0.07); }
+    .badge-item { display: flex; align-items: center; gap: 9px; color: rgba(255,255,255,0.65); font-size: 0.88rem; }
+    .badge-item i { color: var(--pink); font-size: 1.1rem; }
+    .badge-sep { width: 1px; height: 28px; background: rgba(255,255,255,0.08); }
+
+    /* FOOTER */
+    footer { background: #0A0818; padding: 4.5rem 6% 2.5rem; }
+    .ft-top { display: grid; grid-template-columns: 1.6fr 1fr 1.1fr; gap: 3rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .ft-brand-tagline { font-size: 0.88rem; line-height: 1.75; color: rgba(255,255,255,0.38); margin-top: 1rem; max-width: 270px; }
+    .ft-socials { display: flex; gap: 10px; margin-top: 1.6rem; }
+    .ft-soc { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.45); text-decoration: none; font-size: 0.88rem; transition: all 0.3s ease; }
+    .ft-soc:hover { background: linear-gradient(135deg, var(--pink), var(--blue)); border-color: transparent; color: white; transform: translateY(-3px); }
+    .ft-col h5 { font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 4px; text-transform: uppercase; color: white; margin-bottom: 1.5rem; }
+    .ft-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+    .ft-col ul a { text-decoration: none; color: rgba(255,255,255,0.4); font-size: 0.88rem; transition: color 0.3s ease; }
+    .ft-col ul a:hover { color: var(--pink); }
+    .ft-cinfo { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 0.9rem; }
+    .ft-cinfo i { color: var(--pink); font-size: 0.85rem; margin-top: 3px; flex-shrink: 0; }
+    .ft-cinfo a { text-decoration: none; color: rgba(255,255,255,0.4); font-size: 0.88rem; transition: color 0.3s ease; word-break: break-all; }
+    .ft-cinfo a:hover { color: var(--pink); }
+    .ft-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .ft-bottom p { font-size: 0.78rem; color: rgba(255,255,255,0.2); }
+    .ft-story { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--pink), var(--blue)); color: white; text-decoration: none; padding: 10px 22px; border-radius: 50px; font-size: 0.84rem; font-weight: 600; transition: transform 0.3s ease; }
+    .ft-story:hover { transform: translateY(-2px); }
+
+    /* WHATSAPP FLOAT */
+    .wa-float { position: fixed; bottom: 28px; left: 28px; z-index: 995; display: flex; flex-direction: column; align-items: flex-start; gap: 9px; }
+    .wa-tip { background: var(--dark2); color: white; padding: 7px 14px; border-radius: 50px; font-size: 0.78rem; white-space: nowrap; opacity: 0; transform: translateX(-16px); transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.08); pointer-events: none; }
+    .wa-float:hover .wa-tip { opacity: 1; transform: translateX(0); }
+    .wa-btn { width: 58px; height: 58px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.55rem; text-decoration: none; box-shadow: 0 6px 22px rgba(37,211,102,0.38); transition: transform 0.3s ease; animation: waPulse 3s ease-in-out infinite; }
+    .wa-btn:hover { transform: scale(1.1); }
+    @keyframes waPulse { 0%,100%{box-shadow:0 6px 22px rgba(37,211,102,0.38)} 50%{box-shadow:0 6px 22px rgba(37,211,102,0.38),0 0 0 14px rgba(37,211,102,0.1)} }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeRight { from{opacity:0;transform:translateX(35px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .reveal { opacity:0; transform:translateY(38px); transition:opacity 0.7s ease,transform 0.7s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .delay1{transition-delay:0.1s} .delay2{transition-delay:0.2s} .delay3{transition-delay:0.3s} .delay4{transition-delay:0.4s}
+
+    /* RESPONSIVE */
+    @media(max-width:1100px){.col-grid{grid-template-columns:repeat(2,1fr)}.why-grid{grid-template-columns:repeat(2,1fr)}.hero-wrap{grid-template-columns:1fr;text-align:center}.hero-stats{display:none}.hero-desc{margin:0 auto 2rem}.hero-btns{justify-content:center}}
+    @media(max-width:768px){.nav-ul{display:none}.burger{display:flex}#nav{padding:0 5%}.col-grid{grid-template-columns:1fr 1fr;gap:1rem}.col-card{height:300px}.why-grid{grid-template-columns:1fr 1fr}.ft-top{grid-template-columns:1fr;gap:2rem}.ft-bottom{flex-direction:column;text-align:center}.badge-sep{display:none}}
+    @media(max-width:480px){.col-grid{grid-template-columns:1fr}.why-grid{grid-template-columns:1fr}.hero-btns{flex-direction:column;align-items:center}}
+  </style>
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="pl-logo"><span class="s">S</span><span class="k">K</span></div>
+  <div class="pl-sub">Fashion</div>
+  <div class="pl-bar"><div class="pl-fill"></div></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- NAVBAR                                                        -->
+<!-- ============================================================ -->
+<nav id="nav">
+
+  <!-- 🔗 LOGO LINK → Homepage -->
+  <a href="index.html" class="logo">
+    <div class="logo-sk"><span class="s">S</span><span class="k">K</span></div>
+    <div class="logo-words"><span class="w1">SK</span><span class="w2">Fashion</span></div>
+  </a>
+
+  <ul class="nav-ul">
+    <!-- 🔗 NAV: Home -->
+    <li><a href="index.html">Home</a></li>
+
+    <!-- 🔗 NAV: Shop — REPLACE shop.html when created -->
+    <li><a href="shop.html" class="plink">Shop</a></li>
+
+    <!-- 🔗 NAV: Collections (scrolls down on same page) -->
+    <li><a href="#collections">Collections</a></li>
+
+    <!-- 🔗 NAV: About page -->
+    <li><a href="about.html" class="plink">Our Story</a></li>
+
+    <li><a href="https://wa.me/8801676456965" class="nav-login" target="_blank">Order Help</a></li>
+
+    <!-- 🔗 NAV: WhatsApp Order CTA -->
+    <!-- REPLACE 8801676456965 with actual WhatsApp number if changed -->
+    <li><a href="https://wa.me/8801676456965" target="_blank" class="nav-cta"><i class="fab fa-whatsapp"></i> Order Now</a></li>
+
+    
+    </li>
+  </ul>
+
+  <div class="burger" id="burger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- ============================================================ -->
+<!-- MOBILE MENU                                                   -->
+<!-- ============================================================ -->
+<nav class="mob-menu" id="mob">
+  <!-- 🔗 MOBILE NAV LINKS — same rules as desktop nav above -->
+  <a href="index.html" onclick="closeMob()">Home</a>
+  <a href="shop.html" class="plink" onclick="closeMob()">Shop</a>
+  <a href="#collections" onclick="closeMob()">Collections</a>
+  <a href="about.html" class="plink" onclick="closeMob()">Our Story</a>
+  <div class="mob-divider"></div>
+  <!-- 🔗 MOBILE: Login & Signup — REPLACE when customer.html built -->
+  <a href="https://wa.me/8801676456965" target="_blank" onclick="closeMob()"><i class="fab fa-whatsapp"></i> &nbsp;Order Help</a>
+  <div class="mob-divider"></div>
+  <!-- 🔗 MOBILE: Social Links -->
+  <a href="https://www.facebook.com/skfashionnn/" target="_blank"><i class="fab fa-facebook"></i> &nbsp;Facebook Shop</a>
+  <a href="https://wa.me/8801676456965" target="_blank"><i class="fab fa-whatsapp"></i> &nbsp;WhatsApp Order</a>
+</nav>
+
+<!-- ============================================================ -->
+<!-- HERO SECTION                                                   -->
+<!-- ============================================================ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-silk"></div>
+  <div class="orb1"></div><div class="orb2"></div><div class="orb3"></div>
+  <div class="hero-wrap">
+    <div class="hero-left">
+      <div class="hero-tag"><span class="tag-dot"></span> Bangladesh's Finest Fashion House</div>
+      <h1 class="hero-h1">Elegance Woven<br><span class="h1-grad">in Every Thread</span></h1>
+      <p class="hero-bangla">"প্রতিটি শাড়ি একটি গল্প বলে"</p>
+      <p class="hero-desc">From the richest Banarasi silk to the heritage art of Jamdani — SK Fashion brings you authentically handpicked fashion straight from the weavers. Premium quality, delivered with love across Bangladesh.</p>
+      <div class="hero-btns">
+        <!-- 🔗 HERO BTN 1: Explore shop — REPLACE shop.html when created -->
+        <a href="shop.html" class="btn-a plink"><i class="fas fa-th-large"></i> Explore Collections</a>
+        <!-- 🔗 HERO BTN 2: Facebook shop link -->
+        <a href="https://www.facebook.com/skfashionnn/" target="_blank" class="btn-b"><i class="fab fa-facebook"></i> Facebook Shop</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-card wide"><div class="stat-num">500+</div><div class="stat-lbl">Happy Customers</div></div>
+      <div class="stat-card"><div class="stat-em">🥻</div><div class="stat-num">4</div><div class="stat-lbl">Collections</div></div>
+      <div class="stat-card"><div class="stat-em">🚚</div><div class="stat-num">COD</div><div class="stat-lbl">Available</div></div>
+      <div class="stat-card"><div class="stat-em">✅</div><div class="stat-num">100%</div><div class="stat-lbl">Authentic</div></div>
+    </div>
+  </div>
+  <div class="hero-scroll"><span>Scroll</span><div class="scroll-chevron"></div></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- COLLECTIONS SECTION                                           -->
+<!-- ============================================================ -->
+<section id="collections">
+  <div class="sec-head reveal">
+    <span class="sec-tag">Our Collections</span>
+    <h2 class="sec-title">Crafted for Every Occasion</h2>
+    <p class="sec-sub">Discover our handpicked range of authentic fabrics and fashion.</p>
+    <div class="sec-line"></div>
+  </div>
+  <div class="col-grid">
+
+    <!-- 🔗 COLLECTION CARD 1: Silk — links to shop filtered by silk -->
+    <!-- REPLACE href when shop.html is ready -->
+    <div class="col-card reveal delay1">
+      <div class="c-bg silk-bg"></div><div class="c-dots"></div><div class="c-overlay"></div>
+      <div class="c-body">
+        <span class="c-icon">🥻</span>
+        <h3 class="c-name">Silk Sarees</h3>
+        <p class="c-bangla">সিল্ক শাড়ি</p>
+        <p class="c-range">Banarasi · Kanjivaram · Bridal</p>
+        <a href="shop.html?category=silk" class="c-btn plink">View <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <!-- 🔗 COLLECTION CARD 2: Jamdani -->
+    <div class="col-card reveal delay2">
+      <div class="c-bg jam-bg"></div><div class="c-dots"></div><div class="c-overlay"></div>
+      <div class="c-body">
+        <span class="c-icon">🌿</span>
+        <h3 class="c-name">Jamdani Sarees</h3>
+        <p class="c-bangla">জামদানি শাড়ি</p>
+        <p class="c-range">Muslin · Traditional · Handloom</p>
+        <a href="shop.html?category=jamdani" class="c-btn plink">View <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <!-- 🔗 COLLECTION CARD 3: Panjabi -->
+    <div class="col-card reveal delay3">
+      <div class="c-bg pan-bg"></div><div class="c-dots"></div><div class="c-overlay"></div>
+      <div class="c-body">
+        <span class="c-icon">👔</span>
+        <h3 class="c-name">Men's Panjabi</h3>
+        <p class="c-bangla">পাঞ্জাবি</p>
+        <p class="c-range">Eid Special · Casual · Premium</p>
+        <a href="shop.html?category=panjabi" class="c-btn plink">View <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <!-- 🔗 COLLECTION CARD 4: Handbag -->
+    <div class="col-card reveal delay4">
+      <div class="c-bg bag-bg"></div><div class="c-dots"></div><div class="c-overlay"></div>
+      <div class="c-body">
+        <span class="c-icon">👜</span>
+        <h3 class="c-name">Ladies Handbags</h3>
+        <p class="c-bangla">হ্যান্ডব্যাগ</p>
+        <p class="c-range">Suti Kapor · Handcrafted · Unique</p>
+        <a href="shop.html?category=handbag" class="c-btn plink">View <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WHY SK FASHION -->
+<section id="why">
+  <div class="sec-head reveal">
+    <span class="sec-tag" style="color:var(--pink-soft)">Why Choose Us</span>
+    <h2 class="sec-title">The SK Fashion Promise</h2>
+    <p class="sec-sub" style="color:rgba(255,255,255,0.5)">আমাদের প্রতিটি পণ্য সর্বোচ্চ মানের</p>
+    <div class="sec-line"></div>
+  </div>
+  <div class="why-grid">
+    <div class="why-card reveal delay1"><div class="why-ico">✅</div><h3 class="why-ttl">100% Authentic Fabrics</h3><p class="why-dsc">Every saree and product is personally handpicked and verified. No compromise — ever.</p></div>
+    <div class="why-card reveal delay2"><div class="why-ico">🚚</div><h3 class="why-ttl">Cash on Delivery</h3><p class="why-dsc">Pay when you receive your order. We trust you — all across Bangladesh.</p></div>
+    <div class="why-card reveal delay3"><div class="why-ico">👑</div><h3 class="why-ttl">Curated with Passion</h3><p class="why-dsc">Each piece is chosen with deep love for fashion and Bangladesh's heritage.</p></div>
+    <div class="why-card reveal delay4"><div class="why-ico">💬</div><h3 class="why-ttl">Personal Service</h3><p class="why-dsc">Call or WhatsApp directly. You speak to the owner — real advice, real care.</p></div>
+  </div>
+  <div class="badges-row">
+    <div class="badge-item"><i class="fas fa-shield-alt"></i> 100% Authentic</div>
+    <div class="badge-sep"></div>
+    <div class="badge-item"><i class="fas fa-truck"></i> Cash on Delivery</div>
+    <div class="badge-sep"></div>
+    <div class="badge-item"><i class="fab fa-facebook"></i> 500+ Happy Customers</div>
+    <div class="badge-sep"></div>
+    <div class="badge-item"><i class="fas fa-heart"></i> Trusted Brand</div>
+    <div class="badge-sep"></div>
+    <div class="badge-item"><i class="fas fa-star"></i> Premium Quality</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- FOOTER                                                        -->
+<!-- ============================================================ -->
+<footer>
+  <div class="ft-top">
+    <div>
+      <!-- 🔗 FOOTER LOGO → Homepage -->
+      <a href="index.html" class="logo" style="margin-bottom:0.6rem;display:inline-flex;">
+        <div class="logo-sk" style="font-size:2.4rem;"><span class="s">S</span><span class="k">K</span></div>
+        <div class="logo-words"><span class="w1" style="font-size:0.9rem;">SK</span><span class="w2" style="font-size:0.9rem;">Fashion</span></div>
+      </a>
+      <p class="ft-brand-tagline">Authentic sarees, Jamdani, Panjabi &amp; handcrafted bags. Premium fashion with a personal touch.</p>
+      <div class="ft-socials">
+        <!-- 🔗 FOOTER SOCIALS: Replace links if changed -->
+        <a href="https://www.facebook.com/skfashionnn/" target="_blank" class="ft-soc"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/aftabun_nahar/?hl=en" target="_blank" class="ft-soc"><i class="fab fa-instagram"></i></a>
+        <a href="https://wa.me/8801676456965" target="_blank" class="ft-soc"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+
+    <div class="ft-col">
+      <h5>Quick Links</h5>
+      <ul>
+        <!-- 🔗 FOOTER LINKS: Replace when pages are created -->
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html" class="plink">Shop All Products</a></li>
+        <li><a href="#collections">Collections</a></li>
+        <li><a href="about.html" class="plink">Our Story</a></li>
+        <li><a href="about.html#gallery" class="plink">Lookbook Gallery</a></li>
+        <li><a href="about.html#founder" class="plink">Meet the Founder</a></li>
+        <li><a href="https://wa.me/8801676456965" target="_blank">Order Help</a></li>
+      </ul>
+    </div>
+
+    <div class="ft-col">
+      <h5>Contact Us</h5>
+      <!-- 🔗 FOOTER CONTACT: Replace phone/email if changed -->
+      <div class="ft-cinfo"><i class="fas fa-phone"></i><a href="tel:+8801676456965">01676-456965</a></div>
+      <div class="ft-cinfo"><i class="fab fa-whatsapp"></i><a href="https://wa.me/8801676456965" target="_blank">WhatsApp Order</a></div>
+      <div class="ft-cinfo"><i class="fas fa-envelope"></i><a href="mailto:kasturyshahid@gmail.com">kasturyshahid@gmail.com</a></div>
+      <div class="ft-cinfo"><i class="fab fa-facebook"></i><a href="https://www.facebook.com/skfashionnn/" target="_blank">SK Fashion Facebook</a></div>
+    </div>
+  </div>
+
+  <div class="ft-bottom">
+    <p>© 2024 SK Fashion Bangladesh. All rights reserved.</p>
+
+    <div style="display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;">
+      <!-- 🔗 FOOTER: Link to about page -->
+      <a href="about.html" class="ft-story plink">Our Full Story &nbsp;<i class="fas fa-arrow-right"></i></a>
+
+      <!-- ============================================================ -->
+      <!-- 🔗 ADMIN LOGIN LINK                                          -->
+      <!-- Subtle — customers won't notice it                           -->
+      <!-- Only admin knows to look here                                -->
+      <!-- ============================================================ -->
+      <a href="admin.html"
+         title="Admin Panel"
+         style="
+           display: inline-flex;
+           align-items: center;
+           gap: 6px;
+           font-size: 0.72rem;
+           color: rgba(255,255,255,0.18);
+           text-decoration: none;
+           letter-spacing: 1px;
+           text-transform: uppercase;
+           padding: 6px 12px;
+           border: 1px solid rgba(255,255,255,0.06);
+           border-radius: 50px;
+           transition: all 0.3s ease;
+           cursor: pointer;
+           position: relative;
+           z-index: 10;
+         "
+         onmouseover="this.style.color='rgba(212,68,154,0.7)';this.style.borderColor='rgba(212,68,154,0.25)';"
+         onmouseout="this.style.color='rgba(255,255,255,0.18)';this.style.borderColor='rgba(255,255,255,0.06)';">
+        <i class="fas fa-lock" style="font-size:0.65rem;"></i> Admin
+      </a>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================ -->
+<!-- FLOATING WHATSAPP                                             -->
+<!-- 🔗 Replace phone number if changed                           -->
+<!-- ============================================================ -->
+<div class="wa-float">
+  <div class="wa-tip">Order on WhatsApp 🛍️</div>
+  <a href="https://wa.me/8801676456965" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i></a>
+</div>
+
+<script>
+  // PAGE TRANSITIONS
+  function goTo(href) { document.body.classList.add('exiting'); setTimeout(() => { window.location.href = href; }, 420); }
+  document.querySelectorAll('.plink').forEach(a => {
+    a.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (href && !href.startsWith('http') && !href.startsWith('mailto') && !href.startsWith('tel') && !href.startsWith('#')) { e.preventDefault(); goTo(href); }
+    });
+  });
+
+  // PRELOADER
+  window.addEventListener('load', () => { setTimeout(() => { document.getElementById('preloader').classList.add('gone'); document.body.classList.add('loaded'); }, 2100); });
+
+  // NAVBAR SCROLL
+  window.addEventListener('scroll', () => { document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50); });
+
+  // BURGER
+  const burger = document.getElementById('burger');
+  const mob = document.getElementById('mob');
+  burger.addEventListener('click', () => { burger.classList.toggle('open'); mob.classList.toggle('show'); });
+  function closeMob() { burger.classList.remove('open'); mob.classList.remove('show'); }
+
+  // SMOOTH SCROLL
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      const t = document.querySelector(this.getAttribute('href'));
+      if (t) { window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' }); closeMob(); }
+    });
+  });
+
+  // SCROLL REVEAL
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); obs.unobserve(entry.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+
+  window.showUserInNav = function(user) {
+    document.querySelectorAll('.nav-login, .nav-signup').forEach(el => el.closest('li').style.display = 'none');
+    const btn = document.getElementById('nav-user-btn');
+    if (btn) {
+      btn.classList.add('show');
+      if (user.displayName) {
+        document.getElementById('nav-user-name').textContent = user.displayName.split(' ')[0];
+        document.getElementById('nav-user-initial').textContent = user.displayName.charAt(0).toUpperCase();
+      }
+    }
+  };
+  window.showLoginInNav = function() {
+    document.querySelectorAll('.nav-login, .nav-signup').forEach(el => el.closest('li').style.display = '');
+    const btn = document.getElementById('nav-user-btn');
+    if (btn) btn.classList.remove('show');
+  };
+</script>
+</body>
+</html>
